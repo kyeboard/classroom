@@ -20,6 +20,20 @@ class MainActivity : ComponentActivity() {
         val client = get_appwrite_client(this)
         val account = Account(client)
 
+        // Check if the session exists
+        CoroutineScope(Dispatchers.IO).launch {
+            // Check if the session exists
+            try {
+                // Try to get the session
+                account.get()
+
+                // If exists, redirect to the home page
+            } catch(_: Exception) {
+                // TODO: Remove this from production
+                startHomeActivity()
+            }
+        }
+
         findViewById<Button>(R.id.login).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 // TODO: Add redirect to the website to prevent redirect attack
