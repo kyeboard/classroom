@@ -28,9 +28,10 @@ class MainActivity : ComponentActivity() {
                 account.get()
 
                 // If exists, redirect to the home page
+                startHomeActivity()
             } catch(_: Exception) {
                 // TODO: Remove this from production
-                startHomeActivity()
+                // startHomeActivity()
             }
         }
 
