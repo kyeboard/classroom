@@ -8,4 +8,5 @@
     <string name="action_button">Action Button</string>
     <string name="title_activity_new_announcement">NewAnnouncement</string>
     <string name="title_activity_meeting">Meeting</string>
+    <string name="title_activity_meeting_chat">MeetingChat</string>
 </resources>
