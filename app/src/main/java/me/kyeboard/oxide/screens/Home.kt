@@ -1,7 +1,10 @@
 package me.kyeboard.oxide.screens
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
@@ -19,5 +22,13 @@ class Home : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+
+        findViewById<ImageButton>(R.id.open_new_class_popup).setOnClickListener {
+            // Create a new intent
+            val intent = Intent(this, NewAnnouncement::class.java)
+
+            // Start the intent
+            startActivity(intent)
+        }
     }
 }

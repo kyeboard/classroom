@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <ImageButton
-        android:id="@+id/new_class_popup"
+        android:id="@+id/open_new_class_popup"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/plus"
@@ -48,7 +48,6 @@
         android:background="@drawable/rounded"
         app:flow_horizontalAlign="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/action_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

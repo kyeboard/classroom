@@ -13,6 +13,11 @@
         android:theme="@style/Theme.Oxide"
         tools:targetApi="31">
         <activity
+            android:name=".screens.NewAnnouncement"
+            android:exported="false"
+            android:label="@string/title_activity_new_announcement"
+            android:theme="@style/Theme.Oxide" />
+        <activity
             android:name=".screens.Home"
             android:exported="false"
             android:label="@string/title_activity_home"
