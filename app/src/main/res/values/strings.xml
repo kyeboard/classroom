@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Oxide</string>
+    <string name="login_button_home">Get Started</string>
+    <string name="app_description">Effortlessly manage assignments, streamline grading, and enhance classroom collaboration.</string>
 </resources>
