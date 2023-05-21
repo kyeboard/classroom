@@ -32,8 +32,7 @@ class MainActivity : ComponentActivity() {
                 // If exists, redirect to the home page
                 startHomeActivity()
             } catch(_: Exception) {
-                // TODO: Remove this from production
-                // startHomeActivity()
+
             }
         }
 
@@ -49,7 +48,7 @@ class MainActivity : ComponentActivity() {
                         Toast.makeText(this@MainActivity, "Successfully logged in!", Toast.LENGTH_SHORT).show()
                     }
 
-                    // Start home activity
+                    // Start home activity'''
                     startHomeActivity()
                 } catch(_: Exception) {
                     runOnUiThread {
@@ -63,7 +62,7 @@ class MainActivity : ComponentActivity() {
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, MeetingChat::class.java)
+        val intent = Intent(this, Home::class.java)
 
         // Start the activity
         startActivity(intent)
