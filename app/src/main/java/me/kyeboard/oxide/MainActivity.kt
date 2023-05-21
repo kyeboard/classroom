@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 account.get()
 
                 // If exists, redirect to the home page
-                startHomeActivity()
+                // startHomeActivity()
             } catch(_: Exception) {
 
             }
