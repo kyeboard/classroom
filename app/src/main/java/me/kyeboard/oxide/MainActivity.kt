@@ -12,6 +12,8 @@ import kotlinx.coroutines.launch
 import me.kyeboard.oxide.screens.Home
 import me.kyeboard.oxide.screens.Meeting
 import me.kyeboard.oxide.screens.MeetingChat
+import me.kyeboard.oxide.screens.NewClass
+import me.kyeboard.oxide.screens.SelectHeader
 import me.kyeboard.oxide.utils.get_appwrite_client
 
 class MainActivity : ComponentActivity() {
@@ -21,6 +23,8 @@ class MainActivity : ComponentActivity() {
 
         val client = get_appwrite_client(this)
         val account = Account(client)
+
+        startHomeActivity()
 
         // Check if the session exists
         CoroutineScope(Dispatchers.IO).launch {
@@ -62,7 +66,7 @@ class MainActivity : ComponentActivity() {
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, Home::class.java)
+        val intent = Intent(this, NewClass::class.java)
 
         // Start the activity
         startActivity(intent)

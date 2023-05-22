@@ -9,4 +9,6 @@
     <string name="title_activity_new_announcement">NewAnnouncement</string>
     <string name="title_activity_meeting">Meeting</string>
     <string name="title_activity_meeting_chat">MeetingChat</string>
+    <string name="title_activity_new_class">NewClass</string>
+    <string name="title_activity_select_header">SelectHeader</string>
 </resources>
