@@ -2,11 +2,13 @@ package me.kyeboard.oxide.screens
 
 import Announcement
 import AnnouncementsAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import io.appwrite.services.Databases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -22,6 +24,11 @@ class ClassDashboard : ComponentActivity() {
         val view = findViewById<RecyclerView>(R.id.class_dashboard_stream_announcements)
         val client = get_appwrite_client(this)
         val databases = Databases(client)
+
+        findViewById<FloatingActionButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
+            val intent = Intent(this, NewAnnouncement::class.java)
+            startActivity(intent)
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             try {

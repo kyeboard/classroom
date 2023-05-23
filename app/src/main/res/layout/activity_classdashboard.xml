@@ -20,9 +20,23 @@
         app:layout_constraintTop_toTopOf="parent"
         android:src="@drawable/back" />
 
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Class 10"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/plusjakartasans_extrabold"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:includeFontPadding="false"
+        android:layout_marginLeft="10dp"
+        app:layout_constraintStart_toEndOf="@+id/imageButton5"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/new_annoucement_tabs"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="15dp"
         app:tabIndicatorColor="@color/white"
         app:tabRippleColor="#00000000"
         android:layout_width="match_parent"
@@ -50,7 +64,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/class_dashboard_stream_announcements"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -60,17 +74,13 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <ImageView
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/class_dashboard_new_announcement"
-        android:layout_width="60dp"
-        android:padding="15dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="5dp"
-        android:layout_height="60dp"
-        android:background="@drawable/rounded"
-        android:backgroundTint="@color/white"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/plus"
-        android:tint="@color/black"
+        android:backgroundTint="@color/white"
+        app:shapeAppearanceOverlay="@drawable/rounded"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

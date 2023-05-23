@@ -18,10 +18,10 @@ class AnnouncementsAdapter(private val dataSet: List<Document>, private val onCl
      * (custom ViewHolder)
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val user_profile: ImageView
+        // val user_profile: ImageView
 
         init {
-            user_profile = view.findViewById(R.id.announcement_item_author_pfp)
+            // user_profile = view.findViewById(R.id.announcement_item_author_pfp)
         }
     }
 
@@ -29,7 +29,7 @@ class AnnouncementsAdapter(private val dataSet: List<Document>, private val onCl
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
         val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.announcement_item, viewGroup, false)
+            .inflate(R.layout.announcement_item_meeting, viewGroup, false)
 
         return ViewHolder(view)
     }
@@ -38,7 +38,7 @@ class AnnouncementsAdapter(private val dataSet: List<Document>, private val onCl
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val data = dataSet[position].data.tryJsonCast<Announcement>()!!
 
-        Picasso.get().load(data.profile_url).into(viewHolder.user_profile)
+        // Picasso.get().load(data.profile_url).into(viewHolder.user_profile)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
