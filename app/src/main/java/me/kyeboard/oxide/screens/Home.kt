@@ -43,7 +43,7 @@ class Home : Activity() {
                 runOnUiThread {
                     val view = findViewById<RecyclerView>(R.id.home_classes_list)
 
-                    view.adapter = ClassesListAdapter(user_classes)
+                    view.adapter = ClassesListAdapter(user_classes, this@Home::openClassDashboard)
                     view.layoutManager = LinearLayoutManager(this@Home)
                 }
             } catch(e: Exception) {
@@ -60,5 +60,10 @@ class Home : Activity() {
             // Start the intent
             startActivity(intent)
         }
+    }
+
+    private fun openClassDashboard(id: String): Unit {
+        val intent = Intent(this@Home, ClassDashboard::class.java)
+        startActivity(intent)
     }
 }

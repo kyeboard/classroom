@@ -5,13 +5,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import me.kyeboard.oxide.R
 
-data class ClassItem(val name: String, val header: String, val section: String, val subject: String)
+data class ClassItem(val name: String, val header: String, val subject: String)
 
-class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>) :
+class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String) -> Unit) :
     RecyclerView.Adapter<ClassesListAdapter.ViewHolder>() {
 
     /**
@@ -22,8 +23,10 @@ class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>) :
         val headerImage: ImageView
         val title: TextView
         val subject: TextView
+        val parent: ConstraintLayout
 
         init {
+            parent = view.findViewById(R.id.classes_list_item_parent)
             // Define click listener for the ViewHolder's View
             headerImage = view.findViewById(R.id.classes_list_item_header)
             title = view.findViewById(R.id.classes_list_item_name)
@@ -43,6 +46,10 @@ class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>) :
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val data = dataSet[position]
+
+        viewHolder.parent.setOnClickListener {
+            onClick("646c4200c2459aafcae8")
+        }
 
         Picasso.get().load(data.header).into(viewHolder.headerImage)
         viewHolder.title.text = data.name

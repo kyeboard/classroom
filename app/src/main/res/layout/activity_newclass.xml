@@ -80,7 +80,7 @@
         app:layout_constraintTop_toBottomOf="@+id/select_header" />
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/new_class_name"
         android:layout_width="match_parent"
         android:background="@drawable/rounded"
         android:backgroundTint="#99333333"
@@ -104,11 +104,11 @@
         android:text="Subject"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/new_class_name" />
 
 
     <EditText
-        android:id="@+id/editTextText4"
+        android:id="@+id/new_class_subject"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -124,7 +124,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/new_class_create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -134,7 +134,7 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText4" />
+        app:layout_constraintTop_toBottomOf="@+id/new_class_subject" />
 
     <Button
         android:id="@+id/button3"
@@ -147,7 +147,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/new_class_create" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

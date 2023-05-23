@@ -13,6 +13,16 @@
         android:theme="@style/Theme.Oxide"
         tools:targetApi="31">
         <activity
+            android:name=".screens.ClassDashboard"
+            android:exported="false"
+            android:label="@string/title_activity_class_dashboard"
+            android:theme="@style/Theme.Oxide" />
+        <activity
+            android:name=".screens.MainActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.Oxide" />
+        <activity
             android:name=".screens.SelectHeader"
             android:exported="false"
             android:label="@string/title_activity_select_header"
