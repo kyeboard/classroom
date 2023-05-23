@@ -65,7 +65,7 @@ class MainActivity : ComponentActivity() {
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, ClassDashboard::class.java)
+        val intent = Intent(this, MeetingChat::class.java)
 
         // Start the activity
         startActivity(intent)
