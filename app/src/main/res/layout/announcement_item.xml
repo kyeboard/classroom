@@ -52,11 +52,15 @@
 
             <TextView
                 android:layout_width="wrap_content"
+
+
+
+
                 android:layout_height="wrap_content"
                 android:text="2nd May, 2023"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView13"
-                tools:layout_editor_absoluteX="0dp" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
