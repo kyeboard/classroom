@@ -35,7 +35,7 @@
         app:layout_constraintTop_toTopOf="parent" /> -->
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/new_annoucement_tabs"
+        android:id="@+id/class_dashboard_tablayout"
         android:layout_marginTop="15dp"
         app:tabIndicatorColor="@color/white"
         app:tabRippleColor="#00000000"
@@ -65,22 +65,25 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/class_dashboard_stream_announcements"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="10dp"
         android:layout_width="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_annoucement_tabs"
+        app:layout_constraintTop_toBottomOf="@+id/class_dashboard_tablayout"
         android:layout_height="0dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/class_dashboard_new_announcement"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:src="@drawable/plus"
+        app:flow_verticalAlign="center"
         android:backgroundTint="@color/white"
-        app:shapeAppearanceOverlay="@drawable/rounded"
+        android:background="@drawable/rounded"
+        app:flow_horizontalAlign="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/action_button" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

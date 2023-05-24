@@ -13,6 +13,7 @@ import me.kyeboard.oxide.screens.ClassDashboard
 import me.kyeboard.oxide.screens.Home
 import me.kyeboard.oxide.screens.Meeting
 import me.kyeboard.oxide.screens.MeetingChat
+import me.kyeboard.oxide.screens.NewAnnouncement
 import me.kyeboard.oxide.screens.NewClass
 import me.kyeboard.oxide.screens.SelectHeader
 import me.kyeboard.oxide.utils.get_appwrite_client
@@ -65,7 +66,7 @@ class MainActivity : ComponentActivity() {
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, ClassDashboard::class.java)
+        val intent = Intent(this, NewAnnouncement::class.java)
 
         // Start the activity
         startActivity(intent)

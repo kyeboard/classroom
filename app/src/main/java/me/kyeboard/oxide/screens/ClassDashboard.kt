@@ -5,6 +5,7 @@ import AnnouncementsAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageButton
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +26,7 @@ class ClassDashboard : ComponentActivity() {
         val client = get_appwrite_client(this)
         val databases = Databases(client)
 
-        findViewById<FloatingActionButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
+        findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
             val intent = Intent(this, NewAnnouncement::class.java)
             startActivity(intent)
         }
