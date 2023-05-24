@@ -21,6 +21,7 @@ import io.appwrite.services.Databases
 import io.appwrite.services.Realtime
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.kyeboard.oxide.R
 import me.kyeboard.oxide.screens.ui.theme.OxideTheme
@@ -42,8 +43,18 @@ class MeetingChat : ComponentActivity() {
         view.adapter = ChatsAdapter(messages)
         view.layoutManager = LinearLayoutManager(this)
 
+        GlobalScope.launch {
+            for(message in databases.listDocuments("classes", "646cc4c8aab6656a1b16").documents) {
+                messages.add(message.data.tryJsonCast()!!)
+            }
+
+            runOnUiThread { this@MeetingChat.update_view(view) }
+        }
+
         realtime.subscribe("databases.classes.collections.646cc4c8aab6656a1b16.documents") {
-            messages.add(it.tryJsonCast<Chat>()!!)
+            messages.add(it.payload.tryJsonCast<Chat>()!!)
+
+            Log.d("messages_service", messages.toString())
 
             this.update_view(view)
         }
