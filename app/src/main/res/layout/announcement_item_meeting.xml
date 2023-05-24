@@ -3,41 +3,70 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:background="@drawable/rounded"
+    android:backgroundTint="#55333333"
+    android:padding="20dp"
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:cardCornerRadius="20dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            app:cardCornerRadius="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/imageView6"
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/pfp" />
         </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
-            android:layout_marginLeft="20dp"
             android:layout_height="wrap_content"
-            android:text="kyeboard"
+            android:layout_marginStart="15dp"
             android:fontFamily="@font/plusjakartasans_extrabold"
+            android:text="kyeboard"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView2"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:text="16 hours ago"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="0dp"
+        android:maxLines="6"
+        android:layout_marginTop="14dp"
+        android:lineHeight="22sp"
+        android:ellipsize="end"
+        android:textSize="14sp"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse augue justo, congue vitae consectetur a, placerat et orci. Morbi et cursus sem. Duis rutrum, tellus sed commodo tempor, mi ipsum sagittis nunc, ac interdum libero elit lacinia turpis. Mauris lacinia vulputate augue id ultricies. Donec auctor odio porttitor, ornare tortor eu, fringilla risus. Proin tristique lacinia diam, id ultrices mauris pretium at. Donec eu nisi non turpis tempus suscipit eget eget arcu. Donec tempor, orci sed varius euismod, ligula libero dictum quam, eu lacinia nibh risus at orci. Nam tincidunt lorem vel lacus mollis rhoncus. Donec sit amet molestie ante. In a quam et erat pulvinar mattis vitae id nisi. Nulla non risus neque"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

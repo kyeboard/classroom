@@ -7,7 +7,7 @@
     android:background="@color/black"
     android:layout_height="match_parent">
 
-    <ImageButton
+    <!-- <ImageButton
         android:id="@+id/imageButton5"
         android:background="@drawable/rounded"
         android:tint="@color/white"
@@ -32,7 +32,7 @@
         android:includeFontPadding="false"
         android:layout_marginLeft="10dp"
         app:layout_constraintStart_toEndOf="@+id/imageButton5"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" /> -->
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/new_annoucement_tabs"
@@ -43,7 +43,7 @@
         style="@style/customTabLayout"
         app:tabIndicatorFullWidth="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton5"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabItem
@@ -59,7 +59,7 @@
         <com.google.android.material.tabs.TabItem
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Students" />
+            android:text="Classes" />
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.recyclerview.widget.RecyclerView

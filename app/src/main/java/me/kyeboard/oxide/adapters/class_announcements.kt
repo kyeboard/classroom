@@ -8,7 +8,7 @@ import io.appwrite.extensions.tryJsonCast
 import io.appwrite.models.Document
 import me.kyeboard.oxide.R
 
-data class Announcement(val profile_url: String, val author: String, val content: String)
+data class Announcement(val author: String, val content: String)
 
 class AnnouncementsAdapter(private val dataSet: List<Document>, private val onClick: (id: String) -> Unit) :
     RecyclerView.Adapter<AnnouncementsAdapter.ViewHolder>() {

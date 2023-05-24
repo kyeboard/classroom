@@ -1,0 +1,21 @@
+{
+    "projectId": "fryday",
+    "projectName": "fryday",
+    "functions": [
+        {
+            "$id": "646d9ff16a7eb68e3ba3",
+            "name": "Upload user profiles",
+            "runtime": "node-16.0",
+            "path": "functions/upload_user_profiles",
+            "entrypoint": "src/index.js",
+            "ignore": [
+                "node_modules",
+                ".npm"
+            ],
+            "execute": [],
+            "events": ["users.*.sessions.*.create"],
+            "schedule": "",
+            "timeout": 15
+        }
+    ]
+}
