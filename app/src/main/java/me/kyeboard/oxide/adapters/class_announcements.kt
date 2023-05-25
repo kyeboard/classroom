@@ -10,7 +10,7 @@ import me.kyeboard.oxide.R
 
 data class Announcement(val author: String, val content: String)
 
-class AnnouncementsAdapter(private val dataSet: List<Document>, private val onClick: (id: String) -> Unit) :
+class AnnouncementsAdapter(private val dataSet: List<Document>) :
     RecyclerView.Adapter<AnnouncementsAdapter.ViewHolder>() {
 
     /**

@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView3"
+            android:id="@+id/newclass_destory_self"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/back"
@@ -29,14 +29,14 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20sp"
+            android:layout_marginStart="20dp"
             android:fontFamily="@font/plusjakartasans_extrabold"
             android:includeFontPadding="false"
             android:text="New class"
             android:textColor="@color/white"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toEndOf="@+id/newclass_destory_self"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -64,7 +64,6 @@
             android:id="@+id/selected_header_preview"
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:background="@drawable/header"
             android:scaleType="centerCrop" />
     </androidx.cardview.widget.CardView>
 
@@ -130,6 +129,7 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/rounded"
         android:backgroundTint="@color/white"
+        android:includeFontPadding="false"
         android:text="Create class"
         android:textAllCaps="false"
         android:textColor="@color/black"
@@ -137,7 +137,7 @@
         app:layout_constraintTop_toBottomOf="@+id/new_class_subject" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/newclass_cancel_self"
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

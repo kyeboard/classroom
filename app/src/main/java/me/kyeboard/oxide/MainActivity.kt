@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.appcompat.widget.AppCompatButton
+import com.google.android.material.button.MaterialButton
 import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +42,7 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        findViewById<Button>(R.id.login).setOnClickListener {
+        findViewById<MaterialButton>(R.id.login).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 // TODO: Add redirect to the website to prevent redirect attack
                 try {
@@ -66,7 +68,7 @@ class MainActivity : ComponentActivity() {
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, NewAnnouncement::class.java)
+        val intent = Intent(this, Home::class.java)
 
         // Start the activity
         startActivity(intent)

@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:padding="10dp"
     android:background="@color/black"
     android:layout_height="match_parent">
 
@@ -38,6 +37,8 @@
         android:id="@+id/class_dashboard_tablayout"
         android:layout_marginTop="15dp"
         app:tabIndicatorColor="@color/white"
+        app:layout_goneMarginTop="10dp"
+        android:layout_marginHorizontal="10dp"
         app:tabRippleColor="#00000000"
         android:layout_width="match_parent"
         style="@style/customTabLayout"
@@ -62,16 +63,14 @@
             android:text="Classes" />
     </com.google.android.material.tabs.TabLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/class_dashboard_stream_announcements"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/classdashbord_viewpager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/class_dashboard_tablayout"
-        android:layout_height="0dp">
-
-    </androidx.recyclerview.widget.RecyclerView>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/class_dashboard_tablayout" />
 
     <ImageButton
         android:id="@+id/class_dashboard_new_announcement"

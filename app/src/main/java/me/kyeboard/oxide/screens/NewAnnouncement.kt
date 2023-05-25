@@ -32,7 +32,6 @@ class NewAnnouncement : AppCompatActivity() {
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                Log.d("test", "testtr")
                 tab?.let {
                     viewPager.setCurrentItem(it.position, true)
                 }

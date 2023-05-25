@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.github.leandroborgesferreira.loadingbutton.customViews.CircularProgressButton
 import com.squareup.picasso.Picasso
 import io.appwrite.services.Databases
 import io.appwrite.services.Teams
@@ -34,6 +35,16 @@ class NewClass : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newclass)
 
+        // Bind buttons that closes the self instance
+        findViewById<ImageView>(R.id.newclass_destory_self).setOnClickListener {
+            finish()
+        }
+
+        findViewById<Button>(R.id.newclass_cancel_self).setOnClickListener {
+            finish()
+        }
+
+        // Default items
         var header_image = "https://cloud.appwrite.io/v1/storage/buckets/646460e48963e000edd6/files/landscape1/view?project=fryday"
         val client = get_appwrite_client(this)
         val teams = Teams(client)
@@ -63,12 +74,11 @@ class NewClass : ComponentActivity() {
 
             // Create a team
             CoroutineScope(Dispatchers.IO).launch {
-                runOnUiThread {
-                    Toast.makeText(this@NewClass, "Renning", Toast.LENGTH_SHORT).show()
-                }
                 val team = teams.create("unique()", class_name)
 
                 database.createDocument("classes", "registery", team.id, ClassItem(class_name, header_image, class_subject))
+
+                finish()
             }
         }
 

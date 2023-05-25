@@ -3,6 +3,7 @@ package me.kyeboard.oxide.screens
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +14,11 @@ class SelectHeader : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.select_header)
+
+        // Handle destorying self instance on back button click
+        findViewById<ImageView>(R.id.select_header_destroy_self).setOnClickListener {
+            finish()
+        }
 
         val headers = arrayListOf(
             "https://cloud.appwrite.io/v1/storage/buckets/646460e48963e000edd6/files/landscape1/view?project=fryday",
@@ -35,7 +41,7 @@ class SelectHeader : ComponentActivity() {
         listview.layoutManager = LinearLayoutManager(this)
     }
 
-    fun send_result(url: String): Unit {
+    private fun send_result(url: String) {
         val v = Intent()
 
         v.data = Uri.parse(url)

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Oxide</string>
-    <string name="login_button_home">Get Started</string>
+    <string name="login_button_home">Get    Started</string>
     <string name="app_description">Effortlessly manage assignments, streamline grading, and enhance classroom collaboration.</string>
-    <string name="app_title">Bridging the gap between students and teachers</string>
+    <string name="app_title">Bridging the gap between students and teachers.</string>
     <string name="title_activity_home">Home</string>
     <string name="create_new_class">Create new class</string>
     <string name="action_button">Action Button</string>

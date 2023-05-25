@@ -9,28 +9,25 @@
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/rounded"
-        android:backgroundTint="#44333333"
-        android:padding="9dp"
+        android:layout_width="40dp"
+        android:layout_marginBottom="5dp"
+        android:layout_height="40dp"
         android:src="@drawable/logo"
         android:tint="@color/white"
         android:translationZ="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/login"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded"
-        android:backgroundTint="@color/white"
-        android:fontFamily="@font/plusjakartasans_medium"
-        android:text="@string/login_button_home"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:fontFamily="@font/plusjakartasans_extrabold"
+        android:text="@string/app_title"
+        android:textColor="@color/white"
+        android:layout_marginBottom="10dp"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -42,22 +39,30 @@
         android:lineHeight="23dp"
         android:layout_marginBottom="25dp"
         android:text="@string/app_description"
-        android:textAlignment="center"
         android:textColor="#90FFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/login"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/plusjakartasans_extrabold"
-        android:text="@string/app_title"
-        android:textAlignment="center"
-        android:textColor="@color/white"
-        android:layout_marginBottom="10dp"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/login"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:letterSpacing="0.025"
+        android:textSize="13sp"
+        app:iconSize="18dp"
+        android:includeFontPadding="false"
+        android:layout_marginVertical="16dp"
+        android:gravity="center"
+        android:textAllCaps="false"
+        app:backgroundTint="@color/white"
+        android:background="@drawable/rounded"
+        app:icon="@drawable/chevron_right"
+        app:iconGravity="textEnd"
+        app:iconPadding="5dp"
+        app:iconTint="@color/black"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/login_button_home" />
 </androidx.constraintlayout.widget.ConstraintLayout>

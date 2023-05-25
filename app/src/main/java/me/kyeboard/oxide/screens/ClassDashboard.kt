@@ -7,43 +7,55 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
 import io.appwrite.services.Databases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.oxide.R
+import me.kyeboard.oxide.adapters.ViewPagerAdapter
+import me.kyeboard.oxide.fragments.ClassDashboardAssignments
+import me.kyeboard.oxide.fragments.ClassDashboardClasses
+import me.kyeboard.oxide.fragments.ClassDashboardStream
+import me.kyeboard.oxide.fragments.CreateNewAnnouncement
+import me.kyeboard.oxide.fragments.CreateNewMeeting
 import me.kyeboard.oxide.utils.get_appwrite_client
 
-class ClassDashboard : ComponentActivity() {
+class ClassDashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classdashboard)
 
-        val view = findViewById<RecyclerView>(R.id.class_dashboard_stream_announcements)
-        val client = get_appwrite_client(this)
-        val databases = Databases(client)
+        val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
+        val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
 
-        findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
-            val intent = Intent(this, NewAnnouncement::class.java)
-            startActivity(intent)
-        }
+        val adapter = ViewPagerAdapter(this)
+        adapter.addFragment(ClassDashboardStream())
+        adapter.addFragment(ClassDashboardAssignments())
+        adapter.addFragment(ClassDashboardClasses())
 
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val data = databases.listDocuments("classes", "646c532bc46aecc1120a").documents
-                val adapter = AnnouncementsAdapter(data, this@ClassDashboard::open_announcement_activity)
+        viewPager.adapter = adapter
 
-                runOnUiThread {
-                    view.adapter = adapter
-                    view.layoutManager = LinearLayoutManager(this@ClassDashboard)
+        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    viewPager.setCurrentItem(it.position, true)
                 }
-            } catch(e: Exception) {
-                Log.e("eee", e.message.toString())
             }
-        }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                // Do nothing
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Do nothing
+            }
+        })
     }
 
     fun open_announcement_activity(id: String): Unit {
