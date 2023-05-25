@@ -1,11 +1,20 @@
 package me.kyeboard.oxide.fragments
 
+import AssignmentAdapter
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import io.appwrite.services.Databases
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.kyeboard.oxide.R
+import me.kyeboard.oxide.utils.get_appwrite_client
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,7 +44,27 @@ class ClassDashboardAssignments : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_class_dashboard_assignments, container, false)
+        val view = inflater.inflate(R.layout.fragment_class_dashboard_assignments, container, false)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.classdashboard_assignments_recyclerview)
+        val client = get_appwrite_client(view.context)
+        val databases = Databases(client)
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val data = databases.listDocuments("classes", "646c532bc46aecc1120a").documents
+                val adapter = AssignmentAdapter(data)
+
+                activity?.runOnUiThread {
+                    recyclerView.adapter = adapter
+                    recyclerView.layoutManager = LinearLayoutManager(view.context)
+                }
+            } catch(e: Exception) {
+                Log.e("eee", e.message.toString())
+            }
+        }
+
+        return view
     }
 
     companion object {
