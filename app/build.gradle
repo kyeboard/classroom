@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'me.kyeboard.oxide'
+    namespace 'me.kyeboard.classroom'
     compileSdk 33
 
     defaultConfig {
-        applicationId "me.kyeboard.oxide"
+        applicationId "me.kyeboard.classroom"
         minSdk 24
         targetSdk 33
         versionCode 1

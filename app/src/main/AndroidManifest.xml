@@ -10,48 +10,43 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Oxide"
+        android:theme="@style/Theme.Classroom"
         tools:targetApi="31">
         <activity
             android:name=".screens.ClassDashboard"
             android:exported="false"
             android:label="@string/title_activity_class_dashboard"
-            android:theme="@style/Theme.Oxide" />
-        <activity
-            android:name=".screens.MainActivity"
-            android:exported="false"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.Oxide" />
+            android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.SelectHeader"
             android:exported="false"
             android:label="@string/title_activity_select_header"
-            android:theme="@style/Theme.Oxide" />
+            android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.NewClass"
             android:exported="false"
             android:label="@string/title_activity_new_class"
-            android:theme="@style/Theme.Oxide" />
+            android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.MeetingChat"
             android:exported="false"
             android:label="@string/title_activity_meeting_chat"
-            android:theme="@style/Theme.Oxide" />
+            android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.Meeting"
             android:exported="false"
             android:label="@string/title_activity_meeting"
-            android:theme="@style/Theme.Oxide" />
+            android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.NewAnnouncement"
             android:exported="false"
             android:label="@string/title_activity_new_announcement"
-            android:theme="@style/Theme.Oxide" />
+            android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.Home"
             android:exported="false"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.Oxide" />
+            android:theme="@style/Theme.Classroom" />
         <activity
             android:name="io.appwrite.views.CallbackActivity"
             android:exported="true">
@@ -68,7 +63,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Oxide">
+            android:theme="@style/Theme.Classroom">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
