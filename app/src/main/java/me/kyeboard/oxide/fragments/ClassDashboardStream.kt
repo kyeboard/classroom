@@ -1,6 +1,6 @@
 package me.kyeboard.oxide.fragments
 
-import AnnouncementsAdapter
+import AnnouncementAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -56,7 +56,7 @@ class ClassDashboardStream : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val data = databases.listDocuments("classes", "646c532bc46aecc1120a").documents
-                val adapter = AnnouncementsAdapter(data)
+                val adapter = AnnouncementAdapter(data)
 
                 activity?.runOnUiThread {
                     recyclerView.adapter = adapter

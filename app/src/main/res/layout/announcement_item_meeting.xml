@@ -34,19 +34,18 @@
         </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/announcement_item_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:fontFamily="@font/plusjakartasans_extrabold"
-            android:text="kyeboard"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cardView2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView14"
+            android:id="@+id/announcement_item_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
@@ -58,7 +57,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/textView11"
+        android:id="@+id/announcement_item_description"
         android:layout_width="0dp"
         android:maxLines="6"
         android:layout_marginTop="14dp"
@@ -66,7 +65,6 @@
         android:ellipsize="end"
         android:textSize="13sp"
         android:layout_height="wrap_content"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse augue justo, congue vitae consectetur a, placerat et orci. Morbi et cursus sem. Duis rutrum, tellus sed commodo tempor, mi ipsum sagittis nunc, ac interdum libero elit lacinia turpis. Mauris lacinia vulputate augue id ultricies. Donec auctor odio porttitor, ornare tortor eu, fringilla risus. Proin tristique lacinia diam, id ultrices mauris pretium at. Donec eu nisi non turpis tempus suscipit eget eget arcu. Donec tempor, orci sed varius euismod, ligula libero dictum quam, eu lacinia nibh risus at orci. Nam tincidunt lorem vel lacus mollis rhoncus. Donec sit amet molestie ante. In a quam et erat pulvinar mattis vitae id nisi. Nulla non risus neque"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />

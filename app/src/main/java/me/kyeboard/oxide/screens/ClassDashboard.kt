@@ -1,7 +1,6 @@
 package me.kyeboard.oxide.screens
 
 import Announcement
-import AnnouncementsAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
