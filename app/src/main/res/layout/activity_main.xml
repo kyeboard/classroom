@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/black"
     android:layout_width="match_parent"
-    android:padding="30dp"
+    android:paddingHorizontal="30dp"
     android:layout_height="match_parent">
 
     <ImageView

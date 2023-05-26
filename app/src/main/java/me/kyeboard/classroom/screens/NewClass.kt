@@ -28,51 +28,62 @@ class NewClass : ComponentActivity() {
         findViewById<ImageView>(R.id.newclass_destory_self).setOnClickListener {
             finish()
         }
-
         findViewById<Button>(R.id.newclass_cancel_self).setOnClickListener {
             finish()
         }
 
         // Default items
-        var header_image = "https://cloud.appwrite.io/v1/storage/buckets/646460e48963e000edd6/files/landscape1/view?project=fryday"
+        var headerImage = "https://cloud.appwrite.io/v1/storage/buckets/646460e48963e000edd6/files/landscape1/view?project=fryday"
         val client = get_appwrite_client(this)
         val teams = Teams(client)
         val database = Databases(client)
 
         // Initial
-        updateHeaderImage(header_image)
+        updateHeaderImage(headerImage)
 
+        // Activity handler which returns the newly selected header
         val headerHandler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             try {
-                header_image = result.data?.data!!.toString()
-                updateHeaderImage(header_image)
+                headerImage = result.data?.data!!.toString()
+                updateHeaderImage(headerImage)
             } catch(_: Exception) {
 
             }
         }
 
+        // Handle new class create button clicks
         findViewById<Button>(R.id.new_class_create).setOnClickListener {
-            val class_name = findViewById<EditText>(R.id.new_class_name).text.toString()
-            val class_subject = findViewById<EditText>(R.id.new_class_subject).text.toString()
+            // Get the values entered by the user
+            val className = findViewById<EditText>(R.id.new_class_name).text.toString()
+            val classSubject = findViewById<EditText>(R.id.new_class_subject).text.toString()
 
-            if (class_name.isBlank() || class_subject.isBlank()) {
-                Toast.makeText(this, "Fill in all details before continuing", Toast.LENGTH_SHORT).show()
+            // Make sure they are not blank
+            if (className.isBlank() || classSubject.isBlank()) {
+                Toast.makeText(this, "Fill in all details before continuing", Toast.LENGTH_LONG).show()
 
                 return@setOnClickListener
             }
 
             // Create a team
             CoroutineScope(Dispatchers.IO).launch {
-                val team = teams.create("unique()", class_name)
+                // Create a new team for the user
+                val team = teams.create("unique()", className)
 
-                database.createDocument("classes", "registery", team.id, ClassItem(class_name, header_image, class_subject))
+                // Create the registry in the database
+                // TODO: Fix the registry spelling
+                database.createDocument("classes", "registery", team.id, ClassItem(className, headerImage, classSubject))
 
+                // End the current activity (the class is created)
                 finish()
             }
         }
 
+        // Launch select header activity to select a header
         findViewById<CardView>(R.id.select_header).setOnClickListener {
+            // Create intent for that activity
             val intent = Intent(this, SelectHeader::class.java)
+
+            // Launch with the result handler
             headerHandler.launch(intent)
         }
     }
