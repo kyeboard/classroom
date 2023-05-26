@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.appwrite.Query
 import io.appwrite.services.Databases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +53,7 @@ class ClassDashboardAssignments : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val data = databases.listDocuments("classes", "646c532bc46aecc1120a").documents
+                val data = databases.listDocuments("classes", "646f432ad59caafabf74", listOf(Query.orderAsc("due_date"))).documents
                 val adapter = AssignmentAdapter(data)
 
                 activity?.runOnUiThread {
