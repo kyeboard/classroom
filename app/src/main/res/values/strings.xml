@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Oxide</string>
+    <string name="app_name">Classroom</string>
     <string name="login_button_home">Get    Started</string>
     <string name="app_description">Effortlessly manage assignments, streamline grading, and enhance classroom collaboration.</string>
     <string name="app_title">Bridging the gap between students and teachers.</string>
@@ -15,4 +15,15 @@
     <string name="title_activity_class_dashboard">ClassDashboard</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="imageview_content_description">App logo</string>
+    <string name="image_caret_left">Image caret left</string>
+    <string name="new_class_title">New class</string>
+    <string name="newclass_header_title">Header</string>
+    <string name="newclass_header_selected_text">Selected header for the class</string>
+    <string name="newclass_name_title">Name</string>
+    <string name="newclass_name_hint">Your class\' name</string>
+    <string name="newclass_subject_header">Subject</string>
+    <string name="newclass_subject_hint">Your class\' subject</string>
+    <string name="newclass_create_btn_title">Create class</string>
+    <string name="newclass_cancel_btn_text">Cancel</string>
 </resources>

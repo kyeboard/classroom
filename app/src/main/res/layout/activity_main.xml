@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/black"
     android:layout_width="match_parent"
-    android:padding="30dp"
+    android:paddingHorizontal="30dp"
     android:layout_height="match_parent">
 
     <ImageView
@@ -16,7 +16,9 @@
         android:tint="@color/white"
         android:translationZ="10dp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="UseAppTint"
+        android:contentDescription="@string/imageview_content_description" />
 
     <TextView
         android:id="@+id/textView2"
@@ -35,8 +37,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/plusjakartasans_medium"
-        android:lineHeight="23dp"
+        android:lineSpacingMultiplier="1.3"
         android:layout_marginBottom="25dp"
         android:text="@string/app_description"
         android:textColor="#90FFFFFF"

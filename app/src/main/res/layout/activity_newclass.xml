@@ -23,7 +23,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:tint="@color/white"
-            tools:ignore="UseAppTint" />
+            tools:ignore="UseAppTint"
+            android:contentDescription="@string/image_caret_left" />
 
         <TextView
             android:id="@+id/textView3"
@@ -32,7 +33,7 @@
             android:layout_marginStart="20dp"
             android:fontFamily="@font/plusjakartasans_extrabold"
             android:includeFontPadding="false"
-            android:text="New class"
+            android:text="@string/new_class_title"
             android:textColor="@color/white"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -44,7 +45,7 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Header"
+        android:text="@string/newclass_header_title"
         android:fontFamily="@font/plusjakartasans_extrabold"
         android:textColor="@color/white"
         android:layout_marginTop="20dp"
@@ -64,7 +65,8 @@
             android:id="@+id/selected_header_preview"
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/newclass_header_selected_text" />
     </androidx.cardview.widget.CardView>
 
     <TextView
@@ -73,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/plusjakartasans_extrabold"
-        android:text="Name"
+        android:text="@string/newclass_name_title"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/select_header" />
@@ -90,9 +92,10 @@
         android:layout_marginTop="5dp"
         android:ems="10"
         android:inputType="text"
-        android:hint="Your class' name"
+        android:hint="@string/newclass_name_hint"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9"
+        android:autofillHints="name" />
 
     <TextView
         android:id="@+id/textView6"
@@ -100,11 +103,10 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/plusjakartasans_extrabold"
         android:layout_marginTop="20dp"
-        android:text="Subject"
+        android:text="@string/newclass_subject_header"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_class_name" />
-
 
     <EditText
         android:id="@+id/new_class_subject"
@@ -114,13 +116,14 @@
         android:background="@drawable/rounded"
         android:backgroundTint="#99333333"
         android:ems="10"
-        android:hint="Your class' subject"
+        android:hint="@string/newclass_subject_hint"
         android:includeFontPadding="false"
         android:inputType="text"
         android:padding="16dp"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6"
+        android:autofillHints="name" />
 
     <Button
         android:id="@+id/new_class_create"
@@ -130,7 +133,7 @@
         android:background="@drawable/rounded"
         android:backgroundTint="@color/white"
         android:includeFontPadding="false"
-        android:text="Create class"
+        android:text="@string/newclass_create_btn_title"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -143,11 +146,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded"
         android:backgroundTint="#00000000"
-        android:text="Cancel"
+        android:text="@string/newclass_cancel_btn_text"
         android:textAllCaps="false"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_class_create" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
