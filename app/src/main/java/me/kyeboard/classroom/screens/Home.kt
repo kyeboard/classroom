@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Databases
 import io.appwrite.services.Teams
@@ -26,6 +27,7 @@ class Home : Activity() {
         val client = get_appwrite_client(this)
         val teams = Teams(client)
         val database = Databases(client)
+        val pullToRefresh = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
 
         CoroutineScope(Dispatchers.IO).launch {
             // Get the list of the teams that the current user is in

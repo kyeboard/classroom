@@ -56,6 +56,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.5.1'
     implementation platform('androidx.compose:compose-bom:2022.10.00')
     implementation 'androidx.compose.ui:ui'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
     implementation 'com.squareup.picasso:picasso:2.8'
     //noinspection GradleDependency (higher versions tends to break due to appwrite cloud version being v1.10.0
     implementation 'io.appwrite:sdk-for-android:1.0.0'
