@@ -1,57 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/classes_list_item_parent"
     android:layout_marginBottom="15dp"
     android:layout_width="match_parent"
-    android:layout_height="150dp">
+    android:layout_height="180dp">
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView5"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_height="match_parent">
+        app:layout_constraintTop_toTopOf="parent">
+
         <ImageView
             android:id="@+id/classes_list_item_header"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
     </androidx.cardview.widget.CardView>
 
-    <TextView
-        android:id="@+id/classes_list_item_name"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
+        android:background="@drawable/gradient"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textColor="#CCFFFFFF"
-        android:paddingHorizontal="22dp"
-        android:paddingTop="10dp"
-        android:textSize="26sp"
-        android:fontFamily="@font/plusjakartasans_extrabold"
         android:translationZ="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/classes_list_item_subject"
-        android:layout_width="wrap_content"
-        android:paddingHorizontal="25dp"
-        android:paddingVertical="3dp"
-        android:textColor="#99FFFFFF"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/classes_list_item_name"
-        android:text=""
-        android:translationZ="10dp" />
+        <TextView
+            android:id="@+id/classes_list_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/plusjakartasans_extrabold"
+            android:paddingHorizontal="20dp"
+            android:text=""
+            android:textColor="#CCFFFFFF"
+            android:textSize="22sp"
+            android:translationZ="10dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    <View
-        android:background="#60000000"
-        android:id="@+id/view"
-        android:translationZ="9dp"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/classes_list_item_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:textColor="#99FFFFFF"
+            android:translationZ="10dp"
+            app:layout_constraintBottom_toTopOf="@+id/classes_list_item_name"
+            app:layout_constraintStart_toStartOf="parent" />
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#60000000"
+            android:translationZ="9dp" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
