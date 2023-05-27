@@ -22,7 +22,8 @@ val isoDateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 class AssignmentAdapter(private val dataSet: List<Document>) :
     RecyclerView.Adapter<AssignmentAdapter.ViewHolder>() {
 
-    var previousAssignmentDate = Date()
+    var previousDiff = -1
+    val today = Date()
 
     /**
      * Provide a reference to the type of views that you are using
@@ -40,15 +41,13 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
         }
     }
 
-    private fun getDayDifference(date: String): Number {
+    private fun getDayDifference(date: String): Int {
         val date = isoDateFormatter.parse(date)!!
 
         val cal = Calendar.getInstance()
         cal.time = date
 
-        Log.d("today", "$date and the prev $previousAssignmentDate")
-
-        return cal.get(Calendar.DAY_OF_MONTH) - previousAssignmentDate.date
+        return cal.get(Calendar.DAY_OF_MONTH) - today.date
     }
 
     // Create new views (invoked by the layout manager)
@@ -68,11 +67,24 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
 
         viewHolder.title.text = data.title
         viewHolder.time.text = dataSet[position].createdAt
-        viewHolder.timeDiff.text = "$diff hours ago"
+
+        if(diff != previousDiff) {
+            viewHolder.timeDiff.text = getReadableFormat(diff)
+            previousDiff = diff
+        } else {
+            viewHolder.timeDiff.visibility = View.GONE
+        }
+    }
+
+    private fun getReadableFormat(diff: Int): CharSequence {
+        return when(diff) {
+            0 -> "Today"
+            1 -> "Tomorrow"
+            else -> "This week"
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
 
 }
-
