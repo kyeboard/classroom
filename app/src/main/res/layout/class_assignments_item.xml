@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="5dp"
+
     android:layout_height="wrap_content">
 
     <TextView
@@ -12,7 +13,8 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:textSize="13sp"
-        android:paddingBottom="10dp"
+        android:fontFamily="@font/plusjakartasans_extrabold"
+        android:paddingVertical="6dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/layout10"
@@ -24,31 +26,18 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded"
         android:backgroundTint="#50444444"
-        android:padding="10dp"
+        android:padding="18dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/class_assignments_time_header">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:background="@drawable/rounded"
-            android:backgroundTint="#55333333"
-            android:padding="12dp"
-            android:tint="#AADDDDDD"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/assignment"
-            tools:ignore="UseAppTint" />
 
         <TextView
             android:id="@+id/class_assignment_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
+            android:textSize="14sp"
             android:textColor="#EEFFFFFF"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView

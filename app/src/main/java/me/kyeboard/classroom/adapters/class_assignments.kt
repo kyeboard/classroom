@@ -11,9 +11,11 @@ import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Date
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 
 data class Assignment(val author: String, val title: String, val due_date: String)
 
@@ -59,6 +61,17 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
         return ViewHolder(view)
     }
 
+    fun getHumanReadableTimeDifference(date: String): String {
+        val diff = getDayDifference(date)
+
+        return when {
+            diff == 0 -> "Today"
+            diff == -1 -> "Yesterday"
+            diff >= -7 -> "${abs(diff)} days ago"
+            else -> diff.toString()
+        }
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val data = dataSet[position].data.tryJsonCast<Assignment>()!!
@@ -66,7 +79,7 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
         val diff = getDayDifference(data.due_date)
 
         viewHolder.title.text = data.title
-        viewHolder.time.text = dataSet[position].createdAt
+        viewHolder.time.text = getHumanReadableTimeDifference(dataSet[position].createdAt)
 
         if(diff != previousDiff) {
             viewHolder.timeDiff.text = getReadableFormat(diff)
