@@ -24,7 +24,7 @@ val isoDateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 class AssignmentAdapter(private val dataSet: List<Document>) :
     RecyclerView.Adapter<AssignmentAdapter.ViewHolder>() {
 
-    var previousDiff = -1
+    var previousDiff = -2
     val today = Date()
 
     /**
@@ -76,6 +76,8 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val data = dataSet[position].data.tryJsonCast<Assignment>()!!
 
+        Log.d("assignments_service", getDayDifference(data.due_date).toString())
+
         val diff = getDayDifference(data.due_date)
 
         viewHolder.title.text = data.title
@@ -90,10 +92,12 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
     }
 
     private fun getReadableFormat(diff: Int): CharSequence {
-        return when(diff) {
-            0 -> "Today"
-            1 -> "Tomorrow"
-            else -> "This week"
+        return when {
+            diff < 0 -> "Missed"
+            diff == 0 -> "Today"
+            diff == 1 -> "Tomorrow"
+            diff <= 7 -> "This week"
+            else -> "Later"
         }
     }
 

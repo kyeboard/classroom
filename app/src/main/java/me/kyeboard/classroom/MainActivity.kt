@@ -42,10 +42,10 @@ class MainActivity : ComponentActivity() {
         val intent = Intent(this, Home::class.java)
 
         // Start the activity
-        // startActivity(intent)
+        startActivity(intent)
 
         // End the current activity
-        // finish()
+        finish()
     }
 
     // Function that starts oauth activity
