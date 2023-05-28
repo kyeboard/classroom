@@ -21,6 +21,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        actionBar?.hide()
+
         // Initialize appwrite client and req services
         val client = get_appwrite_client(this)
         val account = Account(client)
@@ -40,10 +42,10 @@ class MainActivity : ComponentActivity() {
         val intent = Intent(this, Home::class.java)
 
         // Start the activity
-        startActivity(intent)
+        // startActivity(intent)
 
         // End the current activity
-        finish()
+        // finish()
     }
 
     // Function that starts oauth activity
