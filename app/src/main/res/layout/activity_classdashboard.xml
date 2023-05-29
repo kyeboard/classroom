@@ -6,33 +6,6 @@
     android:background="@color/black"
     android:layout_height="match_parent">
 
-    <!-- <ImageButton
-        android:id="@+id/imageButton5"
-        android:background="@drawable/rounded"
-        android:tint="@color/white"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="15dp"
-        android:backgroundTint="#00000000"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/back" />
-
-    <TextView
-        android:id="@+id/textView11"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Class 10"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/plusjakartasans_extrabold"
-        android:textColor="@color/white"
-        android:textSize="25sp"
-        android:includeFontPadding="false"
-        android:layout_marginLeft="10dp"
-        app:layout_constraintStart_toEndOf="@+id/imageButton5"
-        app:layout_constraintTop_toTopOf="parent" /> -->
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/class_dashboard_tablayout"
         android:layout_marginTop="15dp"
@@ -77,6 +50,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/plus"
+        android:layout_marginRight="15dp"
+        android:layout_marginBottom="15dp"
         app:flow_verticalAlign="center"
         android:backgroundTint="@color/white"
         android:background="@drawable/rounded"

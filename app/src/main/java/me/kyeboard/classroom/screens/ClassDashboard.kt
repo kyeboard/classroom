@@ -1,6 +1,8 @@
 package me.kyeboard.classroom.screens
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -14,6 +16,11 @@ class ClassDashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classdashboard)
+
+        findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
+            val intent = Intent(this, NewAnnouncement::class.java)
+            startActivity(intent)
+        }
 
         val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
         val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
