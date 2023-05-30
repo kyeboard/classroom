@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/black"
+    android:padding="30dp"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout6"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView6"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:cardCornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/pfp" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cardView6"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/announcement_itemview_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/plusjakartasans_extrabold"
+                android:text="kyeboard"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/announcement_itemview_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="28th May, 2023"
+                android:textColor="#90FFFFFF"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/announcement_itemview_username" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/announcement_itemview_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="#99FFFFFF"
+        android:layout_marginTop="20dp"
+        android:lineSpacingMultiplier="1.3"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam interdum ligula vitae velit consequat venenatis. Maecenas nec urna nisi. Maecenas varius, massa non commodo posuere, enim lorem lacinia augue, in posuere ipsum libero nec dolor. Fusce tristique faucibus maximus. Curabitur mattis ligula est, in viverra nulla tempor vitae. Vivamus consequat accumsan risus a sodales. Praesent posuere nisi eu enim pellentesque consequat. Maecenas porta magna at libero cursus, et venenatis magna commodo. "
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/announcement_itemview_attachment_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/announcement_itemview_description">
+
+    </androidx.recyclerview.widget.RecyclerView>
+</androidx.constraintlayout.widget.ConstraintLayout>

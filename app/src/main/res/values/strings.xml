@@ -26,4 +26,5 @@
     <string name="newclass_subject_hint">Your class\' subject</string>
     <string name="newclass_create_btn_title">Create class</string>
     <string name="newclass_cancel_btn_text">Cancel</string>
+    <string name="title_activity_announcement_view">AnnouncementView</string>
 </resources>
