@@ -35,20 +35,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/new_announcement_attachments_list"
+        android:layout_width="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_announcement_message" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/new_announcement_attach_files"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/rounded"
+        android:backgroundTint="#50333333"
+        android:fontFamily="@font/plusjakartasans_medium"
+        android:includeFontPadding="false"
+        android:text="Add attachments"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_announcement_attachments_list" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/new_announcement_create_announcement"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded"
         android:backgroundTint="@color/white"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="@font/plusjakartasans_medium"
         android:includeFontPadding="false"
         android:text="Create announcement"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_announcement_message" />
+        app:layout_constraintTop_toBottomOf="@+id/new_announcement_attach_files" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/destroy_self"
