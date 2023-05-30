@@ -13,6 +13,8 @@ import me.kyeboard.classroom.screens.AnnouncementView
 import me.kyeboard.classroom.screens.ClassDashboard
 import me.kyeboard.classroom.screens.Home
 import me.kyeboard.classroom.screens.Meeting
+import me.kyeboard.classroom.screens.NewAnnouncement
+import me.kyeboard.classroom.screens.NewAssignment
 import me.kyeboard.classroom.screens.NewClass
 import me.kyeboard.classroom.utils.get_appwrite_client
 
@@ -42,7 +44,7 @@ class MainActivity : ComponentActivity() {
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, AnnouncementView::class.java)
+        val intent = Intent(this, NewAssignment::class.java)
 
         // Start the activity
         startActivity(intent)

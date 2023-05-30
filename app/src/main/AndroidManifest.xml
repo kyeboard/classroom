@@ -13,6 +13,11 @@
         android:theme="@style/Theme.Classroom"
         tools:targetApi="31">
         <activity
+            android:name=".screens.NewAssignment"
+            android:exported="false"
+            android:label="@string/title_activity_new_assignment"
+            android:theme="@style/Theme.Classroom" />
+        <activity
             android:name=".screens.AnnouncementView"
             android:exported="false"
             android:label="@string/title_activity_announcement_view"
