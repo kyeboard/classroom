@@ -10,6 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.screens.AnnouncementView
+import me.kyeboard.classroom.screens.AssignmentView
 import me.kyeboard.classroom.screens.ClassDashboard
 import me.kyeboard.classroom.screens.Home
 import me.kyeboard.classroom.screens.Meeting
@@ -44,7 +45,7 @@ class MainActivity : ComponentActivity() {
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, NewAssignment::class.java)
+        val intent = Intent(this, AssignmentView::class.java)
 
         // Start the activity
         startActivity(intent)

@@ -28,4 +28,5 @@
     <string name="newclass_cancel_btn_text">Cancel</string>
     <string name="title_activity_announcement_view">AnnouncementView</string>
     <string name="title_activity_new_assignment">NewAssignment</string>
+    <string name="title_activity_assignment_view">AssignmentView</string>
 </resources>
