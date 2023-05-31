@@ -1,4 +1,11 @@
 @import "https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900;1000&display=swap"
+@import "tailwindcss/base"
+@import "tailwindcss/components"
+@import "tailwindcss/utilities"
 
 html, body
     font-family: "Nunito"
+
+@layer components
+    .home_cover
+        background-image: linear-gradient(140deg, #D8E3FC 3%, #eddffc 10%, #eaf0fa 30%, #ddf8f4 40%, #b8ebfc)

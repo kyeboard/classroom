@@ -1,5 +1,5 @@
 <template>
-    <div class="w-screen h-screen bg-nord4 text-nord0 font-semibold">
+    <div class="w-screen h-screen bg-[#FFFFFF] text-nord0 font-semibold px-10 pt-32 pb-10">
         <NavBar />
         <NuxtPage />
     </div>
