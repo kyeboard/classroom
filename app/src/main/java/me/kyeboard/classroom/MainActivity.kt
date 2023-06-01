@@ -27,8 +27,6 @@ class MainActivity : ComponentActivity() {
 
         actionBar?.hide()
 
-        startHomeActivity()
-
         // Initialize appwrite client and req services
         val client = get_appwrite_client(this)
         val account = Account(client)

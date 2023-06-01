@@ -39,59 +39,35 @@
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toBottomOf="@+id/assignment_view_author" />
 
-    <TextView
-        android:id="@+id/assignment_view_description"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/assignment_view_tablayout"
+        android:layout_marginTop="15dp"
+        app:tabIndicatorColor="@color/white"
+        app:layout_goneMarginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        app:tabRippleColor="#00000000"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="TextView"
+        style="@style/customTabLayout"
+        app:tabIndicatorFullWidth="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView5"
+        android:layout_height="wrap_content">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/assignment_view_attachment_list"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/assignment_view_description" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Task" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Submissions" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/assignment_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Your work"
-            android:textColor="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assignment_view_submissions_list"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
-
-        <Button
-            android:id="@+id/assignment_view_add_files"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assignment_view_submissions_list" />
-
-        <Button
-            android:id="@+id/assignment_view_submit_assignment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintTop_toBottomOf="@+id/assignment_view_tablayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>

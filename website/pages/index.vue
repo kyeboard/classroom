@@ -1,6 +1,6 @@
 <template>
     <div class="h-full w-full home_cover rounded-2xl flex p-14 flex">
-        <div class="left mt-auto">
+        <div class="left mt-auto w-1/2">
             <div class="text-gray-500">Classroom v1.0.0</div>
             <div class="font-bold text-5xl mt-2 leading-[55px] font-source-code-pro">Bridging the gap<br />between teachers and<br />students</div>
             <div class="flex mt-8 gap-5">
@@ -14,8 +14,8 @@
                 </button>
             </div>
         </div>
-        <div class="right ml-auto">
-            <div class="mobile w-[350px] flex flex-col bg-white rounded-3xl h-[600px]">
+        <div class="right">
+            <div class="mobile -translate-y-10 translate-x-10 w-[400px] rotate-[25deg] flex flex-col bg-white rounded-3xl h-[700px]">
                 <div class="status_bar flex items-center justify-center p-4 px-6 text-gray-400">
                     <div class="time text-sm font-bold">9:41</div>
                     <div class="items flex ml-auto items-center gap-1 justify-center">
@@ -30,10 +30,9 @@
                     <hr class="my-3 border-gray-300" />
                     <div class="description text-gray-600 text-[14px]">Read the novel "The Great Gatsby" by F. Scott Fitzgerald and identify at least three significant symbols used in the story. Write a well-structured essay analyzing the symbolism and its significance in the overall narrative. Focus on the meaning of each symbol, its contribution to themes and character development, and use specific examples from the novel to support your analysis.</div>
                 </div>
-                <div class="sumbission_item bg-gray-200/40 p-5 rounded-t-lg flex flex-col mt-auto">
+                <div class="sumbission_item bg-gray-200/40 p-5 rounded-t-2xl flex flex-col mt-auto">
                     <div class="title">Your work</div>
-                    <button class="w-full bg-gray-200 p-2.5 rounded-lg mt-4">Add files</button>
-                    <button class="w-full bg-nord0 p-2.5 text-white rounded-lg mt-2">Sumbit</button>
+                    <button class="w-full bg-gray-200 p-2 rounded-lg mt-4">Add files</button>
                 </div>
             </div>
         </div>
