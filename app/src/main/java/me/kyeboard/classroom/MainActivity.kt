@@ -22,6 +22,7 @@ import me.kyeboard.classroom.screens.Meeting
 import me.kyeboard.classroom.screens.NewAnnouncement
 import me.kyeboard.classroom.screens.NewAssignment
 import me.kyeboard.classroom.screens.NewClass
+import me.kyeboard.classroom.screens.SubmissionView
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class MainActivity : ComponentActivity() {
@@ -36,6 +37,8 @@ class MainActivity : ComponentActivity() {
         val client = get_appwrite_client(this)
         val account = Account(client)
 
+        startHomeActivity()
+
         // Redirect users to home page if service exists
         redirectIfSessionExists(account)
 
@@ -48,7 +51,7 @@ class MainActivity : ComponentActivity() {
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, AssignmentView::class.java)
+        val intent = Intent(this, SubmissionView::class.java)
 
         // Start the activity
         startActivity(intent)

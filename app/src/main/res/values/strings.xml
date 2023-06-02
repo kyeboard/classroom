@@ -29,4 +29,5 @@
     <string name="title_activity_announcement_view">AnnouncementView</string>
     <string name="title_activity_new_assignment">NewAssignment</string>
     <string name="title_activity_assignment_view">AssignmentView</string>
+    <string name="title_activity_submission_view">SubmissionView</string>
 </resources>
