@@ -1,9 +1,14 @@
 package me.kyeboard.classroom
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.google.android.material.button.MaterialButton
 import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
