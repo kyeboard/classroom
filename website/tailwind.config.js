@@ -8,7 +8,14 @@ module.exports = {
         "./nuxt.config.{js,ts}",
     ],
     theme: {
-        extend: {},
+        extend: {
+            scale: {
+                "-1": "-1"
+            }
+        },
+        fontFamily: {
+            "montserrat": ["Montserrat"]
+        }
     },
     plugins: [
         require("tailwind-nord")

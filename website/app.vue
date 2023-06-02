@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-nord4 w-screen h-screen font-semibold">
-        <LazyNavBar />
+    <div class="bg-nord4 text-nord0 w-screen h-screen font-semibold">
+        <NavBar />
         <NuxtPage />
     </div>
 </template>
