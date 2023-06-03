@@ -7,6 +7,5 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup activity
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
     }
 }
