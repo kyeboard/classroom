@@ -1,3 +1,5 @@
+package me.kyeboard.classroom.screens
+
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -10,7 +12,6 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.SubmissionView
 import me.kyeboard.classroom.utils.get_appwrite_client
-
 class Login : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup activity
@@ -22,11 +23,6 @@ class Login : ComponentActivity() {
         // Initialize appwrite client and req services
         val client = get_appwrite_client(this)
         val account = Account(client)
-
-        startHomeActivity()
-
-        // Redirect users to home page if service exists
-        redirectIfSessionExists(account)
 
         // Handle get started button click
         findViewById<MaterialButton>(R.id.login).setOnClickListener {
@@ -65,22 +61,6 @@ class Login : ComponentActivity() {
                 runOnUiThread {
                     Toast.makeText(this@Login, "Login failed, try again!", Toast.LENGTH_SHORT).show()
                 }
-            }
-        }
-    }
-
-    private fun redirectIfSessionExists(account: Account) {
-        // Check if the session exists
-        CoroutineScope(Dispatchers.IO).launch {
-            // Check if the session exists
-            try {
-                // Try to get the session
-                account.get()
-
-                // If exists, redirect to the home page
-                startHomeActivity()
-            } catch(_: Exception) {
-
             }
         }
     }

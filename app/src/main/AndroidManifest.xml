@@ -25,6 +25,11 @@
             android:label="@string/title_activity_assignment_view"
             android:theme="@style/Theme.Classroom" />
         <activity
+            android:name=".screens.Login"
+            android:exported="false"
+            android:label="Login"
+            android:theme="@style/Theme.Classroom" />
+        <activity
             android:name=".screens.NewAssignment"
             android:exported="false"
             android:label="@string/title_activity_new_assignment"
