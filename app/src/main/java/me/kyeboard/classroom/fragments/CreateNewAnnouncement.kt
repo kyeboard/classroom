@@ -8,6 +8,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,19 +35,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [CreateNewAnnouncement.newInstance] factory method to
- * create an instance of this fragment.
- */
-
-data class AnnouncementItem(val author: String, val description: String, val attachments: ArrayList<String>)
+data class AnnouncementItem(val author: String, val message: String, val attachments: ArrayList<String>, val classid: String)
 
 class CreateNewAnnouncement : Fragment() {
     val attachments: ArrayList<Attachment> = arrayListOf()
@@ -70,10 +59,13 @@ class CreateNewAnnouncement : Fragment() {
         val view = inflater.inflate(R.layout.create_new_announcement, container, false)
 
         val adapter = AttachmentAdapter(attachments)
+        val class_id = requireArguments().getString("class_id")
         val recyclerView = view.findViewById<RecyclerView>(R.id.new_announcement_attachments_list)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+        Log.d("tt", "dsdsds")
 
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
@@ -116,7 +108,7 @@ class CreateNewAnnouncement : Fragment() {
                     attachment_ids.add(uploadToAppwriteStorage(view.context.contentResolver, uri, storage))
                 }
 
-                databases.createDocument("classes", "646c532bc46aecc1120a", "unique()", AnnouncementItem("kyeboard", message, attachment_ids))
+                databases.createDocument("classes", "647c1b704310bb8f0fed", "unique()", AnnouncementItem("kyeboard", message, attachment_ids, class_id!!))
             }
         }
 

@@ -1,6 +1,8 @@
 package me.kyeboard.classroom.screens
 
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
@@ -15,29 +17,18 @@ class NewAnnouncement : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newannouncement)
 
+        val class_id = intent.extras!!.getString("class_id")
+        Log.e("lmfao", class_id!!)
         val viewPager = findViewById<ViewPager2>(R.id.new_announcement_pager)
-        val tabLayout = findViewById<TabLayout>(R.id.new_announcement_tabs)
+
+        val bundle = Bundle()
+        bundle.putString("class_id", class_id)
+        val newAnnouncement = CreateNewAnnouncement()
+        newAnnouncement.arguments = bundle
 
         val adapter = ViewPagerAdapter(this)
-        adapter.addFragment(CreateNewAnnouncement())
-        adapter.addFragment(CreateNewMeeting())
+        adapter.addFragment(newAnnouncement)
 
         viewPager.adapter = adapter
-
-        tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tab?.let {
-                    viewPager.setCurrentItem(it.position, true)
-                }
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // Do nothing
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // Do nothing
-            }
-        })
     }
 }

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.appwrite.Query
 import io.appwrite.services.Databases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,12 +48,15 @@ class ClassDashboardStream : Fragment() {
         val view = inflater.inflate(R.layout.fragment_class_dashboard_stream, container, false)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.class_dashboard_stream_announcements)
+        val class_id = requireArguments().getString("class_id")!!
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
 
+        Log.d("cc", class_id)
+
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val data = databases.listDocuments("classes", "646c532bc46aecc1120a").documents
+                val data = databases.listDocuments("classes", "646c532bc46aecc1120a", arrayListOf(Query.equal("classid", class_id))).documents
                 val adapter = AnnouncementAdapter(data)
 
                 activity?.runOnUiThread {

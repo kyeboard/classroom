@@ -40,7 +40,6 @@ class AnnouncementAdapter(private val dataSet: List<Document>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        Log.d("tt", dataSet[position].data.toString())
         val data = dataSet[position].data.tryJsonCast<Announcement>()!!
 
         viewHolder.description.text = data.description
