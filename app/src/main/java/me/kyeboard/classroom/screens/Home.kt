@@ -18,6 +18,8 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.ClassItem
 import me.kyeboard.classroom.adapters.ClassesListAdapter
+import me.kyeboard.classroom.utils.AppwriteService
+import me.kyeboard.classroom.utils.AppwriteServiceSingleton
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class Home : Activity() {
@@ -25,19 +27,18 @@ class Home : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val client = get_appwrite_client(this)
-        val teams = Teams(client)
-        val database = Databases(client)
+        val appwriteService = AppwriteServiceSingleton.getInstance(this).get()!!
 
         CoroutineScope(Dispatchers.IO).launch {
             // Get the list of the teams that the current user is in
             try {
-                val teams = teams.list()
-                val user_classes = arrayListOf<ClassItem>()
+                // Get the data
+                val teams = appwriteService.teams.list()
+                val userClasses = arrayListOf<ClassItem>()
 
                 // Iterate over each team
                 for (team in teams.teams) {
-                    user_classes.add(database.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!)
+                    userClasses.add(appwriteService.databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!)
                 }
 
                 // Configure recycler view
@@ -45,7 +46,7 @@ class Home : Activity() {
                     val view = findViewById<RecyclerView>(R.id.home_classes_list)
                     findViewById<ProgressBar>(R.id.home_classes_list_loading).visibility = View.GONE
 
-                    view.adapter = ClassesListAdapter(user_classes, this@Home::openClassDashboard)
+                    view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard)
                     view.layoutManager = LinearLayoutManager(this@Home)
                 }
             } catch(e: Exception) {
@@ -64,8 +65,14 @@ class Home : Activity() {
         }
     }
 
-    private fun openClassDashboard(id: String): Unit {
+    private fun openClassDashboard(id: String) {
+        // Create a new intent for the dashboard
         val intent = Intent(this@Home, ClassDashboard::class.java)
+
+        // Put the id
+        intent.putExtra("class_id", id)
+
+        // Start
         startActivity(intent)
     }
 }

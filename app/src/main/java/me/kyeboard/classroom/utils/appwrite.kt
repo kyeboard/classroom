@@ -3,6 +3,8 @@ package me.kyeboard.classroom.utils
 import android.content.Context
 import io.appwrite.Client
 import io.appwrite.services.Account
+import io.appwrite.services.Databases
+import io.appwrite.services.Teams
 import java.lang.ref.WeakReference
 
 fun get_appwrite_client(context: Context): Client {
@@ -16,6 +18,8 @@ class AppwriteService(context: Context) {
         .setEndpoint("https://cloud.appwrite.io/v1")
         .setProject("fryday")
     val account = Account(client)
+    val teams = Teams(client)
+    val databases = Databases(client)
 }
 
 object AppwriteServiceSingleton {
