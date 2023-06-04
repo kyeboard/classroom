@@ -65,8 +65,6 @@ class CreateNewAnnouncement : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-        Log.d("tt", "dsdsds")
-
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
         val storage = Storage(client)

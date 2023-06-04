@@ -18,7 +18,6 @@ class NewAnnouncement : AppCompatActivity() {
         setContentView(R.layout.activity_newannouncement)
 
         val class_id = intent.extras!!.getString("class_id")
-        Log.e("lmfao", class_id!!)
         val viewPager = findViewById<ViewPager2>(R.id.new_announcement_pager)
 
         val bundle = Bundle()

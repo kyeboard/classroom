@@ -56,11 +56,27 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/newassignment_grade" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/new_assignment_attachments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newassignment_duedate" />
+
+    <Button
+        android:id="@+id/new_assignment_add_attachment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add attachments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_assignment_attachments" />
+
     <Button
         android:id="@+id/newassignment_create_assignment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
         android:text="Create assignment"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newassignment_duedate" />
+        app:layout_constraintTop_toBottomOf="@+id/new_assignment_add_attachment" />
 </androidx.constraintlayout.widget.ConstraintLayout>
