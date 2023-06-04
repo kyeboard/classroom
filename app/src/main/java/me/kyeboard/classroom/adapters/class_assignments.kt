@@ -14,18 +14,20 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
 data class Assignment(val author: String, val title: String, val due_date: String)
 
 val isoDateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+val dateFormat = SimpleDateFormat("d MMMM, yyyy", Locale.ENGLISH)
 
 class AssignmentAdapter(private val dataSet: List<Document>) :
     RecyclerView.Adapter<AssignmentAdapter.ViewHolder>() {
 
-    var previousDiff = -2
     val today = Date()
+    var previous_title = ""
 
     /**
      * Provide a reference to the type of views that you are using
@@ -43,15 +45,6 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
         }
     }
 
-    private fun getDayDifference(date: String): Int {
-        val date = isoDateFormatter.parse(date)!!
-
-        val cal = Calendar.getInstance()
-        cal.time = date
-
-        return cal.get(Calendar.DAY_OF_MONTH) - today.date
-    }
-
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         // Create a new view, which defines the UI of the list item
@@ -61,47 +54,40 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
         return ViewHolder(view)
     }
 
-    fun getHumanReadableTimeDifference(date: String): String {
-        val diff = getDayDifference(date)
+    fun getDaysDifference(newDate: String): Long {
+        val parsedDate = isoDateFormatter.parse(newDate)
+        val diff = parsedDate.time - today.time
 
-        return when {
-            diff == 0 -> "Today"
-            diff == -1 -> "Yesterday"
-            diff >= -7 -> "${abs(diff)} days ago"
-            else -> diff.toString()
-        }
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val data = dataSet[position].data.tryJsonCast<Assignment>()!!
 
-        Log.d("assignments_service", getDayDifference(data.due_date).toString())
-
-        val diff = getDayDifference(data.due_date)
+        val days_difference = getDaysDifference(data.due_date)
+        val new_title = getTitleForDiff(days_difference)
 
         viewHolder.title.text = data.title
-        viewHolder.time.text = getHumanReadableTimeDifference(dataSet[position].createdAt)
+        viewHolder.time.text = dateFormat.format(isoDateFormatter.parse(dataSet[position].createdAt)!!)
 
-        if(diff != previousDiff) {
-            viewHolder.timeDiff.text = getReadableFormat(diff)
-            previousDiff = diff
+        if(previous_title != new_title) {
+            previous_title = new_title
+            viewHolder.timeDiff.text = new_title
         } else {
             viewHolder.timeDiff.visibility = View.GONE
         }
     }
 
-    private fun getReadableFormat(diff: Int): CharSequence {
+    private fun getTitleForDiff(difference: Long): String {
         return when {
-            diff < 0 -> "Missed"
-            diff == 0 -> "Today"
-            diff == 1 -> "Tomorrow"
-            diff <= 7 -> "This week"
-            else -> "Later"
+            difference < 0 -> "Missed"
+            difference == 0L -> "Today"
+            difference == 1L -> "Tomorrow"
+            else -> "Others"
         }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
-
 }
