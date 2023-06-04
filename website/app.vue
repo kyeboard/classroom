@@ -1,6 +1,5 @@
 <template>
-    <div class="bg-nord4 text-nord0 w-screen h-screen font-semibold">
-        <NavBar />
+    <div class="bg-[#FFFFFF] text-nord0 w-screen h-screen font-semibold">
         <NuxtPage />
     </div>
 </template>
