@@ -3,7 +3,9 @@ package me.kyeboard.classroom.screens
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +43,7 @@ class Home : Activity() {
                 // Configure recycler view
                 runOnUiThread {
                     val view = findViewById<RecyclerView>(R.id.home_classes_list)
+                    findViewById<ProgressBar>(R.id.home_classes_list_loading).visibility = View.GONE
 
                     view.adapter = ClassesListAdapter(user_classes, this@Home::openClassDashboard)
                     view.layoutManager = LinearLayoutManager(this@Home)
