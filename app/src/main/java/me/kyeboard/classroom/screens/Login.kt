@@ -11,29 +11,28 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.SubmissionView
+import me.kyeboard.classroom.utils.AppwriteServiceSingleton
 import me.kyeboard.classroom.utils.get_appwrite_client
+
 class Login : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup activity
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        actionBar?.hide()
-
         // Initialize appwrite client and req services
-        val client = get_appwrite_client(this)
-        val account = Account(client)
+        val service = AppwriteServiceSingleton.getInstance(this)
 
         // Handle get started button click
         findViewById<MaterialButton>(R.id.login).setOnClickListener {
-            startGoogleOAuth(account)
+            startGoogleOAuth(service.get()!!.account)
         }
     }
 
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
         // Create an intent
-        val intent = Intent(this, SubmissionView::class.java)
+        val intent = Intent(this, Home::class.java)
 
         // Start the activity
         startActivity(intent)
@@ -55,7 +54,7 @@ class Login : ComponentActivity() {
                     Toast.makeText(this@Login, "Successfully logged in!", Toast.LENGTH_SHORT).show()
                 }
 
-                // Start home activity'''
+                // Start home activity
                 startHomeActivity()
             } catch(_: Exception) {
                 runOnUiThread {
