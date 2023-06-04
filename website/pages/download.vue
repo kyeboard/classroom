@@ -7,7 +7,7 @@
             <div class="mt-4 text-gray-500 w-1/2 leading-[28px]">Download the variant for your device. If you are unsure of your variant, download the universal one!</div>
             <div class="changelogs mt-6">
                 <div class="title font-jakarta font-bold">Changelogs</div>
-                <div class="items mt-2 ml-8 text-gray-600 flex flex-col gap-1">
+                <div class="items mt-2 ml-6 text-gray-600 flex flex-col gap-1">
                     <div class="item">- Initial build</div>
                     <div class="item">- Improve performance and reduce apk size</div>
                     <div class="item">- Remove bugs lingering around</div>
@@ -30,17 +30,23 @@
             </div>
             <div class="support">
                 <div class="title mt-5 font-jakarta font-bold">Support</div>
-                <div class="items mt-2 ml-8 text-gray-600 flex flex-col gap-1">
+                <div class="items mt-2 ml-6 text-gray-600 flex flex-col gap-1">
                     <div class="item">- Join my discord channel - </div>
                     <div class="item">- Came across a bug? Report it here - <a class="text-nord10" href="https://www.github.com/kyeboard/classroom/issues/new">https://www.github.com/kyeboard/classroom/issues/new</a></div>
                 </div>
             </div>
             <div class="notes">
                 <div class="title mt-5 font-jakarta font-bold">Notes</div>
-                <div class="items mt-2 ml-8 text-gray-600 flex flex-col gap-1">
+                <div class="items mt-2 ml-6 text-gray-600 flex flex-col gap-1">
                     <div class="item">- Loved my project? Sponsor me! - <a class="text-nord10" href="https://www.github.com/sponsors/kyeboard">https://www.github.com/sponsors/kyeboard</a></div>
                 </div>
             </div>
         </div>
    </div>
 </template>
+
+<script setup lang="ts">
+useHead({
+    title: "Download for your device | Classroom"
+})
+</script>

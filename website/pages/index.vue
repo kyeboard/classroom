@@ -24,5 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import VueFeather from "vue-feather"
+useHead({
+    title: "Briding the gap between students and teachers | Classroom"
+})
 </script>
