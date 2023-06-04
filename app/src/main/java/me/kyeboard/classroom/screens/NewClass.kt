@@ -16,8 +16,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
-import me.kyeboard.classroom.adapters.ClassItem
 import me.kyeboard.classroom.utils.get_appwrite_client
+
+data class ClassItem(val name: String, val header: String, val subject: String)
 
 class NewClass : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

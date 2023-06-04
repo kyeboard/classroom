@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import me.kyeboard.classroom.R
 
-data class ClassItem(val name: String, val header: String, val subject: String)
+data class ClassItem(val name: String, val header: String, val subject: String, val `$id`: String)
 
 class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String) -> Unit) :
     RecyclerView.Adapter<ClassesListAdapter.ViewHolder>() {
@@ -48,7 +48,7 @@ class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val 
         val data = dataSet[position]
 
         viewHolder.parent.setOnClickListener {
-            onClick("646c4200c2459aafcae8")
+            onClick(data.`$id`)
         }
 
         Picasso.get().load(data.header).into(viewHolder.headerImage)

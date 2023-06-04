@@ -8,9 +8,9 @@ import io.appwrite.extensions.tryJsonCast
 import io.appwrite.models.Document
 import me.kyeboard.classroom.R
 
-data class Announcement(val author: String, val description: String)
+data class Announcement(val author: String, val message: String, val classid: String, val attachments: ArrayList<String>)
 
-class AnnouncementAdapter(private val dataSet: List<Document>) :
+class AnnouncementAdapter(private val dataSet: List<Announcement>) :
     RecyclerView.Adapter<AnnouncementAdapter.ViewHolder>() {
 
     /**
@@ -40,9 +40,9 @@ class AnnouncementAdapter(private val dataSet: List<Document>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val data = dataSet[position].data.tryJsonCast<Announcement>()!!
+        val data = dataSet[position]
 
-        viewHolder.description.text = data.description
+        viewHolder.description.text = data.message
         viewHolder.username.text = data.author
 
         // Picasso.get().load(data.profile_url).into(viewHolder.user_profile)

@@ -1,5 +1,6 @@
 package me.kyeboard.classroom.fragments
 
+import Announcement
 import AnnouncementAdapter
 import android.os.Bundle
 import android.util.Log
@@ -10,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.Query
+import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Databases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -56,8 +58,18 @@ class ClassDashboardStream : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val data = databases.listDocuments("classes", "646c532bc46aecc1120a", arrayListOf(Query.equal("classid", class_id))).documents
-                val adapter = AnnouncementAdapter(data)
+                val data = databases.listDocuments("classes", "647c1b704310bb8f0fed").documents
+                val announcements = arrayListOf<Announcement>()
+
+                for(i in data) {
+                    val casted = i.data.tryJsonCast<Announcement>()!!
+
+                    if(casted.classid == class_id) {
+                        announcements.add(casted)
+                    }
+                }
+
+                val adapter = AnnouncementAdapter(announcements)
 
                 activity?.runOnUiThread {
                     recyclerView.adapter = adapter
