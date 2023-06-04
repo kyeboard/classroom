@@ -21,12 +21,6 @@ class ClassDashboard : AppCompatActivity() {
 
         val class_id = intent.extras!!.getString("class_id")
 
-        findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
-            val intent = Intent(this, NewAnnouncement::class.java)
-            intent.putExtra("class_id", class_id)
-            startActivity(intent)
-        }
-
         val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
         val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
 
@@ -35,6 +29,16 @@ class ClassDashboard : AppCompatActivity() {
         }
         val classDashboardStream = ClassDashboardStream().apply {
             arguments = bundle
+        }
+
+        findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
+            val intent = if(viewPager.currentItem == 0) {
+                Intent(this, NewAnnouncement::class.java)
+            } else {
+                Intent(this, NewAssignment::class.java)
+            }
+            intent.putExtra("class_id", class_id)
+            startActivity(intent)
         }
 
         val adapter = ViewPagerAdapter(this)
