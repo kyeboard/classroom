@@ -2,6 +2,7 @@ package me.kyeboard.classroom.fragments
 
 import Announcement
 import AnnouncementAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -17,6 +18,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
+import me.kyeboard.classroom.screens.AnnouncementView
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 // TODO: Rename parameter arguments, choose names that match
@@ -69,7 +71,7 @@ class ClassDashboardStream : Fragment() {
                     }
                 }
 
-                val adapter = AnnouncementAdapter(announcements)
+                val adapter = AnnouncementAdapter(announcements, this@ClassDashboardStream::openAnnouncementView)
 
                 activity?.runOnUiThread {
                     recyclerView.adapter = adapter
@@ -83,14 +85,11 @@ class ClassDashboardStream : Fragment() {
         return view
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ClassDashboardStream().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun openAnnouncementView(id: String) {
+        val intent = Intent(this.context, AnnouncementView::class.java)
+
+        intent.putExtra("announcement_id", id)
+
+        startActivity(intent)
     }
 }

@@ -16,14 +16,14 @@ import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.utils.get_appwrite_client
 
-data class Announcement(val author: String, val description: String, val attachments: ArrayList<String>)
+data class Announcement(val author: String, val message: String, val attachments: ArrayList<String>)
 
 class AnnouncementView : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_announcementview)
 
-        val announcement_id = "647585478738f0ca0638"
+        val announcement_id = intent.extras!!.getString("announcement_id")!!
         val client = get_appwrite_client(this)
         val database = Databases(client)
         val storage = Storage(client)
@@ -34,7 +34,7 @@ class AnnouncementView : ComponentActivity() {
         val view = findViewById<RecyclerView>(R.id.announcement_itemview_attachment_list)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val announcement_obj = database.getDocument("classes", "646c532bc46aecc1120a", announcement_id)
+            val announcement_obj = database.getDocument("classes", "647c1b704310bb8f0fed", announcement_id)
             val data = announcement_obj.data.tryJsonCast<Announcement>()!!
             val attachments = arrayListOf<Attachment>()
 
@@ -46,7 +46,7 @@ class AnnouncementView : ComponentActivity() {
             runOnUiThread {
                 username.text = data.author
                 time.text = announcement_obj.createdAt
-                description.text = data.description
+                description.text = data.message
 
                 view.adapter = AttachmentAdapter(attachments)
                 view.layoutManager = LinearLayoutManager(this@AnnouncementView)
