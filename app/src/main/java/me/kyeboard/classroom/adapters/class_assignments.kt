@@ -3,6 +3,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.models.Document
@@ -18,12 +19,12 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
-data class Assignment(val author: String, val title: String, val due_date: String)
+data class Assignment(val author: String, val title: String, val due_date: String, val `$id`: String)
 
 val isoDateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
 val dateFormat = SimpleDateFormat("d MMMM, yyyy", Locale.ENGLISH)
 
-class AssignmentAdapter(private val dataSet: List<Document>) :
+class AssignmentAdapter(private val dataSet: List<Document>, private val onClick: (id: String) -> Unit) :
     RecyclerView.Adapter<AssignmentAdapter.ViewHolder>() {
 
     val today = Date()
@@ -36,10 +37,12 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView
         val time: TextView
+        val parent: ConstraintLayout
         val timeDiff: TextView
 
         init {
             title = view.findViewById(R.id.class_assignment_item_title)
+            parent = view.findViewById(R.id.assignment_item_parent)
             time = view.findViewById(R.id.class_assignment_item_time)
             timeDiff = view.findViewById(R.id.class_assignments_time_header)
         }
@@ -67,6 +70,10 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
 
         val days_difference = getDaysDifference(data.due_date)
         val new_title = getTitleForDiff(days_difference)
+
+        viewHolder.parent.setOnClickListener {
+            onClick(data.`$id`)
+        }
 
         viewHolder.title.text = data.title
         viewHolder.time.text = dateFormat.format(isoDateFormatter.parse(dataSet[position].createdAt)!!)

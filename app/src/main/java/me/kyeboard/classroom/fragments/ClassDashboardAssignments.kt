@@ -1,6 +1,7 @@
 package me.kyeboard.classroom.fragments
 
 import AssignmentAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,6 +16,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
+import me.kyeboard.classroom.screens.AssignmentView
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 // TODO: Rename parameter arguments, choose names that match
@@ -54,7 +56,7 @@ class ClassDashboardAssignments : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val data = databases.listDocuments("classes", "646f432ad59caafabf74", listOf(Query.orderAsc("due_date"))).documents
-                val adapter = AssignmentAdapter(data)
+                val adapter = AssignmentAdapter(data, this@ClassDashboardAssignments::openAssignment)
 
                 activity?.runOnUiThread {
                     recyclerView.adapter = adapter
@@ -68,23 +70,11 @@ class ClassDashboardAssignments : Fragment() {
         return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ClassDashboardAssignments.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ClassDashboardAssignments().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    private fun openAssignment(id: String) {
+        val intent = Intent(this.context, AssignmentView::class.java)
+
+        intent.putExtra("assignment_id", id)
+
+        startActivity(intent)
     }
 }
