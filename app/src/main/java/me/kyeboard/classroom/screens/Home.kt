@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Databases
 import io.appwrite.services.Teams
@@ -33,6 +36,17 @@ class Home : Activity() {
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
 
         CoroutineScope(Dispatchers.IO).launch {
+            val session = appwriteService.account.get()
+
+            runOnUiThread {
+                val pfp = findViewById<ImageView>(R.id.current_user_profile)
+
+                findViewById<TextView>(R.id.current_user_name).text = session.name
+                findViewById<TextView>(R.id.current_user_email).text = session.email
+
+                Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday").into(pfp)
+            }
+
             // Get the list of the teams that the current user is in
             try {
                 // Get the data
@@ -53,7 +67,7 @@ class Home : Activity() {
                         noClassesParent.visibility = View.VISIBLE
                     }
 
-                    view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard)
+                    view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)
                     view.layoutManager = LinearLayoutManager(this@Home)
                 }
             } catch(e: Exception) {

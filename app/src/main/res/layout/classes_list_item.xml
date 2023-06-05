@@ -4,29 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/classes_list_item_parent"
     android:layout_marginBottom="15dp"
+    android:background="@drawable/classes_border"
     android:layout_width="match_parent"
     android:layout_height="180dp">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView5"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/classes_list_item_header"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
-    </androidx.cardview.widget.CardView>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
-        android:background="@drawable/gradient"
         android:layout_height="0dp"
         android:translationZ="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -38,10 +21,10 @@
             android:id="@+id/classes_list_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/plusjakartasans_extrabold"
+            android:fontFamily="@font/nekst_bold"
             android:paddingHorizontal="20dp"
             android:text=""
-            android:textColor="#CCFFFFFF"
+            android:textColor="@color/black"
             android:textSize="22sp"
             android:translationZ="10dp"
             android:layout_marginBottom="15dp"
@@ -53,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:textColor="#99FFFFFF"
+            android:textColor="@color/black"
             android:translationZ="10dp"
             app:layout_constraintBottom_toTopOf="@+id/classes_list_item_name"
             app:layout_constraintStart_toStartOf="parent" />
