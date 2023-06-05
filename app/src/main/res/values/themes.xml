@@ -3,7 +3,7 @@
 
     <style name="Theme.Classroom" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:statusBarColor">@color/black</item>
-        <item name="android:fontFamily">@font/plusjakartasans_medium</item>
+        <item name="android:fontFamily">@font/nekst_semibold</item>
     </style>
 
     <style name="customTabLayout" parent="Widget.Design.TabLayout">

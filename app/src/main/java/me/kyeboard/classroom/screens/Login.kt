@@ -2,6 +2,7 @@ package me.kyeboard.classroom.screens
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import com.google.android.material.button.MaterialButton
@@ -24,7 +25,7 @@ class Login : ComponentActivity() {
         val service = AppwriteServiceSingleton.getInstance(this)
 
         // Handle get started button click
-        findViewById<MaterialButton>(R.id.login).setOnClickListener {
+        findViewById<Button>(R.id.login).setOnClickListener {
             startGoogleOAuth(service.get()!!.account)
         }
     }
