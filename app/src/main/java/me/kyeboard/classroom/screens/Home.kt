@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.extensions.tryJsonCast
@@ -29,16 +30,17 @@ class Home : Activity() {
         setContentView(R.layout.activity_home)
 
         val appwriteService = AppwriteServiceSingleton.getInstance(this).get()!!
+        val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
 
         CoroutineScope(Dispatchers.IO).launch {
             // Get the list of the teams that the current user is in
             try {
                 // Get the data
-                val teams = appwriteService.teams.list()
+                val teams = appwriteService.teams.list().teams
                 val userClasses = arrayListOf<ClassItem>()
 
                 // Iterate over each team
-                for (team in teams.teams) {
+                for (team in teams) {
                     userClasses.add(appwriteService.databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!)
                 }
 
@@ -46,6 +48,10 @@ class Home : Activity() {
                 runOnUiThread {
                     val view = findViewById<RecyclerView>(R.id.home_classes_list)
                     findViewById<ProgressBar>(R.id.home_classes_list_loading).visibility = View.GONE
+
+                    if(teams.isEmpty()) {
+                        noClassesParent.visibility = View.VISIBLE
+                    }
 
                     view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard)
                     view.layoutManager = LinearLayoutManager(this@Home)
