@@ -79,7 +79,7 @@ class NewAssignmentTask : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_new_assignment_task, container, false)
 
-        val assignment_id = "646f5e9c8ba221bf2df1"
+        val assignment_id = requireArguments().getString("assignment_id")!!
 
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
