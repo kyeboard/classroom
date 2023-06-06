@@ -12,6 +12,7 @@
 
     <style name="TabTextAppearance" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 
 

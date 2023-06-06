@@ -2,6 +2,7 @@ package me.kyeboard.classroom.screens
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -33,6 +34,8 @@ class Home : Activity() {
 
         val appwriteService = AppwriteServiceSingleton.getInstance(this).get()!!
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
+
+        window.statusBarColor = Color.parseColor("#fee587")
 
         CoroutineScope(Dispatchers.IO).launch {
             val session = appwriteService.account.get()

@@ -2,9 +2,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.models.Document
 import me.kyeboard.classroom.R
@@ -22,11 +24,13 @@ class AnnouncementAdapter(private val dataSet: List<Announcement>, private val o
         val username: TextView
         val description: TextView
         val parent: ConstraintLayout
+        val pfp: ImageView
         val time: TextView
 
         init {
             parent = view.findViewById(R.id.announcement_item_parent)
             username = view.findViewById(R.id.announcement_item_username)
+            pfp = view.findViewById(R.id.announcement_item_author_pfp)
             description = view.findViewById(R.id.announcement_item_description)
             time = view.findViewById(R.id.announcement_item_time)
         }
@@ -52,7 +56,7 @@ class AnnouncementAdapter(private val dataSet: List<Announcement>, private val o
             onClick(data.`$id`)
         }
 
-        // Picasso.get().load(data.profile_url).into(viewHolder.user_profile)
+        Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/647dd94e7155f82fb365/view?project=fryday").into(viewHolder.pfp)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
