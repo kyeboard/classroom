@@ -1,6 +1,7 @@
 package me.kyeboard.classroom.screens
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -25,14 +26,15 @@ class NewClass : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newclass)
 
+        window.statusBarColor = Color.parseColor("#fee587")
+
         // Bind buttons that closes the self instance
-        findViewById<ImageView>(R.id.newclass_destory_self).setOnClickListener {
+        /* findViewById<ImageView>(R.id.newclass_destory_self).setOnClickListener {
             finish()
         }
         findViewById<Button>(R.id.newclass_cancel_self).setOnClickListener {
             finish()
         }
-
         // Default items
         var headerImage = "https://cloud.appwrite.io/v1/storage/buckets/646460e48963e000edd6/files/landscape1/view?project=fryday"
         val client = get_appwrite_client(this)
@@ -86,10 +88,11 @@ class NewClass : ComponentActivity() {
 
             // Launch with the result handler
             headerHandler.launch(intent)
-        }
+        } */
     }
 
+    /*
     private fun updateHeaderImage(url: String) {
         Picasso.get().load(url).into(findViewById<ImageView>(R.id.selected_header_preview))
-    }
+    } */
 }
