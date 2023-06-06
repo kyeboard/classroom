@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#e5e9f0"
+    android:background="#eceff4"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/topbar_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fee587"
@@ -50,7 +50,7 @@
         android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/topbar_parent" />
 
     <TextView
         android:id="@+id/textView8"
@@ -76,11 +76,11 @@
         android:textColor="@color/black"
         android:layout_marginHorizontal="15dp"
         android:hint="Name for your class"
-        android:textColorHint="#888888"
+        android:textColorHint="#4c566a"
         android:includeFontPadding="false"
         android:inputType="text"
         android:padding="18dp"
-        android:textSize="15sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -111,25 +111,92 @@
         android:hint="Subject for your class"
         android:includeFontPadding="false"
         android:inputType="text"
-        android:textColorHint="#888888"
-        android:padding="19dp"
-        android:textSize="15sp"
+        android:textColorHint="#4c566a"
+        android:padding="18dp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/nekst_bold"
+        android:text="Colour"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_class_subject" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="By creating a new class,\nyou agree to our terms and conditions"
+        android:textColor="#2E3440"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/color_select_yellow" />
 
     <Button
         android:id="@+id/new_class_create"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="20dp"
         android:layout_height="55dp"
-        android:text="Create class"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/border_yellow"
-        android:textAllCaps="false"
         android:includeFontPadding="false"
+        android:outlineProvider="none"
+        android:text="Create class"
+        android:textAllCaps="false"
         android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_class_subject" />
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <View
+        android:id="@+id/color_select_yellow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <View
+        android:id="@+id/color_select_green"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintStart_toEndOf="@+id/color_select_yellow"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <View
+        android:id="@+id/color_select_orange"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintStart_toEndOf="@+id/color_select_green"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <View
+        android:id="@+id/color_select_pink"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintStart_toEndOf="@+id/color_select_orange"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
     <!--
     <Button

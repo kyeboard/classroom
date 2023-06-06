@@ -2,7 +2,10 @@ package me.kyeboard.classroom.screens
 
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -10,6 +13,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.cardview.widget.CardView
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.squareup.picasso.Picasso
 import io.appwrite.services.Databases
 import io.appwrite.services.Teams
@@ -19,40 +23,46 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.utils.get_appwrite_client
 
-data class ClassItem(val name: String, val header: String, val subject: String)
+data class ClassItem(val name: String, val subject: String, val color: String)
 
 class NewClass : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newclass)
 
-        window.statusBarColor = Color.parseColor("#fee587")
+        var color = "#fee587"
+
+        updateAccent(color)
+
+        findViewById<View>(R.id.color_select_green).setOnClickListener {
+            color = "#a3be8c"
+            updateAccent(color)
+        }
+
+        findViewById<View>(R.id.color_select_orange).setOnClickListener {
+            color = "#d08770"
+            updateAccent(color)
+        }
+
+        findViewById<View>(R.id.color_select_pink).setOnClickListener {
+            color = "#b48ead"
+            updateAccent(color)
+        }
+
+        findViewById<View>(R.id.color_select_yellow).setOnClickListener {
+            color = "#fee587"
+            updateAccent(color)
+        }
 
         // Bind buttons that closes the self instance
-        /* findViewById<ImageView>(R.id.newclass_destory_self).setOnClickListener {
+        findViewById<ImageView>(R.id.newclass_destory_self).setOnClickListener {
             finish()
         }
-        findViewById<Button>(R.id.newclass_cancel_self).setOnClickListener {
-            finish()
-        }
+
         // Default items
-        var headerImage = "https://cloud.appwrite.io/v1/storage/buckets/646460e48963e000edd6/files/landscape1/view?project=fryday"
         val client = get_appwrite_client(this)
         val teams = Teams(client)
         val database = Databases(client)
-
-        // Initial
-        updateHeaderImage(headerImage)
-
-        // Activity handler which returns the newly selected header
-        val headerHandler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            try {
-                headerImage = result.data?.data!!.toString()
-                updateHeaderImage(headerImage)
-            } catch(_: Exception) {
-
-            }
-        }
 
         // Handle new class create button clicks
         findViewById<Button>(R.id.new_class_create).setOnClickListener {
@@ -74,21 +84,49 @@ class NewClass : ComponentActivity() {
 
                 // Create the registry in the database
                 // TODO: Fix the registry spelling
-                database.createDocument("classes", "registery", team.id, ClassItem(className, headerImage, classSubject))
+                database.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, color))
 
                 // End the current activity (the class is created)
                 finish()
             }
         }
+    }
 
-        // Launch select header activity to select a header
-        findViewById<CardView>(R.id.select_header).setOnClickListener {
-            // Create intent for that activity
-            val intent = Intent(this, SelectHeader::class.java)
+    private fun updateAccent(color: String) {
+        window.statusBarColor = Color.parseColor(color)
 
-            // Launch with the result handler
-            headerHandler.launch(intent)
-        } */
+        findViewById<ConstraintLayout>(R.id.topbar_parent).background.setTint(Color.parseColor(color))
+        val buttonBackground = findViewById<Button>(R.id.new_class_create).background as GradientDrawable
+
+        buttonBackground.apply {
+            setColor(Color.parseColor(color))
+            setStroke(5, Color.parseColor("#000000"))
+            cornerRadius = 10F
+        }
+
+        // Reset selections
+        for(i in listOf(
+            listOf(R.id.color_select_green, "#a3be8c"),
+            listOf(R.id.color_select_yellow, "#fee587"),
+            listOf(R.id.color_select_orange, "#d08770"),
+            listOf(R.id.color_select_pink, "#b48ead")
+        )) {
+            val background = findViewById<View>(i[0] as Int).background as GradientDrawable
+
+            if(color == i[1] as String) {
+                background.apply {
+                    setColor(Color.parseColor(color))
+                    setStroke(5, Color.parseColor("#000000"))
+                    cornerRadius = 10F
+                }
+            } else {
+                background.apply {
+                    setColor(Color.parseColor(i[1] as String))
+                    setStroke(0, Color.parseColor("#000000"))
+                    cornerRadius = 10F
+                }
+            }
+        }
     }
 
     /*
