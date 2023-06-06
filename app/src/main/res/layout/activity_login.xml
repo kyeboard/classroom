@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="250dp"
@@ -16,7 +15,8 @@
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.492" />
 
     <TextView
         android:id="@+id/textView2"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:textColor="#CC000000"
         android:lineSpacingMultiplier="1.3"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="40dp"
         android:text="@string/app_description"
         app:layout_constraintBottom_toTopOf="@+id/login"
         app:layout_constraintStart_toStartOf="parent" />
@@ -45,7 +45,7 @@
     <Button
         android:id="@+id/login"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:text="@string/login_button_home"
         android:background="@drawable/border"
         android:textAllCaps="false"

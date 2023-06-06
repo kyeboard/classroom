@@ -6,7 +6,7 @@
     android:background="@color/black"
     android:layout_height="match_parent">
 
-    <com.google.android.material.tabs.TabLayout
+    <!-- <com.google.android.material.tabs.TabLayout
         android:id="@+id/class_dashboard_tablayout"
         android:layout_marginTop="15dp"
         app:tabIndicatorColor="@color/white"
@@ -34,9 +34,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Classes" />
-    </com.google.android.material.tabs.TabLayout>
+    </com.google.android.material.tabs.TabLayout> -->
 
-    <androidx.viewpager2.widget.ViewPager2
+    <!-- <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/classdashbord_viewpager"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -58,6 +58,16 @@
         app:flow_horizontalAlign="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/action_button" />
+        android:contentDescription="@string/action_button" /> -->
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="#fee587"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:layout_editor_absoluteX="1dp">
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.kyeboard.classroom.R
 
 
-data class ClassItem(val name: String, val header: String, val subject: String, val `$id`: String, val color: String)
+data class ClassItem(val name: String, val header: String, val subject: String, val `$id`: String, val color: String, var total: Long)
 
 class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String) -> Unit, private val context: Context) :
     RecyclerView.Adapter<ClassesListAdapter.ViewHolder>() {
@@ -54,7 +54,7 @@ class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val 
 
         val bg = (viewHolder.parent.background as GradientDrawable)
 
-        bg.setColor(Color.parseColor("#fee587"))
+        bg.setColor(Color.parseColor(data.color))
         bg.setStroke(8, Color.parseColor("#000000"))
         bg.cornerRadius = 5F
 

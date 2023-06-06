@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#e2d1ca"
-    android:padding="20dp"
+    android:background="#e5d6d0"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
+        android:padding="20dp"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -18,8 +18,8 @@
             android:id="@+id/constraintLayout7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/pfp_border"
             android:padding="2dp"
+            android:background="@drawable/pfp_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -28,42 +28,57 @@
                 android:id="@+id/cardView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="19dp"
+                app:cardCornerRadius="22dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/current_user_profile"
-                    android:layout_width="38dp"
-                    android:layout_height="38dp"
-                    android:background="@drawable/border"
-                    android:src="@drawable/pfp" />
+                    android:layout_width="44dp"
+                    android:layout_height="44dp" />
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/current_user_name"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:fontFamily="@font/nekst_bold"
-            android:includeFontPadding="false"
-            android:text="TextView"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout7"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/current_user_email"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="TextView"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/constraintLayout7" />
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout7"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/current_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nekst_bold"
+                android:includeFontPadding="false"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/current_user_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textColor="#444444"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/current_user_name" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="0dp"
+        android:background="@color/black"
+        android:layout_height="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
     <ImageButton
         android:id="@+id/open_new_class_popup"
@@ -73,19 +88,23 @@
         android:translationZ="10dp"
         android:layout_width="wrap_content"
         android:src="@drawable/plus"
+        android:layout_marginRight="15dp"
+        android:elevation="0dp"
+        android:outlineProvider="none"
+        android:layout_marginBottom="15dp"
         android:contentDescription="@string/action_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/home_classes_list"
-        android:layout_marginTop="20dp"
         android:layout_width="0dp"
+        android:padding="15dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/view2" />
 
     <ProgressBar
         android:id="@+id/home_classes_list_loading"

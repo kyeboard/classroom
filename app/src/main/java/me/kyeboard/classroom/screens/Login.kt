@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.graphics.Color
 import com.google.android.material.button.MaterialButton
 import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,8 @@ class Login : ComponentActivity() {
         // Setup activity
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+
+        window.statusBarColor = android.graphics.Color.parseColor("#e2d1ca")
 
         // Initialize appwrite client and req services
         val service = AppwriteServiceSingleton.getInstance(this)

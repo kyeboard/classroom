@@ -1,6 +1,7 @@
 package me.kyeboard.classroom.screens
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
@@ -21,6 +22,9 @@ class ClassDashboard : AppCompatActivity() {
 
         val class_id = intent.extras!!.getString("class_id")
 
+        window.statusBarColor = Color.parseColor("#fee587")
+
+        /*
         val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
         val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
 
@@ -62,7 +66,7 @@ class ClassDashboard : AppCompatActivity() {
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Do nothing
             }
-        })
+        }) */
     }
 
     fun open_announcement_activity(id: String): Unit {

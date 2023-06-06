@@ -12,6 +12,9 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:translationZ="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
+        android:paddingVertical="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,23 +25,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nekst_bold"
-            android:paddingHorizontal="20dp"
-            android:text=""
+            android:text="sdsdssd"
             android:textColor="@color/black"
-            android:textSize="22sp"
+            android:layout_marginTop="15dp"
+            android:textSize="24sp"
             android:translationZ="10dp"
-            android:layout_marginBottom="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/classes_list_item_subject"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:text="sds"
+            android:textColor="#444444"
             android:translationZ="10dp"
-            app:layout_constraintBottom_toTopOf="@+id/classes_list_item_name"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/classes_list_item_name" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:tint="@color/black"
+            android:padding="15dp"
+            android:backgroundTint="@color/white"
+            android:background="@drawable/leaflet"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:src="@drawable/caret_right" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

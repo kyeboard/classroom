@@ -3,7 +3,6 @@ package me.kyeboard.classroom.screens
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -55,7 +54,9 @@ class Home : Activity() {
 
                 // Iterate over each team
                 for (team in teams) {
-                    userClasses.add(appwriteService.databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!)
+                    val item = appwriteService.databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!
+                    item.total = team.total
+                    userClasses.add(item)
                 }
 
                 // Configure recycler view
