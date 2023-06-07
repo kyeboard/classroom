@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
@@ -61,10 +62,13 @@ class AssignmentView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assignmentview)
 
+        window.statusBarColor = Color.parseColor("#fee587")
+
         val viewPager = findViewById<ViewPager2>(R.id.assignment_view_pager)
         val tabLayout = findViewById<TabLayout>(R.id.assignment_view_tablayout)
 
-        val assignment_id = intent.extras!!.getString("assignment_id")!!
+        //val assignment_id = intent.extras!!.getString("assignment_id")!!
+        val assignment_id = "646f5e9c8ba221bf2df1"
 
         val newAssignmentTask = NewAssignmentTask().apply {
             arguments = Bundle().apply {
