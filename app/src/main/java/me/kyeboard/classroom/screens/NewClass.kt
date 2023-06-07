@@ -34,7 +34,9 @@ class NewClass : ComponentActivity() {
 
         var selectedColor = "#fee587"
 
-        updateAccent(selectedColor)
+        val loader = findViewById<ConstraintLayout>(R.id.new_class_loading)
+
+         updateAccent(selectedColor)
 
         for((selector, color) in colorsIndex) {
             findViewById<View>(selector as Int).setOnClickListener {
@@ -66,6 +68,9 @@ class NewClass : ComponentActivity() {
 
                 return@setOnClickListener
             }
+
+            window.statusBarColor = Color.parseColor("#DD2E3440")
+            loader.visibility = View.VISIBLE
 
             // Create a team
             CoroutineScope(Dispatchers.IO).launch {
