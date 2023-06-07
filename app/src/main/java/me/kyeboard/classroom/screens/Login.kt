@@ -5,15 +5,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.graphics.Color
-import com.google.android.material.button.MaterialButton
+import androidx.core.content.res.ResourcesCompat
 import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
-import me.kyeboard.classroom.screens.SubmissionView
-import me.kyeboard.classroom.utils.AppwriteServiceSingleton
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class Login : ComponentActivity() {
@@ -22,14 +19,15 @@ class Login : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        window.statusBarColor = android.graphics.Color.parseColor("#e2d1ca")
+        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.home_bg, null)
 
         // Initialize appwrite client and req services
-        val service = AppwriteServiceSingleton.getInstance(this)
+        val client = get_appwrite_client(this)
+        val account = Account(client)
 
         // Handle get started button click
         findViewById<Button>(R.id.login).setOnClickListener {
-            startGoogleOAuth(service.get()!!.account)
+            startGoogleOAuth(account)
         }
     }
 

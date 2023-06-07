@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:background="#e2d1ca"
+    android:background="@color/home_bg"
     android:padding="30dp"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -16,14 +15,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.492" />
+        android:contentDescription="@string/home_cover_content_desc" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/app_title"
-        android:textColor="@color/black"
         android:fontFamily="@font/nekst_bold"
         android:textSize="32sp"
         android:lineSpacingMultiplier="0.9"
@@ -35,7 +33,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#CC000000"
+        android:textColor="@color/black2"
         android:lineSpacingMultiplier="1.3"
         android:layout_marginBottom="40dp"
         android:text="@string/app_description"
@@ -49,7 +47,8 @@
         android:text="@string/login_button_home"
         android:background="@drawable/border"
         android:textAllCaps="false"
-        android:includeFontPadding="false"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:ignore="ButtonTooWide"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

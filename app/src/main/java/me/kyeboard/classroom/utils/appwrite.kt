@@ -17,6 +17,7 @@ class AppwriteService(context: Context) {
     val client: Client = Client(context)
         .setEndpoint("https://cloud.appwrite.io/v1")
         .setProject("fryday")
+
     val account = Account(client)
     val teams = Teams(client)
     val databases = Databases(client)
