@@ -71,7 +71,7 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/class_dashboard_tablayout"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="5dp"
         app:tabIndicatorColor="#2E3440"
         app:layout_goneMarginTop="10dp"
         android:layout_marginHorizontal="10dp"

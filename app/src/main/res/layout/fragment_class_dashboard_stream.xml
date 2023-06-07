@@ -3,13 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingHorizontal="15dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.ClassDashboardStream">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/class_dashboard_stream_announcements"
         android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="15dp"
         android:layout_width="match_parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -18,5 +18,23 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/class_dashboard_stream_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ProgressBar
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:indeterminateTint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

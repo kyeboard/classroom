@@ -12,6 +12,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import io.appwrite.extensions.tryJsonCast
+import io.appwrite.services.Databases
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,57 +22,80 @@ import me.kyeboard.classroom.fragments.ClassDashboardAssignments
 import me.kyeboard.classroom.fragments.ClassDashboardClasses
 import me.kyeboard.classroom.fragments.ClassDashboardStream
 import me.kyeboard.classroom.utils.AppwriteServiceSingleton
+import me.kyeboard.classroom.utils.get_appwrite_client
 
 class ClassDashboard : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Setup view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classdashboard)
 
-        // val class_id = intent.extras!!.getString("class_id")
-        val class_id = "647da6bb4463f64ae8f5"
+        // Get class id sent slong
+        val classId = intent.extras!!.getString("class_id")!!
 
-        val service = AppwriteServiceSingleton.getInstance(this).get()!!
+        // Initiate appwrite services
+        val client = get_appwrite_client(this)
+        val databases = Databases(client)
 
         CoroutineScope(Dispatchers.IO).launch {
-            val class_info = service.databases.getDocument("classes", "registery", class_id).data.tryJsonCast<ClassItem>()!!
+            // Get class info from registery
+            val classInfo = databases.getDocument("classes", "registery", classId).data.tryJsonCast<ClassItem>()!!
 
-            window.statusBarColor = Color.parseColor(class_info.color)
+            // Change the status bar color according to the selected accent color
+            window.statusBarColor = Color.parseColor(classInfo.color)
 
             runOnUiThread {
+                // Change tint of the topbar
                 findViewById<ConstraintLayout>(R.id.class_dashboard_topbar).background.apply {
-                    setTint(Color.parseColor(class_info.color))
+                    setTint(Color.parseColor(classInfo.color))
                 }
-                findViewById<TextView>(R.id.current_class_name).text = class_info.name
-                findViewById<TextView>(R.id.current_class_subject).text = class_info.subject
+
+                // Change name and subject
+                findViewById<TextView>(R.id.current_class_name).text = classInfo.name
+                findViewById<TextView>(R.id.current_class_subject).text = classInfo.subject
             }
         }
 
+        // Viewpager and tab layout for nav
         val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
         val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
 
+        // Setup dashboard stream fragment
         val bundle = Bundle().apply {
-            putString("class_id", class_id)
+            putString("class_id", classId)
         }
         val classDashboardStream = ClassDashboardStream().apply {
             arguments = bundle
         }
+        val classDashboardAssignments = ClassDashboardStream().apply {
+            arguments = bundle
+        }
 
+        // Handle plus button clicks
         findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
+            // Select the intent to show
             val intent = if(viewPager.currentItem == 0) {
                 Intent(this, NewAnnouncement::class.java)
             } else {
                 Intent(this, NewAssignment::class.java)
             }
-            intent.putExtra("class_id", class_id)
+
+            // Add class id
+            intent.putExtra("class_id", classId)
+
+            // Start
             startActivity(intent)
         }
 
+        // Setup pager adapter
         val adapter = ViewPagerAdapter(this)
         adapter.addFragment(classDashboardStream)
-        adapter.addFragment(ClassDashboardAssignments())
+        adapter.addFragment(classDashboardAssignments)
 
+        // Set the adapter
         viewPager.adapter = adapter
 
+        // Change view pager position according to tab clicks
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
@@ -80,16 +104,12 @@ class ClassDashboard : AppCompatActivity() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // Do nothing
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                // Do nothing
+
             }
         })
-    }
-
-    fun open_announcement_activity(id: String): Unit {
-
     }
 }

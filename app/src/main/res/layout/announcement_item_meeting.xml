@@ -72,7 +72,7 @@
         android:id="@+id/announcement_item_description"
         android:layout_width="0dp"
         android:maxLines="6"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:lineHeight="21sp"
         android:textColor="#4c566a"
         android:ellipsize="end"

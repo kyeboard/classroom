@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.Query
@@ -21,29 +22,7 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.AnnouncementView
 import me.kyeboard.classroom.utils.get_appwrite_client
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ClassDashboardStream.newInstance] factory method to
- * create an instance of this fragment.
- */
 class ClassDashboardStream : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -51,34 +30,38 @@ class ClassDashboardStream : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_class_dashboard_stream, container, false)
 
+        // Get the view items
         val recyclerView = view.findViewById<RecyclerView>(R.id.class_dashboard_stream_announcements)
-        val class_id = requireArguments().getString("class_id")!!
+        val classId = requireArguments().getString("class_id")!!
+        val loading = view.findViewById<ConstraintLayout>(R.id.class_dashboard_stream_loading)
+
+        // Initiate appwrite services
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
 
-        Log.d("cc", class_id)
-
+        // Load data
         CoroutineScope(Dispatchers.IO).launch {
-            try {
-                val data = databases.listDocuments("classes", "647c1b704310bb8f0fed").documents
-                val announcements = arrayListOf<Announcement>()
+            val data = databases.listDocuments("classes", "647c1b704310bb8f0fed").documents
+            val announcements = arrayListOf<Announcement>()
 
-                for(i in data) {
-                    val casted = i.data.tryJsonCast<Announcement>()!!
+            for(i in data) {
+                val casted = i.data.tryJsonCast<Announcement>()!!
 
-                    if(casted.classid == class_id) {
-                        announcements.add(casted)
-                    }
+                // Filter those announcements for this class
+                if(casted.classid == classId) {
+                    announcements.add(casted)
                 }
+            }
 
-                val adapter = AnnouncementAdapter(announcements, this@ClassDashboardStream::openAnnouncementView)
+            // Create adapter for announcements
+            val adapter = AnnouncementAdapter(announcements, this@ClassDashboardStream::openAnnouncementView)
 
-                activity?.runOnUiThread {
-                    recyclerView.adapter = adapter
-                    recyclerView.layoutManager = LinearLayoutManager(view.context)
-                }
-            } catch(e: Exception) {
-                Log.e("eee", e.message.toString())
+            // Set adapter and layout
+            activity?.runOnUiThread {
+                loading.visibility = View.GONE
+
+                recyclerView.adapter = adapter
+                recyclerView.layoutManager = LinearLayoutManager(view.context)
             }
         }
 
@@ -86,10 +69,13 @@ class ClassDashboardStream : Fragment() {
     }
 
     private fun openAnnouncementView(id: String) {
+        // Create view intent
         val intent = Intent(this.context, AnnouncementView::class.java)
 
+        // Add announcement id
         intent.putExtra("announcement_id", id)
 
+        // Start
         startActivity(intent)
     }
 }
