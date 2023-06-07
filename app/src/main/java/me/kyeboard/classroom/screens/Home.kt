@@ -2,7 +2,6 @@ package me.kyeboard.classroom.screens
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
@@ -11,11 +10,12 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.appwrite.extensions.tryJsonCast
-import io.appwrite.services.Databases
+import io.appwrite.services.Account
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,22 +23,31 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.ClassItem
 import me.kyeboard.classroom.adapters.ClassesListAdapter
-import me.kyeboard.classroom.utils.AppwriteService
 import me.kyeboard.classroom.utils.AppwriteServiceSingleton
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class Home : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Initialize view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
+        // Status bar color
+        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.yellow, theme)
+
+        // Setup appwrite services
+        val client = get_appwrite_client(this)
+        val account = Account(client)
+        val teamsService = Teams(client)
+
         val appwriteService = AppwriteServiceSingleton.getInstance(this).get()!!
+
+        // View holders
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
 
-        window.statusBarColor = Color.parseColor("#fee587")
-
         CoroutineScope(Dispatchers.IO).launch {
-            val session = appwriteService.account.get()
+            // Show current user info
+            val session = account.get()
 
             runOnUiThread {
                 val pfp = findViewById<ImageView>(R.id.current_user_profile)
@@ -52,25 +61,35 @@ class Home : Activity() {
             // Get the list of the teams that the current user is in
             try {
                 // Get the data
-                val teams = appwriteService.teams.list().teams
+                val teams = teamsService.list().teams
                 val userClasses = arrayListOf<ClassItem>()
 
                 // Iterate over each team
                 for (team in teams) {
+                    // Get register
                     val item = appwriteService.databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!
+
+                    // Set total students
                     item.total = team.total
+
+                    // Add to list
                     userClasses.add(item)
                 }
 
                 // Configure recycler view
                 runOnUiThread {
+                    // Get the view
                     val view = findViewById<RecyclerView>(R.id.home_classes_list)
+
+                    // Remove the progress bar
                     findViewById<ProgressBar>(R.id.home_classes_list_loading).visibility = View.GONE
 
+                    // If there are no teams, show the no found widget
                     if(teams.isEmpty()) {
                         noClassesParent.visibility = View.VISIBLE
                     }
 
+                    // Add the adapter
                     view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)
                     view.layoutManager = LinearLayoutManager(this@Home)
                 }
@@ -81,6 +100,7 @@ class Home : Activity() {
             }
         }
 
+        // Handle new class popup
         findViewById<ImageButton>(R.id.open_new_class_popup).setOnClickListener {
             // Create a new intent
             val intent = Intent(this, NewClass::class.java)

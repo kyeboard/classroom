@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#e5e9f0"
+    android:background="@color/bg"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -11,7 +10,7 @@
         android:paddingHorizontal="20dp"
         android:paddingVertical="15dp"
         android:layout_width="match_parent"
-        android:background="#fee587"
+        android:background="@color/yellow"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -38,7 +37,8 @@
                 <ImageView
                     android:id="@+id/current_user_profile"
                     android:layout_width="44dp"
-                    android:layout_height="44dp" />
+                    android:layout_height="44dp"
+                    android:contentDescription="@string/user_pfp_desc" />
             </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -55,7 +55,6 @@
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:fontFamily="@font/nekst_bold"
-                android:includeFontPadding="false"
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -66,7 +65,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                android:textColor="#444444"
+                android:textColor="@color/black4"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/current_user_name" />
 
@@ -90,7 +89,7 @@
         android:padding="20dp"
         android:lineSpacingMultiplier="1.3"
         android:fontFamily="@font/nekst_bold"
-        android:text="Are you sure you can\ncomplete your assignments today?"
+        android:text="@string/home_tip"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view2" />
 
@@ -111,11 +110,10 @@
         android:translationZ="10dp"
         android:layout_width="wrap_content"
         android:src="@drawable/plus"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:elevation="0dp"
-        android:outlineProvider="none"
         android:layout_marginBottom="15dp"
-        android:contentDescription="@string/action_button"
+        android:contentDescription="@string/create_new_class"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -123,12 +121,12 @@
         android:id="@+id/textView20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your classes"
+        android:text="@string/your_classes_header"
         android:textColor="@color/black"
         android:fontFamily="@font/nekst_bold"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:textSize="20sp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view3" />
 
@@ -148,45 +146,46 @@
         android:id="@+id/home_classes_list_loading"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:indeterminateTint="@color/white"
+        android:indeterminateTint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/home_classes_list" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/no_classes_found_parent"
-        android:visibility="gone"
         android:layout_width="0dp"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/home_classes_list">
 
         <ImageView
             android:id="@+id/imageView9"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:src="@drawable/no_items"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:src="@drawable/no_items" />
+            android:contentDescription="@string/no_items_found_img_desc" />
 
         <TextView
             android:id="@+id/textView18"
-            android:textSize="12sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:textColor="#BBffffff"
+            android:layout_marginTop="15dp"
+            android:text="@string/no_classes_found"
             android:textAlignment="center"
-            android:text="No classes found!\nCreate a new class or join one."
+            android:textColor="@color/black4"
+            android:fontFamily="@font/nekst_bold"
+            android:lineSpacingMultiplier="1.2"
+            android:textSize="15sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView9" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

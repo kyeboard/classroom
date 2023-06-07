@@ -5,7 +5,7 @@
     <string name="app_title">Bridging the gap\nbetween students\nand teachers.</string>
     <string name="title_activity_home">Home</string>
     <string name="create_new_class">Create new class</string>
-    <string name="action_button">Action Button</string>
+    <string name="action_button">Create new class</string>
     <string name="title_activity_new_announcement">NewAnnouncement</string>
     <string name="title_activity_meeting">Meeting</string>
     <string name="title_activity_meeting_chat">MeetingChat</string>
@@ -32,4 +32,9 @@
     <string name="title_activity_submission_view">SubmissionView</string>
     <string name="title_activity_login">Login</string>
     <string name="home_cover_content_desc">Home cover image</string>
+    <string name="home_tip">Are you sure you can\ncomplete your assignments today?</string>
+    <string name="your_classes_header">Your classes</string>
+    <string name="no_classes_found">No classes found!\nCreate a new class or join one.</string>
+    <string name="no_items_found_img_desc">No items found</string>
+    <string name="user_pfp_desc">User profile</string>
 </resources>

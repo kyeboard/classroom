@@ -8,6 +8,12 @@
     <color name="black">#FF2E3440</color>
     <color name="white">#FFD8DEE9</color>
 
+    <!--  Background  -->
+    <color name="bg">#E5E9F0</color>
+
+    <!--  Others  -->
+    <color name="yellow">#fee587</color>
+
     <!-- Blacks' shades -->
     <color name="black2">#3B4252</color>
     <color name="black3">#434C5E</color>
