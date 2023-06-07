@@ -57,6 +57,7 @@
             android:padding="16dp"
             android:id="@+id/assignment_view_add_files"
             android:layout_width="0dp"
+            android:textAllCaps="false"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:background="@drawable/rounded"

@@ -44,6 +44,7 @@ class SubmissionView : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submissionview)
 
+        /*
         val client = get_appwrite_client(this)
         val databases = Databases(client)
         val storage = Storage(client)
@@ -96,6 +97,6 @@ class SubmissionView : ComponentActivity() {
                 comments_view.adapter = CommentAdapter(comment_list)
                 comments_view.layoutManager = LinearLayoutManager(this@SubmissionView)
             }
-        }
+        } */
     }
 }

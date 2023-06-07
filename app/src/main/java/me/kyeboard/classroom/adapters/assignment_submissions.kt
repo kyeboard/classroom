@@ -31,12 +31,10 @@ class SubmissionsAdapter(private val dataSet: List<Membership>) :
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val username: TextView
-        val submitted_at: TextView
         val parent: ConstraintLayout
 
         init {
             username = view.findViewById(R.id.submission_item_view_name)
-            submitted_at = view.findViewById(R.id.submission_item_view_submitted_at)
             parent = view.findViewById(R.id.submissions_view_parent)
         }
     }

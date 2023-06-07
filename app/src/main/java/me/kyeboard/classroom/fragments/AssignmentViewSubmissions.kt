@@ -30,7 +30,7 @@ class AssignmentViewSubmissions : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.submissions_view_list)
 
         GlobalScope.launch {
-            val memberships = teams.listMemberships("646f2bcaea321c445741")
+            val memberships = teams.listMemberships("64720d2e62cdd9d39f04")
             val adapter = SubmissionsAdapter(memberships.memberships)
 
             activity?.runOnUiThread {

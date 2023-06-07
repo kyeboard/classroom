@@ -15,6 +15,7 @@ import me.kyeboard.classroom.screens.Login
 import me.kyeboard.classroom.screens.NewAnnouncement
 import me.kyeboard.classroom.screens.NewAssignment
 import me.kyeboard.classroom.screens.NewClass
+import me.kyeboard.classroom.screens.SubmissionView
 import me.kyeboard.classroom.utils.AppwriteServiceSingleton
 
 class MainActivity : ComponentActivity() {
@@ -33,7 +34,7 @@ class MainActivity : ComponentActivity() {
                 service.get()!!.account.get()
 
                 // Session exists... move on
-                Intent(this@MainActivity, AssignmentView::class.java)
+                Intent(this@MainActivity, SubmissionView::class.java)
             } catch(_: Exception) {
                 Intent(this@MainActivity, Login::class.java)
             }
