@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#eceff4"
+    android:background="@color/bg"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/topbar_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fee587"
+        android:background="@color/yellow"
         android:paddingHorizontal="20dp"
         android:paddingVertical="30dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -56,8 +56,8 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
-        android:layout_marginLeft="15dp"
+        android:text="@string/new_class_name_header"
+        android:layout_marginStart="15dp"
         android:fontFamily="@font/nekst_bold"
         android:textColor="@color/black"
         android:layout_marginTop="20dp"
@@ -75,7 +75,7 @@
         android:ems="10"
         android:textColor="@color/black"
         android:layout_marginHorizontal="15dp"
-        android:hint="Name for your class"
+        android:hint="@string/new_class_name_hint"
         android:textColorHint="#4c566a"
         android:includeFontPadding="false"
         android:inputType="text"
@@ -91,7 +91,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/nekst_bold"
         android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:text="@string/newclass_subject_header"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +108,7 @@
         android:ems="10"
         android:textColor="@color/black"
         android:layout_marginHorizontal="15dp"
-        android:hint="Subject for your class"
+        android:hint="@string/new_class_subject_hint"
         android:includeFontPadding="false"
         android:inputType="text"
         android:textColorHint="#4c566a"
@@ -121,10 +121,10 @@
         android:id="@+id/textView10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/nekst_bold"
-        android:text="Colour"
+        android:text="@string/new_class_color_header"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_class_subject" />
@@ -136,7 +136,7 @@
         android:layout_marginHorizontal="15dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="30dp"
-        android:text="By creating a new class,\nyou agree to our terms and conditions"
+        android:text="@string/terms_and_conditions"
         android:textColor="#2E3440"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -149,9 +149,7 @@
         android:layout_marginHorizontal="15dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/border_yellow"
-        android:includeFontPadding="false"
-        android:outlineProvider="none"
-        android:text="Create class"
+        android:text="@string/new_class_btn_create_text"
         android:textAllCaps="false"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
@@ -164,7 +162,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -174,7 +172,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toEndOf="@+id/color_select_yellow"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -184,7 +182,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toEndOf="@+id/color_select_green"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -194,34 +192,8 @@
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
         android:background="@drawable/rounded"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         app:layout_constraintStart_toEndOf="@+id/color_select_orange"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
-
-    <!--
-    <Button
-        android:id="@+id/new_class_create"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/rounded"
-        android:backgroundTint="@color/white"
-        android:includeFontPadding="false"
-        android:text="@string/newclass_create_btn_title"
-        android:textAllCaps="false"
-        android:textColor="@color/black" />
-
-    <Button
-        android:id="@+id/newclass_cancel_self"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/rounded"
-        android:backgroundTint="#00000000"
-        android:text="@string/newclass_cancel_btn_text"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_class_create" /> -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

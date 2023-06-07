@@ -37,4 +37,10 @@
     <string name="no_classes_found">No classes found!\nCreate a new class or join one.</string>
     <string name="no_items_found_img_desc">No items found</string>
     <string name="user_pfp_desc">User profile</string>
+    <string name="new_class_name_header">Name</string>
+    <string name="new_class_name_hint">Name for your class</string>
+    <string name="new_class_subject_hint">Subject for your class</string>
+    <string name="new_class_color_header">Colour</string>
+    <string name="terms_and_conditions">By creating a new class,\nyou agree to our terms and conditions</string>
+    <string name="new_class_btn_create_text">Create class</string>
 </resources>

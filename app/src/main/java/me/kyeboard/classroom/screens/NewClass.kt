@@ -1,20 +1,15 @@
 package me.kyeboard.classroom.screens
 
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.squareup.picasso.Picasso
 import io.appwrite.services.Databases
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
@@ -26,32 +21,27 @@ import me.kyeboard.classroom.utils.get_appwrite_client
 data class ClassItem(val name: String, val subject: String, val color: String)
 
 class NewClass : ComponentActivity() {
+    private val colorsIndex = listOf(
+        listOf(R.id.color_select_green, "#a3be8c"),
+        listOf(R.id.color_select_yellow, "#fee587"),
+        listOf(R.id.color_select_orange, "#d08770"),
+        listOf(R.id.color_select_pink, "#b48ead")
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newclass)
 
-        var color = "#fee587"
+        var selectedColor = "#fee587"
 
-        updateAccent(color)
+        updateAccent(selectedColor)
 
-        findViewById<View>(R.id.color_select_green).setOnClickListener {
-            color = "#a3be8c"
-            updateAccent(color)
-        }
+        for((selector, color) in colorsIndex) {
+            findViewById<View>(selector as Int).setOnClickListener {
+                selectedColor = color as String
 
-        findViewById<View>(R.id.color_select_orange).setOnClickListener {
-            color = "#d08770"
-            updateAccent(color)
-        }
-
-        findViewById<View>(R.id.color_select_pink).setOnClickListener {
-            color = "#b48ead"
-            updateAccent(color)
-        }
-
-        findViewById<View>(R.id.color_select_yellow).setOnClickListener {
-            color = "#fee587"
-            updateAccent(color)
+                updateAccent(selectedColor)
+            }
         }
 
         // Bind buttons that closes the self instance
@@ -84,7 +74,7 @@ class NewClass : ComponentActivity() {
 
                 // Create the registry in the database
                 // TODO: Fix the registry spelling
-                database.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, color))
+                database.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, selectedColor))
 
                 // End the current activity (the class is created)
                 finish()
@@ -105,15 +95,10 @@ class NewClass : ComponentActivity() {
         }
 
         // Reset selections
-        for(i in listOf(
-            listOf(R.id.color_select_green, "#a3be8c"),
-            listOf(R.id.color_select_yellow, "#fee587"),
-            listOf(R.id.color_select_orange, "#d08770"),
-            listOf(R.id.color_select_pink, "#b48ead")
-        )) {
-            val background = findViewById<View>(i[0] as Int).background as GradientDrawable
+        for((selector, respColor) in colorsIndex) {
+            val background = findViewById<View>(selector as Int).background as GradientDrawable
 
-            if(color == i[1] as String) {
+            if(color == respColor as String) {
                 background.apply {
                     setColor(Color.parseColor(color))
                     setStroke(5, Color.parseColor("#000000"))
@@ -121,16 +106,11 @@ class NewClass : ComponentActivity() {
                 }
             } else {
                 background.apply {
-                    setColor(Color.parseColor(i[1] as String))
+                    setColor(Color.parseColor(respColor))
                     setStroke(0, Color.parseColor("#000000"))
                     cornerRadius = 10F
                 }
             }
         }
     }
-
-    /*
-    private fun updateHeaderImage(url: String) {
-        Picasso.get().load(url).into(findViewById<ImageView>(R.id.selected_header_preview))
-    } */
 }
