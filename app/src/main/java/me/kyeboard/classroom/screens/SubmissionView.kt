@@ -2,10 +2,12 @@ package me.kyeboard.classroom.screens
 
 import Comment
 import CommentAdapter
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -37,14 +39,17 @@ data class UpdateItem(val comments: ArrayList<String>)
 class SubmissionView : ComponentActivity() {
     private fun getID(assignment_id: String, submission_id: String): String {
         val md = MessageDigest.getInstance("MD5")
-        return BigInteger(1, md.digest("$assignment_id-$submission_id".toByteArray())).toString(16).padStart(32, '0')
+        //return BigInteger(1, md.digest("$assignment_id-$submission_id".toByteArray())).toString(16).padStart(32, '0')
+
+        return "23b3cbff7d58f3b25949f8ba558d109c"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_submissionview)
 
-        /*
+        window.statusBarColor = Color.parseColor("#fee587")
+
         val client = get_appwrite_client(this)
         val databases = Databases(client)
         val storage = Storage(client)
@@ -55,14 +60,14 @@ class SubmissionView : ComponentActivity() {
         val assignmment_id = "6475d05340bf25c2069b"
         val submission_id = "6475d05340bf25c2069b"
 
-        findViewById<Button>(R.id.submission_view_msg_send).setOnClickListener {
+        findViewById<ImageView>(R.id.submission_view_msg_send).setOnClickListener {
             val msg = findViewById<EditText>(R.id.submission_view_msg_textbox).text.toString()
 
             GlobalScope.launch {
                 val submission_details = databases.getDocument("classes", "64782b0c5957666e7bee", getID(assignmment_id, submission_id))
                 val current_comments = submission_details.data.tryJsonCast<SubmissionItem>()!!.comments
 
-                current_comments.add("{\"author\": \"kyeboard\", \"message\": \"$msg\"}0")
+                current_comments.add("{\"author\": \"kyeboard\", \"message\": \"$msg\"}")
 
                 databases.updateDocument(
                     "classes",
@@ -78,10 +83,12 @@ class SubmissionView : ComponentActivity() {
             val comment_list = arrayListOf<Comment>()
             val data = submission_details.data.tryJsonCast<SubmissionItem>()!!
 
-            for(i in data.submissions) {
+            Log.d("tt", data.toString())
+
+            /* for(i in data.submissions) {
                 val file_name = storage.getFile("647713fa9be2a68d4458", i).name
                 attachment_list.add(Attachment(file_name.substringAfterLast('.', ""), file_name))
-            }
+            } */
 
             for(comment in data.comments) {
                 val parsed = JSONObject(comment)
@@ -97,6 +104,6 @@ class SubmissionView : ComponentActivity() {
                 comments_view.adapter = CommentAdapter(comment_list)
                 comments_view.layoutManager = LinearLayoutManager(this@SubmissionView)
             }
-        } */
+        }
     }
 }
