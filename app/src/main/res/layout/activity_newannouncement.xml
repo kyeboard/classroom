@@ -3,43 +3,133 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/black"
+    android:background="#e5e9f0"
     android:layout_height="match_parent">
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="wrap_content"
-        android:backgroundTint="#000000"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:src="@drawable/back"
-        android:tint="@color/white"
-        tools:ignore="UseAppTint" />
-
-    <TextView
-        android:id="@+id/header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/plusjakartasans_extrabold"
-        android:text="New announcement"
-        android:textColor="@color/white"
-        android:textSize="23sp"
-        app:layout_constraintStart_toEndOf="@+id/imageButton"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/new_announcement_pager"
-        android:layout_width="0dp"
-        android:layout_marginTop="20dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="#fee587"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="30dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/header">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.viewpager2.widget.ViewPager2>
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#fee587"
+            android:src="@drawable/back"
+            android:layout_marginTop="3dp"
+            android:tint="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nekst_bold"
+            android:includeFontPadding="false"
+            android:text="New announcement"
+            android:textColor="@color/black"
+            android:textSize="23sp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toEndOf="@+id/imageButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view5"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:fontFamily="@font/nekst_bold"
+        android:text="Message"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/view5" />
+
+    <EditText
+        android:id="@+id/new_announcement_message"
+        android:layout_width="0dp"
+        android:background="@drawable/rounded"
+        android:backgroundTint="#d8dee9"
+        android:layout_height="200dp"
+        android:ems="10"
+        android:hint="Enter your message here..."
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="15dp"
+        android:textSize="15sp"
+        android:textColor="@color/black"
+        android:textColorHint="#4c566a"
+        android:layout_marginLeft="15dp"
+        android:padding="20dp"
+        android:gravity="start|top"
+        android:inputType="textMultiLine"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/new_announcement_attachments_list"
+        android:layout_width="0dp"
+        android:paddingHorizontal="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_announcement_message" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="16dp"
+        android:id="@+id/new_announcement_attach_files"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded"
+        android:backgroundTint="#d8dee9"
+        android:layout_marginHorizontal="15dp"
+        android:fontFamily="@font/nekst_bold"
+        android:outlineProvider="none"
+        android:includeFontPadding="false"
+        android:text="Add attachments"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_announcement_attachments_list" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:padding="20dp"
+        android:id="@+id/new_announcement_create_announcement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_yellow"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/nekst_bold"
+        android:outlineProvider="none"
+        android:textAlignment="center"
+        android:includeFontPadding="false"
+        android:layout_marginHorizontal="15dp"
+        android:text="Create announcement"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_announcement_attach_files" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

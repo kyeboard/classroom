@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:backgroundTint="#50333333"
+    android:backgroundTint="#d8dee9"
     android:layout_marginBottom="10dp"
     android:background="@drawable/rounded"
     android:layout_height="wrap_content">
@@ -17,7 +17,8 @@
         android:textAlignment="center"
         android:background="@drawable/rounded_left"
         android:textColor="@color/black"
-        android:backgroundTint="#88C0D0"
+        android:backgroundTint="#fee587"
+        android:fontFamily="@font/nekst_bold"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,6 +31,7 @@
         android:ellipsize="marquee"
         android:layout_marginLeft="15dp"
         android:layout_height="wrap_content"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/new_announcement_attachment_item_extension"
         app:layout_constraintTop_toTopOf="parent" />
