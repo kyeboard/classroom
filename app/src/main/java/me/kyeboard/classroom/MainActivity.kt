@@ -7,6 +7,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import me.kyeboard.classroom.screens.AnnouncementView
 import me.kyeboard.classroom.screens.ClassDashboard
 import me.kyeboard.classroom.screens.Home
 import me.kyeboard.classroom.screens.Login
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
                 service.get()!!.account.get()
 
                 // Session exists... move on
-                Intent(this@MainActivity, NewAnnouncement::class.java)
+                Intent(this@MainActivity, AnnouncementView::class.java)
             } catch(_: Exception) {
                 Intent(this@MainActivity, Login::class.java)
             }
