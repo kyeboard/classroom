@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:backgroundTint="#d8dee9"
     android:layout_marginBottom="10dp"
-    android:background="@drawable/rounded"
+    android:background="#d8dee9"
     android:layout_height="wrap_content">
 
     <TextView
@@ -15,9 +14,8 @@
         android:layout_height="wrap_content"
         android:padding="18dp"
         android:textAlignment="center"
-        android:background="@drawable/rounded_left"
+        android:background="@drawable/border_yellow_left"
         android:textColor="@color/black"
-        android:backgroundTint="#fee587"
         android:fontFamily="@font/nekst_bold"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"

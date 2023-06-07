@@ -19,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -58,9 +59,12 @@ class NewAssignment : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newassignment)
 
+        window.statusBarColor = android.graphics.Color.parseColor("#fee587")
+
         val adapter = AttachmentAdapter(attachments)
         val recyclerView = findViewById<RecyclerView>(R.id.new_assignment_attachments)
-        val class_id = intent.extras!!.getString("class_id")!!
+        //val class_id = intent.extras!!.getString("class_id")!!
+        val class_id = ""
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
