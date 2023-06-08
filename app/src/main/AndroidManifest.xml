@@ -50,24 +50,9 @@
             android:label="@string/title_activity_class_dashboard"
             android:theme="@style/Theme.Classroom" />
         <activity
-            android:name=".screens.SelectHeader"
-            android:exported="false"
-            android:label="@string/title_activity_select_header"
-            android:theme="@style/Theme.Classroom" />
-        <activity
             android:name=".screens.NewClass"
             android:exported="false"
             android:label="@string/title_activity_new_class"
-            android:theme="@style/Theme.Classroom" />
-        <activity
-            android:name=".screens.MeetingChat"
-            android:exported="false"
-            android:label="@string/title_activity_meeting_chat"
-            android:theme="@style/Theme.Classroom" />
-        <activity
-            android:name=".screens.Meeting"
-            android:exported="false"
-            android:label="@string/title_activity_meeting"
             android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.NewAnnouncement"

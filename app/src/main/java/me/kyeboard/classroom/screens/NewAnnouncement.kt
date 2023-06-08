@@ -1,6 +1,5 @@
 package me.kyeboard.classroom.screens
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
@@ -9,10 +8,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
-import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -21,8 +17,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.tabs.TabLayout
 import io.appwrite.models.InputFile
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
@@ -32,10 +26,7 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
-import me.kyeboard.classroom.adapters.ViewPagerAdapter
 import me.kyeboard.classroom.fragments.AnnouncementItem
-import me.kyeboard.classroom.fragments.CreateNewAnnouncement
-import me.kyeboard.classroom.fragments.CreateNewMeeting
 import me.kyeboard.classroom.utils.get_appwrite_client
 import java.io.File
 import java.io.FileOutputStream

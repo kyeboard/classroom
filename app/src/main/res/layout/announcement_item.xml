@@ -43,7 +43,7 @@
                 android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/plusjakartasans_extrabold"
+                android:fontFamily="@font/nekst_bold"
                 android:text="kyeboard"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="parent"
@@ -51,10 +51,6 @@
 
             <TextView
                 android:layout_width="wrap_content"
-
-
-
-
                 android:layout_height="wrap_content"
                 android:text="2nd May, 2023"
                 app:layout_constraintBottom_toBottomOf="parent"

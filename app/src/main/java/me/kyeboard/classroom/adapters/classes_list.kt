@@ -13,7 +13,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import me.kyeboard.classroom.R
 
-
 data class ClassItem(val name: String, val header: String, val subject: String, val `$id`: String, val color: String, var total: Long)
 
 class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String) -> Unit, private val context: Context) :

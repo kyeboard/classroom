@@ -3,11 +3,9 @@ package me.kyeboard.classroom.screens
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
@@ -21,9 +19,7 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.ViewPagerAdapter
 import me.kyeboard.classroom.fragments.ClassDashboardAssignments
-import me.kyeboard.classroom.fragments.ClassDashboardClasses
 import me.kyeboard.classroom.fragments.ClassDashboardStream
-import me.kyeboard.classroom.utils.AppwriteServiceSingleton
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class ClassDashboard : AppCompatActivity() {
