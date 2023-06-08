@@ -94,6 +94,10 @@ class Home : Activity() {
         val teams = teamsService.list().teams
         val userClasses = arrayListOf<ClassItem>()
 
+        runOnUiThread {
+            noClassesParent.visibility = View.GONE
+        }
+
         // Iterate over each team
         for (team in teams) {
             // Get register
@@ -116,6 +120,7 @@ class Home : Activity() {
 
             // If there are no teams, show the no found widget
             if(teams.isEmpty()) {
+                Toast.makeText(this@Home, "mao", Toast.LENGTH_LONG).show()
                 noClassesParent.visibility = View.VISIBLE
             }
 
