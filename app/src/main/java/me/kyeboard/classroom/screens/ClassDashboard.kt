@@ -56,6 +56,23 @@ class ClassDashboard : AppCompatActivity() {
                     setTint(Color.parseColor(classInfo.color))
                 }
 
+                // Handle plus button clicks
+                findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
+                    // Select the intent to show
+                    val intent = if(viewPager.currentItem == 0) {
+                        Intent(this@ClassDashboard, NewAnnouncement::class.java)
+                    } else {
+                        Intent(this@ClassDashboard, NewAssignment::class.java)
+                    }
+
+                    // Add class id
+                    intent.putExtra("class_id", classId)
+                    intent.putExtra("accent_color", classInfo.color)
+
+                    // Start
+                    startActivity(intent)
+                }
+
                 // Change name and subject
                 findViewById<TextView>(R.id.current_class_name).text = classInfo.name
                 findViewById<TextView>(R.id.current_class_subject).text = classInfo.subject
@@ -78,22 +95,6 @@ class ClassDashboard : AppCompatActivity() {
         }
         val classDashboardAssignments = ClassDashboardAssignments().apply {
             arguments = bundle
-        }
-
-        // Handle plus button clicks
-        findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
-            // Select the intent to show
-            val intent = if(viewPager.currentItem == 0) {
-                Intent(this, NewAnnouncement::class.java)
-            } else {
-                Intent(this, NewAssignment::class.java)
-            }
-
-            // Add class id
-            intent.putExtra("class_id", classId)
-
-            // Start
-            startActivity(intent)
         }
 
         // Setup pager adapter

@@ -18,6 +18,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -52,10 +53,12 @@ class NewAnnouncement : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newannouncement)
 
-        window.statusBarColor = Color.parseColor("#fee587")
+        val class_id = intent.extras!!.getString("class_id")!!
+        val accent_color = intent.extras!!.getString("accent_color")
+
+        window.statusBarColor = Color.parseColor(accent_color)
 
         val adapter = AttachmentAdapter(attachments)
-        val class_id = intent.extras!!.getString("class_id")!!
         val recyclerView = findViewById<RecyclerView>(R.id.new_announcement_attachments_list)
 
         recyclerView.adapter = adapter
@@ -89,6 +92,8 @@ class NewAnnouncement : AppCompatActivity() {
         findViewById<Button>(R.id.new_announcement_create_announcement).setOnClickListener {
             val message = findViewById<EditText>(R.id.new_announcement_message).text.toString()
 
+            findViewById<ConstraintLayout>(R.id.new_announcement_loading_screen).visibility = View.VISIBLE
+
             if(message.isBlank()) {
                 Toast.makeText(this, "Fill in all details before submitting", Toast.LENGTH_SHORT).show()
 
@@ -102,7 +107,9 @@ class NewAnnouncement : AppCompatActivity() {
                     attachment_ids.add(uploadToAppwriteStorage(this@NewAnnouncement.contentResolver, uri, storage))
                 }
 
-                databases.createDocument("classes", "647c1b704310bb8f0fed", "unique()", AnnouncementItem("kyeboard", message, attachment_ids, class_id!!))
+                databases.createDocument("classes", "647c1b704310bb8f0fed", "unique()", AnnouncementItem("kyeboard", message, attachment_ids, class_id))
+
+                finish()
             }
         }
     }
