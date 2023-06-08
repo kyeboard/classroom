@@ -62,7 +62,7 @@ class ClassDashboardStream : Fragment() {
     }
 
     private suspend fun updateStreamItems(databases: Databases, classId: String, loading: ConstraintLayout, noAnnouncements: ConstraintLayout, recyclerView: RecyclerView, view: View) {
-        val data = databases.listDocuments("classes", "647c1b704310bb8f0fed").documents
+        val data = databases.listDocuments("classes", "647c1b704310bb8f0fed", arrayListOf(Query.orderDesc("\$createdAt"))).documents
         val announcements = arrayListOf<Announcement>()
 
         for(i in data) {
