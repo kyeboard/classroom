@@ -34,6 +34,7 @@ class ClassDashboardStream : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.class_dashboard_stream_announcements)
         val classId = requireArguments().getString("class_id")!!
         val loading = view.findViewById<ConstraintLayout>(R.id.class_dashboard_stream_loading)
+        val noAnnouncements = view.findViewById<ConstraintLayout>(R.id.no_announcements_parent)
 
         // Initiate appwrite services
         val client = get_appwrite_client(view.context)
@@ -59,6 +60,10 @@ class ClassDashboardStream : Fragment() {
             // Set adapter and layout
             activity?.runOnUiThread {
                 loading.visibility = View.GONE
+
+                if(announcements.isEmpty()) {
+                    noAnnouncements.visibility = View.VISIBLE
+                }
 
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(view.context)
