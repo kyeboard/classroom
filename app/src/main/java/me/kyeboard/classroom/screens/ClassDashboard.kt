@@ -76,7 +76,7 @@ class ClassDashboard : AppCompatActivity() {
         val classDashboardStream = ClassDashboardStream().apply {
             arguments = bundle
         }
-        val classDashboardAssignments = ClassDashboardStream().apply {
+        val classDashboardAssignments = ClassDashboardAssignments().apply {
             arguments = bundle
         }
 
