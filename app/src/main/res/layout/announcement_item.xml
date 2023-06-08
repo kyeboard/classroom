@@ -28,8 +28,7 @@
             <ImageView
                 android:id="@+id/announcement_item_author_pfp"
                 android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/pfp" />
+                android:layout_height="40dp" />
         </androidx.cardview.widget.CardView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
