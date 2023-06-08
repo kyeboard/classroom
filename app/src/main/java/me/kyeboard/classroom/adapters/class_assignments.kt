@@ -68,6 +68,8 @@ class AssignmentAdapter(private val dataSet: List<Document>, private val onClick
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val data = dataSet[position].data.tryJsonCast<Assignment>()!!
 
+        Log.d("tt", "Reloading data")
+
         val days_difference = getDaysDifference(data.due_date)
         val new_title = getTitleForDiff(days_difference)
 
