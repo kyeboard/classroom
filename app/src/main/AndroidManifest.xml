@@ -15,6 +15,11 @@
         android:theme="@style/Theme.App.Starting"
         tools:targetApi="31">
         <activity
+            android:name=".screens.ClassPeople"
+            android:exported="false"
+            android:label="@string/title_activity_class_people"
+            android:theme="@style/Theme.App.Starting" />
+        <activity
             android:name=".screens.SubmissionView"
             android:exported="false"
             android:label="@string/title_activity_submission_view"

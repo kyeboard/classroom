@@ -55,7 +55,7 @@ class NewAnnouncement : AppCompatActivity() {
         window.statusBarColor = Color.parseColor("#fee587")
 
         val adapter = AttachmentAdapter(attachments)
-        val class_id = ""
+        val class_id = intent.extras!!.getString("class_id")!!
         val recyclerView = findViewById<RecyclerView>(R.id.new_announcement_attachments_list)
 
         recyclerView.adapter = adapter
