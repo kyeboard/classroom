@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.appwrite.Query
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Databases
@@ -40,37 +41,53 @@ class ClassDashboardStream : Fragment() {
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
 
-        // Load data
-        CoroutineScope(Dispatchers.IO).launch {
-            val data = databases.listDocuments("classes", "647c1b704310bb8f0fed").documents
-            val announcements = arrayListOf<Announcement>()
+        val swipeToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.class_dashboard_stream_refresh)
 
-            for(i in data) {
-                val casted = i.data.tryJsonCast<Announcement>()!!
+        swipeToRefresh.setOnRefreshListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                updateStreamItems(databases, classId, loading, noAnnouncements, recyclerView, view)
 
-                // Filter those announcements for this class
-                if(casted.classid == classId) {
-                    announcements.add(casted)
+                requireActivity().runOnUiThread {
+                    swipeToRefresh.isRefreshing = false
                 }
-            }
-
-            // Create adapter for announcements
-            val adapter = AnnouncementAdapter(announcements, this@ClassDashboardStream::openAnnouncementView)
-
-            // Set adapter and layout
-            activity?.runOnUiThread {
-                loading.visibility = View.GONE
-
-                if(announcements.isEmpty()) {
-                    noAnnouncements.visibility = View.VISIBLE
-                }
-
-                recyclerView.adapter = adapter
-                recyclerView.layoutManager = LinearLayoutManager(view.context)
             }
         }
 
+        // Load data
+        CoroutineScope(Dispatchers.IO).launch {
+            updateStreamItems(databases, classId, loading, noAnnouncements, recyclerView, view)
+        }
+
         return view
+    }
+
+    private suspend fun updateStreamItems(databases: Databases, classId: String, loading: ConstraintLayout, noAnnouncements: ConstraintLayout, recyclerView: RecyclerView, view: View) {
+        val data = databases.listDocuments("classes", "647c1b704310bb8f0fed").documents
+        val announcements = arrayListOf<Announcement>()
+
+        for(i in data) {
+            val casted = i.data.tryJsonCast<Announcement>()!!
+
+            // Filter those announcements for this class
+            if(casted.classid == classId) {
+                announcements.add(casted)
+            }
+        }
+
+        // Create adapter for announcements
+        val adapter = AnnouncementAdapter(announcements, this@ClassDashboardStream::openAnnouncementView)
+
+        // Set adapter and layout
+        activity?.runOnUiThread {
+            loading.visibility = View.GONE
+
+            if(announcements.isEmpty()) {
+                noAnnouncements.visibility = View.VISIBLE
+            }
+
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = LinearLayoutManager(view.context)
+        }
     }
 
     private fun openAnnouncementView(id: String) {
