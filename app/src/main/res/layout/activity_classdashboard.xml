@@ -8,6 +8,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/class_dashboard_topbar"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fee587"
@@ -60,8 +61,9 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
-        android:id="@+id/view4"
+        android:id="@+id/class_dashboard_bottom_bar"
         android:layout_width="match_parent"
+        android:visibility="invisible"
         android:layout_height="3dp"
         android:background="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/class_dashboard_topbar"
@@ -76,11 +78,12 @@
         app:layout_goneMarginTop="10dp"
         android:layout_marginHorizontal="10dp"
         app:tabRippleColor="#00000000"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         style="@style/customTabLayout"
         app:tabIndicatorFullWidth="false"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view4"
+        app:layout_constraintTop_toBottomOf="@+id/class_dashboard_bottom_bar"
         android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabItem

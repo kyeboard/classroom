@@ -4,11 +4,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import io.appwrite.extensions.tryJsonCast
@@ -30,8 +32,14 @@ class ClassDashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classdashboard)
 
-        // Get class id sent slong
+        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.bg, null)
+
+        // Get class id sent along
         val classId = intent.extras!!.getString("class_id")!!
+
+        // Viewpager and tab layout for nav
+        val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
+        val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
 
         // Initiate appwrite services
         val client = get_appwrite_client(this)
@@ -41,24 +49,25 @@ class ClassDashboard : AppCompatActivity() {
             // Get class info from registery
             val classInfo = databases.getDocument("classes", "registery", classId).data.tryJsonCast<ClassItem>()!!
 
-            // Change the status bar color according to the selected accent color
-            window.statusBarColor = Color.parseColor(classInfo.color)
-
             runOnUiThread {
                 // Change tint of the topbar
-                findViewById<ConstraintLayout>(R.id.class_dashboard_topbar).background.apply {
+                val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
+                topbar.background.apply {
                     setTint(Color.parseColor(classInfo.color))
                 }
 
                 // Change name and subject
                 findViewById<TextView>(R.id.current_class_name).text = classInfo.name
                 findViewById<TextView>(R.id.current_class_subject).text = classInfo.subject
+
+                topbar.visibility = View.VISIBLE
+                tabLayout.visibility = View.VISIBLE
+                findViewById<View>(R.id.class_dashboard_bottom_bar).visibility = View.VISIBLE
+
+                // Change the status bar color according to the selected accent color
+                window.statusBarColor = Color.parseColor(classInfo.color)
             }
         }
-
-        // Viewpager and tab layout for nav
-        val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
-        val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
 
         // Setup dashboard stream fragment
         val bundle = Bundle().apply {
