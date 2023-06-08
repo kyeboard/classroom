@@ -8,6 +8,7 @@
         <item name="android:includeFontPadding">false</item>
         <item name="android:fontFamily">@font/nekst_semibold</item>
         <item name="android:outlineProvider">none</item>
+        <item name="android:textCursorDrawable">@drawable/color_cursor</item>
     </style>
 
     <style name="customTabLayout" parent="Widget.Design.TabLayout">
