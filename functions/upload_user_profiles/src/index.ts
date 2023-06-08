@@ -1,5 +1,6 @@
+import { createWriteStream, writeFile } from "fs"
+import https from "https"
 import { Client, InputFile, Storage } from "node-appwrite"
-import fs from "node:fs"
 
 interface Request {
     variables: Variables
@@ -13,7 +14,7 @@ interface Variables {
     APPWRITE_KEY: string
     APPWRITE_ENDPOINT: string
     APPWRITE_PROJECTID: string
-    APPWRITE_FUNCTION_EVENT_DATA: EventData
+    APPWRITE_FUNCTION_EVENT_DATA: string
 }
 
 interface Response {
@@ -28,14 +29,17 @@ const upload_user_profile = async (req: Request, res: Response) => {
         .setProject(req.variables.APPWRITE_PROJECTID)
         .setEndpoint(req.variables.APPWRITE_ENDPOINT)
 
+    const data: EventData = JSON.parse(req.variables.APPWRITE_FUNCTION_EVENT_DATA)
+
     const storage = new Storage(client)
-    const assigned_avatar = Math.floor(Math.random() * (5 - 1) + 1);
+    const avatars = ["648148de33045aacfb5b", "648148e93d358fb1dbd9", "648148a8162d4b833e4d", "648148b31e4ba73c1fb6"]
 
-    fs.readdir(".", (err, files) => {
-        res.json({ err, files })
-    })
+    const selected = Math.floor(Math.random() * 4)
+    const buffer = await storage.getFileDownload("64814877e40fa803a48b", avatars[selected])
 
-    await storage.createFile("646ef17593d213adfcf2", req.variables.APPWRITE_FUNCTION_EVENT_DATA.$id, InputFile.fromPath(`build/avatar_4.png`, "avatar.png"))
+    writeFile("profile.png", buffer, () => {})
+
+    await storage.createFile("646ef17593d213adfcf2", data.$id, InputFile.fromPath("profile.png", "profile.png"))
 }
 
 export default upload_user_profile
