@@ -8,7 +8,6 @@ import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.kyeboard.classroom.screens.ClassPeople
 import me.kyeboard.classroom.screens.Home
 import me.kyeboard.classroom.screens.Login
 import me.kyeboard.classroom.utils.get_appwrite_client
@@ -30,7 +29,7 @@ class MainActivity : ComponentActivity() {
                 account.get()
 
                 // Session exists... move on
-                Intent(this@MainActivity, ClassPeople::class.java)
+                Intent(this@MainActivity, Home::class.java)
             } catch(_: Exception) {
                 Intent(this@MainActivity, Login::class.java)
             }

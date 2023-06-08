@@ -13,9 +13,11 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.squareup.picasso.Picasso
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Account
+import io.appwrite.services.Databases
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +25,6 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.ClassItem
 import me.kyeboard.classroom.adapters.ClassesListAdapter
-import me.kyeboard.classroom.utils.AppwriteServiceSingleton
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class Home : Activity() {
@@ -38,12 +39,22 @@ class Home : Activity() {
         // Setup appwrite services
         val client = get_appwrite_client(this)
         val account = Account(client)
+        val database = Databases(client)
         val teamsService = Teams(client)
-
-        val appwriteService = AppwriteServiceSingleton.getInstance(this).get()!!
 
         // View holders
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
+
+        // Handle refresh event
+        val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
+
+        refreshView.setOnRefreshListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                populateClassesList(teamsService, database, noClassesParent)
+
+                refreshView.isRefreshing = false
+            }
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             // Show current user info
@@ -60,39 +71,7 @@ class Home : Activity() {
 
             // Get the list of the teams that the current user is in
             try {
-                // Get the data
-                val teams = teamsService.list().teams
-                val userClasses = arrayListOf<ClassItem>()
-
-                // Iterate over each team
-                for (team in teams) {
-                    // Get register
-                    val item = appwriteService.databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!
-
-                    // Set total students
-                    item.total = team.total
-
-                    // Add to list
-                    userClasses.add(item)
-                }
-
-                // Configure recycler view
-                runOnUiThread {
-                    // Get the view
-                    val view = findViewById<RecyclerView>(R.id.home_classes_list)
-
-                    // Remove the progress bar
-                    findViewById<ProgressBar>(R.id.home_classes_list_loading).visibility = View.GONE
-
-                    // If there are no teams, show the no found widget
-                    if(teams.isEmpty()) {
-                        noClassesParent.visibility = View.VISIBLE
-                    }
-
-                    // Add the adapter
-                    view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)
-                    view.layoutManager = LinearLayoutManager(this@Home)
-                }
+                populateClassesList(teamsService, database, noClassesParent)
             } catch(e: Exception) {
                 runOnUiThread {
                     Toast.makeText(this@Home, e.toString(), Toast.LENGTH_LONG).show()
@@ -107,6 +86,42 @@ class Home : Activity() {
 
             // Start the intent
             startActivity(intent)
+        }
+    }
+
+    private suspend fun populateClassesList(teamsService: Teams, databases: Databases, noClassesParent: ConstraintLayout) {
+        // Get the data
+        val teams = teamsService.list().teams
+        val userClasses = arrayListOf<ClassItem>()
+
+        // Iterate over each team
+        for (team in teams) {
+            // Get register
+            val item = databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!
+
+            // Set total students
+            item.total = team.total
+
+            // Add to list
+            userClasses.add(item)
+        }
+
+        // Configure recycler view
+        runOnUiThread {
+            // Get the view
+            val view = findViewById<RecyclerView>(R.id.home_classes_list)
+
+            // Remove the progress bar
+            findViewById<ProgressBar>(R.id.home_classes_list_loading).visibility = View.GONE
+
+            // If there are no teams, show the no found widget
+            if(teams.isEmpty()) {
+                noClassesParent.visibility = View.VISIBLE
+            }
+
+            // Add the adapter
+            view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)
+            view.layoutManager = LinearLayoutManager(this@Home)
         }
     }
 
