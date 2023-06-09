@@ -3,20 +3,17 @@
     "projectName": "fryday",
     "functions": [
         {
-            "$id": "647dd8faae0ff61930a5",
+            "$id": "6481f8a4738c40521cb4",
             "name": "upload_user_avatars",
             "runtime": "node-16.0",
-            "path": "functions/upload_user_profiles",
-            "entrypoint": "build/index.js",
+            "path": "functions/upload_user_avatars",
+            "entrypoint": "src/index.js",
             "ignore": [
                 "node_modules",
-                ".npm",
-                "src"
+                ".npm"
             ],
             "execute": [],
-            "events": [
-                "users.*.create"
-            ],
+            "events": ["users.*.create"],
             "schedule": "",
             "timeout": 15
         }
