@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
@@ -15,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.models.InputFile
@@ -48,6 +50,16 @@ class NewAnnouncement : AppCompatActivity() {
         val accent_color = intent.extras!!.getString("accent_color")
 
         window.statusBarColor = Color.parseColor(accent_color)
+
+        findViewById<ConstraintLayout>(R.id.newannouncement_topbar).background.apply {
+            setTint(Color.parseColor(accent_color))
+        }
+
+        val bg = findViewById<Button>(R.id.new_announcement_create_announcement).background.mutate() as GradientDrawable
+
+        bg.setColor(Color.parseColor(accent_color))
+        bg.setStroke(5, Color.parseColor("#000000"))
+        bg.cornerRadius = 5F
 
         val adapter = AttachmentAdapter(attachments)
         val recyclerView = findViewById<RecyclerView>(R.id.new_announcement_attachments_list)
