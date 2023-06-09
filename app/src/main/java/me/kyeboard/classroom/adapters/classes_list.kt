@@ -54,7 +54,7 @@ class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val 
         val bg = (viewHolder.parent.background as GradientDrawable)
 
         bg.setColor(Color.parseColor(data.color))
-        bg.setStroke(8, Color.parseColor("#000000"))
+        bg.setStroke(6, Color.parseColor("#000000"))
         bg.cornerRadius = 5F
 
         viewHolder.title.text = data.name

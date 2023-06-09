@@ -120,7 +120,6 @@ class Home : Activity() {
 
             // If there are no teams, show the no found widget
             if(teams.isEmpty()) {
-                Toast.makeText(this@Home, "mao", Toast.LENGTH_LONG).show()
                 noClassesParent.visibility = View.VISIBLE
             }
 

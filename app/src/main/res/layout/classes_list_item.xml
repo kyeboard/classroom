@@ -12,7 +12,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:translationZ="10dp"
-        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:paddingRight="10dp"
         android:paddingVertical="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,9 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nekst_bold"
-            android:text="sdsdssd"
             android:textColor="@color/black"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:textSize="24sp"
             android:translationZ="10dp"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -38,7 +37,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="sds"
             android:textColor="#444444"
             android:translationZ="10dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +52,7 @@
             android:background="@drawable/leaflet"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:src="@drawable/caret_right" />
+            android:src="@drawable/caret_right"
+            tools:ignore="UseAppTint" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
