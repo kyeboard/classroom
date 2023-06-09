@@ -1,10 +1,10 @@
 {
     "projectId": "fryday",
-    "projectName": "fryday",
+    "projectName": "",
     "functions": [
         {
             "$id": "6481f8a4738c40521cb4",
-            "name": "upload_user_avatars",
+            "name": "upload_user_profile",
             "runtime": "node-16.0",
             "path": "functions/upload_user_avatars",
             "entrypoint": "build/index.js",
@@ -12,7 +12,7 @@
                 "node_modules",
                 ".npm",
                 "src",
-                "tsconfig.json
+                "tsconfig.json"
             ],
             "execute": [],
             "events": ["users.*.create", "users.*.sessions.*.create"],

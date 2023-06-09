@@ -6,7 +6,7 @@ interface Request {
 }
 
 interface EventData {
-    $id: string
+    userId: string
 }
 
 interface Variables {
@@ -52,7 +52,7 @@ module.exports = async function(req: Request, res: Response) {
         })
 
         // Upload it back to the user profiles bucket
-        await storage.createFile("646ef17593d213adfcf2", data.$id, InputFile.fromPath("profile.png", "profile.png"))
+        await storage.createFile("646ef17593d213adfcf2", data.userId, InputFile.fromPath("profile.png", "profile.png"))
 
         // Delete the file
         fs.unlinkSync("profile.png")
