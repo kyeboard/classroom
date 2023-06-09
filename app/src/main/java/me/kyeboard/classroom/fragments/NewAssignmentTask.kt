@@ -1,5 +1,6 @@
 package me.kyeboard.classroom.fragments
 
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentResolver
@@ -14,10 +15,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.AppCompatButton
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.extensions.tryJsonCast
@@ -88,11 +92,30 @@ class NewAssignmentTask : Fragment() {
         //val assignment_id = requireArguments().getString("assignment_id")!!
         val assignment_id = "646f5e9c8ba221bf2df1"
 
-
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
         val storage = Storage(client)
         val account = Account(client)
+
+        val submission_area = view.findViewById<ConstraintLayout>(R.id.assignment_task_submission)
+
+        view.findViewById<ImageView>(R.id.assignment_task_expand_submission).setOnClickListener {
+            val initialHeight = submission_area.height
+            val targetHeight = 900 // Increase the height by 200 pixels
+            val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
+            valueAnimator.duration = 100 // Animation duration in milliseconds
+
+            valueAnimator.addUpdateListener { animator ->
+                val layoutParams = submission_area.layoutParams
+                layoutParams.height = animator.animatedValue as Int
+                submission_area.layoutParams = layoutParams
+            }
+
+            valueAnimator.start()
+
+            view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.VISIBLE
+            view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).visibility = View.VISIBLE
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             val session = account.get()
@@ -169,7 +192,7 @@ class NewAssignmentTask : Fragment() {
                 val hashed_id = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
                 val attachments = uploadToAppwriteStorage("unique()", view.context.contentResolver, attachment_uri, storage)
 
-                databases.createDocument("classes", "64782b0c5957666e7bee", hashed_id, SubmissionItem(0, arrayListOf(attachments)))
+                // databases.createDocument("classes", "64782b0c5957666e7bee", hashed_id, SubmissionItem(0, arrayListOf(attachments)))
             }
         }
 

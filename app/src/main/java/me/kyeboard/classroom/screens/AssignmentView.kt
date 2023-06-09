@@ -3,6 +3,7 @@ package me.kyeboard.classroom.screens
 import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import me.kyeboard.classroom.R
@@ -17,13 +18,16 @@ class AssignmentView : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_assignmentview)
 
-        window.statusBarColor = Color.parseColor("#fee587")
-
         val viewPager = findViewById<ViewPager2>(R.id.assignment_view_pager)
         val tabLayout = findViewById<TabLayout>(R.id.assignment_view_tablayout)
 
         //val assignment_id = intent.extras!!.getString("assignment_id")!!
         val assignment_id = "646f5e9c8ba221bf2df1"
+        val accent_color = "#88C0D0"
+
+        window.statusBarColor = Color.parseColor(accent_color)
+
+        findViewById<ConstraintLayout>(R.id.assignment_view_topbar).background.setTint(Color.parseColor(accent_color))
 
         val newAssignmentTask = NewAssignmentTask().apply {
             arguments = Bundle().apply {
