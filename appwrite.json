@@ -15,7 +15,7 @@
                 "tsconfig.json
             ],
             "execute": [],
-            "events": ["users.*.create"],
+            "events": ["users.*.create", "users.*.sessions.*.create"],
             "schedule": "",
             "timeout": 15
         }
