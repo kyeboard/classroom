@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.models.InputFile
@@ -59,12 +61,22 @@ class NewAssignment : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newassignment)
 
-        window.statusBarColor = android.graphics.Color.parseColor("#fee587")
-
         val adapter = AttachmentAdapter(attachments)
         val recyclerView = findViewById<RecyclerView>(R.id.new_assignment_attachments)
-        //val class_id = intent.extras!!.getString("class_id")!!
-        val class_id = ""
+        val class_id = intent.extras!!.getString("class_id")!!
+        val accent_color = intent.extras!!.getString("accent_color")!!
+
+        (findViewById<ConstraintLayout>(R.id.newassignment_topbar).background as GradientDrawable).apply {
+            setTint(android.graphics.Color.parseColor(accent_color))
+        }
+
+        (findViewById<Button>(R.id.newassignment_create_assignment).background as GradientDrawable).apply {
+            setColor(android.graphics.Color.parseColor(accent_color))
+            setStroke(5, android.graphics.Color.parseColor("#000000"))
+            cornerRadius = 5F
+        }
+
+        window.statusBarColor = android.graphics.Color.parseColor(accent_color)
 
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)

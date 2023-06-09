@@ -1,219 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#eceff4"
+    android:background="@color/bg"
+    android:paddingBottom="20dp"
     android:layout_height="match_parent">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout3"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fee587"
-        android:paddingHorizontal="20dp"
-        android:paddingVertical="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/newassignment_topbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#fee587"
-            android:src="@drawable/back"
-            android:layout_marginTop="3dp"
-            android:tint="@color/black"
+            android:background="@drawable/bg_null"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="30dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="UseAppTint" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_null"
+                android:src="@drawable/back"
+                android:layout_marginTop="3dp"
+                android:tint="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="UseAppTint" />
+
+            <TextView
+                android:id="@+id/header22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nekst_bold"
+                android:includeFontPadding="false"
+                android:text="New assignment"
+                android:textColor="@color/black"
+                android:textSize="23sp"
+                android:layout_marginLeft="10dp"
+                app:layout_constraintStart_toEndOf="@+id/imageButton"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <View
+            android:id="@+id/view7"
+            android:layout_width="wrap_content"
+            android:layout_height="3dp"
+            android:background="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newassignment_topbar"
+            app:layout_constraintEnd_toEndOf="parent" />
 
         <TextView
-            android:id="@+id/header22"
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:fontFamily="@font/nekst_bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view7" />
+
+        <EditText
+            android:id="@+id/newassignment_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/rounded"
+            android:backgroundTint="#d8dee9"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:textColorHint="#4c566a"
+            android:hint="Title for your assignment"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textColor="@color/black"
+            android:fontFamily="@font/nekst_bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newassignment_title" />
+
+        <EditText
+            android:id="@+id/newassignment_description"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:ems="10"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/rounded"
+            android:backgroundTint="#d8dee9"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:textColorHint="#4c566a"
+            android:hint="Description for your assignment"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+        <TextView
+            android:id="@+id/textView14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Grade"
+            android:textColor="@color/black"
+            android:fontFamily="@font/nekst_bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newassignment_description" />
+
+        <EditText
+            android:id="@+id/newassignment_grade"
+            android:text="0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:layout_marginHorizontal="15dp"
+            android:background="@drawable/rounded"
+            android:backgroundTint="#d8dee9"
+            android:padding="16dp"
+            android:layout_marginTop="8dp"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:textColorHint="#4c566a"
+            android:hint="Assignment's Grade"
+            android:inputType="number"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+        <TextView
+            android:id="@+id/textView15"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/nekst_bold"
-            android:includeFontPadding="false"
-            android:text="New assignment"
+            android:text="Due date"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
             android:textColor="@color/black"
-            android:textSize="23sp"
-            android:layout_marginLeft="10dp"
-            app:layout_constraintStart_toEndOf="@+id/imageButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/newassignment_grade"
+            app:layout_constraintTop_toBottomOf="@+id/newassignment_description" />
 
+        <EditText
+            android:id="@+id/newassignment_duedate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:background="@drawable/rounded"
+            android:backgroundTint="#d8dee9"
+            android:padding="16dp"
+            android:textSize="13sp"
+            android:textColor="@color/black"
+            android:textColorHint="#4c566a"
+            android:hint="Due date"
+            android:inputType="date"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/newassignment_grade"
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/new_assignment_attachments"
+            android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="15dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/newassignment_duedate" />
+
+        <Button
+            android:id="@+id/new_assignment_add_attachment"
+            android:layout_width="0dp"
+            android:layout_marginHorizontal="20dp"
+            android:textAllCaps="false"
+            android:background="@drawable/rounded"
+            android:outlineProvider="none"
+            android:padding="18dp"
+            android:textColor="@color/black"
+            android:backgroundTint="#d8dee9"
+            android:layout_height="wrap_content"
+            android:text="Add attachments"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/new_assignment_attachments" />
+
+        <Button
+            android:id="@+id/newassignment_create_assignment"
+            android:layout_width="0dp"
+            android:outlineProvider="none"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:padding="18dp"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/border_yellow"
+            android:layout_height="wrap_content"
+            android:text="Create assignment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/new_assignment_add_attachment" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:id="@+id/view7"
-        android:layout_width="wrap_content"
-        android:layout_height="3dp"
-        android:background="@color/black"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/textView12"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:textColor="@color/black"
-        android:fontFamily="@font/nekst_bold"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view7" />
-
-    <EditText
-        android:id="@+id/newassignment_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_marginHorizontal="15dp"
-        android:background="@drawable/rounded"
-        android:backgroundTint="#d8dee9"
-        android:padding="16dp"
-        android:layout_marginTop="8dp"
-        android:textSize="13sp"
-        android:textColor="@color/black"
-        android:textColorHint="#4c566a"
-        android:hint="Title for your assignment"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
-
-    <TextView
-        android:id="@+id/textView13"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Description"
-        android:textColor="@color/black"
-        android:fontFamily="@font/nekst_bold"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newassignment_title" />
-
-    <EditText
-        android:id="@+id/newassignment_description"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:ems="10"
-        android:layout_marginHorizontal="15dp"
-        android:background="@drawable/rounded"
-        android:backgroundTint="#d8dee9"
-        android:padding="16dp"
-        android:layout_marginTop="8dp"
-        android:textSize="13sp"
-        android:textColor="@color/black"
-        android:textColorHint="#4c566a"
-        android:hint="Description for your assignment"
-        android:gravity="start|top"
-        android:inputType="textMultiLine"
-        app:layout_constraintTop_toBottomOf="@+id/textView13" />
-
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Grade"
-        android:textColor="@color/black"
-        android:fontFamily="@font/nekst_bold"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="15dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newassignment_description" />
-
-    <EditText
-        android:id="@+id/newassignment_grade"
-        android:text="0"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:layout_marginHorizontal="15dp"
-        android:background="@drawable/rounded"
-        android:backgroundTint="#d8dee9"
-        android:padding="16dp"
-        android:layout_marginTop="8dp"
-        android:textSize="13sp"
-        android:textColor="@color/black"
-        android:textColorHint="#4c566a"
-        android:hint="Assignment's Grade"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView14" />
-
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/nekst_bold"
-        android:text="Due date"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toEndOf="@+id/newassignment_grade"
-        app:layout_constraintTop_toBottomOf="@+id/newassignment_description" />
-
-    <EditText
-        android:id="@+id/newassignment_duedate"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:background="@drawable/rounded"
-        android:backgroundTint="#d8dee9"
-        android:padding="16dp"
-        android:textSize="13sp"
-        android:textColor="@color/black"
-        android:textColorHint="#4c566a"
-        android:hint="Due date"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/newassignment_grade"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/new_assignment_attachments"
-        android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="15dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/newassignment_duedate" />
-
-    <Button
-        android:id="@+id/new_assignment_add_attachment"
-        android:layout_width="0dp"
-        android:layout_marginHorizontal="20dp"
-        android:textAllCaps="false"
-        android:background="@drawable/rounded"
-        android:outlineProvider="none"
-        android:padding="18dp"
-        android:textColor="@color/black"
-        android:backgroundTint="#d8dee9"
-        android:layout_height="wrap_content"
-        android:text="Add attachments"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_assignment_attachments" />
-
-    <Button
-        android:id="@+id/newassignment_create_assignment"
-        android:layout_width="0dp"
-        android:outlineProvider="none"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        android:padding="18dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/border_yellow"
-        android:layout_height="wrap_content"
-        android:text="Create assignment"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_assignment_add_attachment" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
