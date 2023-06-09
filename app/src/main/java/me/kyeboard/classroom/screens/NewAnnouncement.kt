@@ -12,6 +12,7 @@ import android.provider.OpenableColumns
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -45,6 +46,10 @@ class NewAnnouncement : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newannouncement)
+
+        findViewById<ImageView>(R.id.destroy_self).setOnClickListener {
+            finish()
+        }
 
         val class_id = intent.extras!!.getString("class_id")!!
         val accent_color = intent.extras!!.getString("accent_color")

@@ -57,6 +57,16 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/current_class_name" />
+
+            <ImageView
+                android:id="@+id/class_members_open"
+                android:layout_width="25dp"
+                android:layout_marginRight="10dp"
+                android:layout_height="20dp"
+                android:src="@drawable/users"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -96,7 +106,6 @@
             android:layout_height="wrap_content"
             android:text="Assignments" />
     </com.google.android.material.tabs.TabLayout>
-
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/classdashbord_viewpager"

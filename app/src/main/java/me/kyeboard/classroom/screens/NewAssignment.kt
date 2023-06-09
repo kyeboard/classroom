@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.OpenableColumns
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -68,6 +69,10 @@ class NewAssignment : ComponentActivity() {
 
         (findViewById<ConstraintLayout>(R.id.newassignment_topbar).background as GradientDrawable).apply {
             setTint(android.graphics.Color.parseColor(accent_color))
+        }
+
+        findViewById<ImageView>(R.id.destroy_self).setOnClickListener {
+            finish()
         }
 
         (findViewById<Button>(R.id.newassignment_create_assignment).background as GradientDrawable).apply {
