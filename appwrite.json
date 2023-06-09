@@ -7,10 +7,12 @@
             "name": "upload_user_avatars",
             "runtime": "node-16.0",
             "path": "functions/upload_user_avatars",
-            "entrypoint": "src/index.js",
+            "entrypoint": "build/index.js",
             "ignore": [
                 "node_modules",
-                ".npm"
+                ".npm",
+                "src",
+                "tsconfig.json
             ],
             "execute": [],
             "events": ["users.*.create"],
