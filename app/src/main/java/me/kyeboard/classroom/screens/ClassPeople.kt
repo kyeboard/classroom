@@ -1,6 +1,7 @@
 package me.kyeboard.classroom.screens
 
 import MembersList
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,12 +30,14 @@ class ClassPeople : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classppl)
-        
-        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.yellow, null)
 
         actionBar?.hide()
 
-        val classId = "647da6bb4463f64ae8f5"
+        val classId = intent.extras!!.getString("class_id")!!
+        val accentColor = intent.extras!!.getString("accent_color")!!
+
+        window.statusBarColor = Color.parseColor(accentColor)
+        findViewById<ConstraintLayout>(R.id.classppl_topbar).background.setTint(Color.parseColor(accentColor))
 
         val view = findViewById<RecyclerView>(R.id.members_list)
         val client = get_appwrite_client(this)

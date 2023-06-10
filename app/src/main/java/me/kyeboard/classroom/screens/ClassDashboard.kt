@@ -1,10 +1,12 @@
 package me.kyeboard.classroom.screens
 
+import MembersList
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -32,6 +34,20 @@ class ClassDashboard : AppCompatActivity() {
 
         // Get class id sent along
         val classId = intent.extras!!.getString("class_id")!!
+        val accent_color = intent.extras!!.getString("accent_color")!!
+
+        // Handle members list opener
+        findViewById<ImageView>(R.id.class_members_open).setOnClickListener {
+            // Create an intent
+            val intent = Intent(this, ClassPeople::class.java)
+
+            // Add class id
+            intent.putExtra("class_id", classId)
+            intent.putExtra("accent_color", accent_color)
+
+            // Start the intent
+            startActivity(intent)
+        }
 
         // Viewpager and tab layout for nav
         val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)

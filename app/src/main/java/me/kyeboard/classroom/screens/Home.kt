@@ -146,12 +146,13 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private fun openClassDashboard(id: String) {
+    private fun openClassDashboard(id: String, accent_color: String) {
         // Create a new intent for the dashboard
         val intent = Intent(this@Home, ClassDashboard::class.java)
 
         // Put the id
         intent.putExtra("class_id", id)
+        intent.putExtra("accent_color", accent_color)
 
         // Start
         startActivity(intent)

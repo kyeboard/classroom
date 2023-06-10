@@ -15,7 +15,7 @@ import me.kyeboard.classroom.R
 
 data class ClassItem(val name: String, val header: String, val subject: String, val `$id`: String, val color: String, var total: Long)
 
-class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String) -> Unit, private val context: Context) :
+class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String, accent_color: String) -> Unit, private val context: Context) :
     RecyclerView.Adapter<ClassesListAdapter.ViewHolder>() {
 
     /**
@@ -48,7 +48,7 @@ class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val 
         val data = dataSet[position]
 
         viewHolder.parent.setOnClickListener {
-            onClick(data.`$id`)
+            onClick(data.`$id`, data.color)
         }
 
         val bg = (viewHolder.parent.background as GradientDrawable)
