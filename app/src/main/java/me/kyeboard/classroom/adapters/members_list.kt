@@ -54,13 +54,24 @@ class MembersList(private val dataSet: List<Membership>) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val data = dataSet[position]
 
-        val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
-        val outputFormat = SimpleDateFormat("d MMMM, yyyy", Locale.US)
-
-        val date = inputFormat.parse(data.joined)!!
-
         viewHolder.username.text = data.userName
-        viewHolder.member_since.text = "Member since ${outputFormat.format(date)}"
+
+        if(data.confirm) {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
+            val outputFormat = SimpleDateFormat("d MMMM, yyyy", Locale.US)
+
+            val date = inputFormat.parse(data.joined)!!
+
+            viewHolder.member_since.text = "Member since ${outputFormat.format(date)}"
+        } else {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
+            val outputFormat = SimpleDateFormat("d MMMM, yyyy", Locale.US)
+
+            val date = inputFormat.parse(data.invited)!!
+
+            viewHolder.member_since.text = "Not joined yet | Invited on ${outputFormat.format(date)}"
+        }
+
         Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${data.userId}/view?project=fryday").into(viewHolder.pfp)
     }
 

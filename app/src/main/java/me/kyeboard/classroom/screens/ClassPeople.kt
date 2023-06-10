@@ -21,6 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +48,21 @@ class ClassPeople : ComponentActivity() {
         val client = get_appwrite_client(this)
         val teams = Teams(client)
 
+        val refreshLayout = findViewById<SwipeRefreshLayout>(R.id.members_list_refresh_layout)
+
+        refreshLayout.setOnRefreshListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                populateList(teams, classId, view)
+                refreshLayout.isRefreshing = false
+            }
+        }
+
+        findViewById<ImageView>(R.id.newclass_destory_self).setOnClickListener {
+            finish()
+        }
+
+        CoroutineScope(Dispatchers.IO).launch { populateList(teams, classId, view) }
+
         val email_check_regex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,})+$")
 
         findViewById<ImageView>(R.id.send_invite).setOnClickListener {
@@ -68,19 +84,21 @@ class ClassPeople : ComponentActivity() {
             GlobalScope.launch {
                 teams.createMembership(classId, email_address, listOf(), "https://fryday.vercel.app")
 
+                populateList(teams, classId, view)
+
                 runOnUiThread {
                     Toast.makeText(this@ClassPeople, "Successfully sent an invite!", Toast.LENGTH_SHORT).show()
                 }
             }
         }
+    }
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val members = teams.listMemberships(classId).memberships
+    private suspend fun populateList(teams: Teams, classId: String, view: RecyclerView) {
+        val members = teams.listMemberships(classId).memberships
 
-            runOnUiThread {
-                view.adapter = MembersList(members)
-                view.layoutManager = LinearLayoutManager(this@ClassPeople)
-            }
+        runOnUiThread {
+            view.adapter = MembersList(members)
+            view.layoutManager = LinearLayoutManager(this@ClassPeople)
         }
     }
 }
