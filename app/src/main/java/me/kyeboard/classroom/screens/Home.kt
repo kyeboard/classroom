@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +29,7 @@ import me.kyeboard.classroom.adapters.ClassItem
 import me.kyeboard.classroom.adapters.ClassesListAdapter
 import me.kyeboard.classroom.utils.get_appwrite_client
 
-class Home : Activity() {
+class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         // Initialize view
         super.onCreate(savedInstanceState)
@@ -44,6 +46,15 @@ class Home : Activity() {
 
         // View holders
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
+
+        // Handle refreshing layout when the new class finishes creating a new class
+        val handler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == Activity.RESULT_OK) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    populateClassesList(teamsService, database, noClassesParent)
+                }
+            }
+        }
 
         // Handle refresh event
         val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
@@ -85,7 +96,7 @@ class Home : Activity() {
             val intent = Intent(this, NewClass::class.java)
 
             // Start the intent
-            startActivity(intent)
+            handler.launch(intent)
         }
     }
 
@@ -94,8 +105,14 @@ class Home : Activity() {
         val teams = teamsService.list().teams
         val userClasses = arrayListOf<ClassItem>()
 
+        // Get the view
+        val view = findViewById<RecyclerView>(R.id.home_classes_list)
+        val bar = findViewById<ProgressBar>(R.id.home_classes_list_loading)
+
         runOnUiThread {
             noClassesParent.visibility = View.GONE
+            view.visibility = View.GONE
+            bar.visibility = View.VISIBLE
         }
 
         // Iterate over each team
@@ -112,16 +129,13 @@ class Home : Activity() {
 
         // Configure recycler view
         runOnUiThread {
-            // Get the view
-            val view = findViewById<RecyclerView>(R.id.home_classes_list)
-
-            // Remove the progress bar
-            findViewById<ProgressBar>(R.id.home_classes_list_loading).visibility = View.GONE
-
             // If there are no teams, show the no found widget
             if(teams.isEmpty()) {
                 noClassesParent.visibility = View.VISIBLE
             }
+
+            bar.visibility = View.GONE
+            view.visibility = View.VISIBLE
 
             // Add the adapter
             view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)

@@ -1,5 +1,6 @@
 package me.kyeboard.classroom.screens
 
+import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
@@ -81,8 +82,13 @@ class NewClass : ComponentActivity() {
                 // TODO: Fix the registry spelling
                 database.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, selectedColor))
 
-                // End the current activity (the class is created)
-                finish()
+                runOnUiThread {
+                    // Set the result
+                    setResult(Activity.RESULT_OK)
+
+                    // End the current activity (the class is created)
+                    finish()
+                }
             }
         }
     }
