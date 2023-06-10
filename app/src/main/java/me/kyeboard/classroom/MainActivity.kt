@@ -18,15 +18,15 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        splashScreen.setKeepOnScreenCondition { true }
-
-        // Get the singleton instance
         val client = get_appwrite_client(this)
         val account = Account(client)
+
+        splashScreen.setKeepOnScreenCondition { true }
 
         // Check if the session exists
         CoroutineScope(Dispatchers.IO).launch {
             val nextIntent = try {
+                // Try to get the session
                 account.get()
 
                 // Session exists... move on

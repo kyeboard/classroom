@@ -21,7 +21,6 @@ class Login : ComponentActivity() {
 
         window.statusBarColor = ResourcesCompat.getColor(resources, R.color.home_bg, null)
 
-        // Initialize appwrite client and req services
         val client = get_appwrite_client(this)
         val account = Account(client)
 
@@ -46,7 +45,6 @@ class Login : ComponentActivity() {
     // Function that starts oauth activity
     private fun startGoogleOAuth(account: Account) {
         CoroutineScope(Dispatchers.IO).launch {
-            // TODO: Add redirect to the website to prevent redirect attack
             try {
                 // Create oauth session
                 account.createOAuth2Session(this@Login, "google")
