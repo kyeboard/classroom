@@ -3,8 +3,10 @@ package me.kyeboard.classroom.screens
 import MembersList
 import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -41,6 +43,8 @@ class ClassPeople : ComponentActivity() {
         val classId = intent.extras!!.getString("class_id")!!
         val accentColor = intent.extras!!.getString("accent_color")!!
 
+        val loading = findViewById<ProgressBar>(R.id.members_list_loading)
+
         window.statusBarColor = Color.parseColor(accentColor)
         findViewById<ConstraintLayout>(R.id.classppl_topbar).background.setTint(Color.parseColor(accentColor))
 
@@ -52,7 +56,7 @@ class ClassPeople : ComponentActivity() {
 
         refreshLayout.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
-                populateList(teams, classId, view)
+                populateList(teams, classId, view, loading, false)
                 refreshLayout.isRefreshing = false
             }
         }
@@ -61,7 +65,7 @@ class ClassPeople : ComponentActivity() {
             finish()
         }
 
-        CoroutineScope(Dispatchers.IO).launch { populateList(teams, classId, view) }
+        CoroutineScope(Dispatchers.IO).launch { populateList(teams, classId, view, loading) }
 
         val email_check_regex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,})+$")
 
@@ -84,7 +88,7 @@ class ClassPeople : ComponentActivity() {
             GlobalScope.launch {
                 teams.createMembership(classId, email_address, listOf(), "https://fryday.vercel.app")
 
-                populateList(teams, classId, view)
+                populateList(teams, classId, view, loading)
 
                 runOnUiThread {
                     Toast.makeText(this@ClassPeople, "Successfully sent an invite!", Toast.LENGTH_SHORT).show()
@@ -93,10 +97,20 @@ class ClassPeople : ComponentActivity() {
         }
     }
 
-    private suspend fun populateList(teams: Teams, classId: String, view: RecyclerView) {
+    private suspend fun populateList(teams: Teams, classId: String, view: RecyclerView, loading: ProgressBar, showLoading: Boolean = true) {
+        runOnUiThread {
+            if(showLoading) {
+                loading.visibility = View.VISIBLE
+                view.visibility = View.GONE
+            }
+        }
+
         val members = teams.listMemberships(classId).memberships
 
         runOnUiThread {
+            loading.visibility = View.GONE
+            view.visibility = View.VISIBLE
+
             view.adapter = MembersList(members)
             view.layoutManager = LinearLayoutManager(this@ClassPeople)
         }

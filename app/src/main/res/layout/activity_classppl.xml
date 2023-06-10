@@ -109,7 +109,16 @@
             android:id="@+id/members_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <ProgressBar
+        android:id="@+id/members_list_loading"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:indeterminateTint="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view10" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
