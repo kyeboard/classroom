@@ -3,6 +3,7 @@ package me.kyeboard.classroom.screens
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.squareup.picasso.Picasso
+import io.appwrite.Client
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
@@ -30,6 +32,11 @@ import me.kyeboard.classroom.adapters.ClassesListAdapter
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class Home : AppCompatActivity() {
+    private lateinit var client: Client
+    private lateinit var account: Account
+    private lateinit var databases: Databases
+    private lateinit var teams: Teams
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Initialize view
         super.onCreate(savedInstanceState)
@@ -39,54 +46,63 @@ class Home : AppCompatActivity() {
         window.statusBarColor = ResourcesCompat.getColor(resources, R.color.yellow, theme)
 
         // Setup appwrite services
-        val client = get_appwrite_client(this)
-        val account = Account(client)
-        val database = Databases(client)
-        val teamsService = Teams(client)
+        client = get_appwrite_client(applicationContext)
+        account = Account(client)
+        databases = Databases(client)
+        teams = Teams(client)
 
         // View holders
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
+        val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
 
         // Handle refreshing layout when the new class finishes creating a new class
         val handler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == Activity.RESULT_OK) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    populateClassesList(teamsService, database, noClassesParent)
+                    populateClassesList(noClassesParent)
                 }
             }
         }
 
-        // Handle refresh event
-        val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
-
+        // Handler refresh layout event
         refreshView.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
-                populateClassesList(teamsService, database, noClassesParent, false)
+                populateClassesList(noClassesParent, false)
 
                 refreshView.isRefreshing = false
             }
         }
 
+        // Load current info
         CoroutineScope(Dispatchers.IO).launch {
             // Show current user info
-            val session = account.get()
+            try {
+                val session = account.get();
 
-            runOnUiThread {
-                val pfp = findViewById<ImageView>(R.id.current_user_profile)
+                runOnUiThread {
+                    val pfp = findViewById<ImageView>(R.id.current_user_profile)
 
-                findViewById<TextView>(R.id.current_user_name).text = session.name
-                findViewById<TextView>(R.id.current_user_email).text = session.email
+                    findViewById<TextView>(R.id.current_user_name).text = session.name
+                    findViewById<TextView>(R.id.current_user_email).text = session.email
 
-                Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday").into(pfp)
+                    Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday").into(pfp)
+                }
+            } catch(e: Exception) {
+                // User has some issue with session so its better for a relogin
+                val intent = Intent(this@Home, Login::class.java)
+
+                // Start
+                startActivity(intent)
+
+                // Finish current since there is no more usage of it
+                finish()
             }
 
             // Get the list of the teams that the current user is in
             try {
-                populateClassesList(teamsService, database, noClassesParent)
+                populateClassesList(noClassesParent)
             } catch(e: Exception) {
-                runOnUiThread {
-                    Toast.makeText(this@Home, e.toString(), Toast.LENGTH_LONG).show()
-                }
+                Log.e("populate_classes_list", e.toString())
             }
         }
 
@@ -100,9 +116,9 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private suspend fun populateClassesList(teamsService: Teams, databases: Databases, noClassesParent: ConstraintLayout, showLoading: Boolean = true) {
+    private suspend fun populateClassesList(noClassesParent: ConstraintLayout, showLoading: Boolean = true) {
         // Get the data
-        val teams = teamsService.list().teams
+        val classes = teams.list().teams
         val userClasses = arrayListOf<ClassItem>()
 
         // Get the view
@@ -119,7 +135,7 @@ class Home : AppCompatActivity() {
         }
 
         // Iterate over each team
-        for (team in teams) {
+        for (team in classes) {
             // Get register
             val item = databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!
 
@@ -133,7 +149,7 @@ class Home : AppCompatActivity() {
         // Configure recycler view
         runOnUiThread {
             // If there are no teams, show the no found widget
-            if(teams.isEmpty()) {
+            if(classes.isEmpty()) {
                 noClassesParent.visibility = View.VISIBLE
             }
 
