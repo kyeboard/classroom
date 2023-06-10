@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 account.get()
 
                 // Session exists... move on
-                Intent(this@MainActivity, AssignmentView::class.java)
+                Intent(this@MainActivity, Home::class.java)
             } catch(_: Exception) {
                 Intent(this@MainActivity, Login::class.java)
             }
