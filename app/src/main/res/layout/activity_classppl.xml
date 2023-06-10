@@ -52,7 +52,7 @@
         app:layout_constraintTop_toBottomOf="@+id/classppl_topbar" />
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/classppl_invite_email"
         android:layout_width="0dp"
         android:textSize="14sp"
         android:layout_height="wrap_content"
@@ -61,17 +61,18 @@
         android:background="@drawable/rounded"
         android:backgroundTint="@color/white"
         android:ems="10"
+        android:textColor="@color/black"
         android:fontFamily="@font/nekst_semibold"
         android:hint="Invite via email address"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:padding="20dp"
         android:textColorHint="@color/black4"
-        app:layout_constraintEnd_toStartOf="@+id/button2"
+        app:layout_constraintEnd_toStartOf="@+id/send_invite"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view9" />
 
     <ImageView
-        android:id="@+id/button2"
+        android:id="@+id/send_invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="10dp"
@@ -92,7 +93,7 @@
         android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/send_invite" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/members_list"
