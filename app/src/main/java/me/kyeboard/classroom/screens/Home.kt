@@ -61,7 +61,7 @@ class Home : AppCompatActivity() {
 
         refreshView.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
-                populateClassesList(teamsService, database, noClassesParent)
+                populateClassesList(teamsService, database, noClassesParent, false)
 
                 refreshView.isRefreshing = false
             }
@@ -100,7 +100,7 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private suspend fun populateClassesList(teamsService: Teams, databases: Databases, noClassesParent: ConstraintLayout) {
+    private suspend fun populateClassesList(teamsService: Teams, databases: Databases, noClassesParent: ConstraintLayout, showLoading: Boolean = true) {
         // Get the data
         val teams = teamsService.list().teams
         val userClasses = arrayListOf<ClassItem>()
@@ -112,7 +112,10 @@ class Home : AppCompatActivity() {
         runOnUiThread {
             noClassesParent.visibility = View.GONE
             view.visibility = View.GONE
-            bar.visibility = View.VISIBLE
+
+            if(showLoading) {
+                bar.visibility = View.VISIBLE
+            }
         }
 
         // Iterate over each team
