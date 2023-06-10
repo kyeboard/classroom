@@ -117,6 +117,8 @@ class NewAnnouncement : AppCompatActivity() {
 
                 databases.createDocument("classes", "647c1b704310bb8f0fed", "unique()", AnnouncementItem("kyeboard", message, attachment_ids, class_id))
 
+                setResult(Activity.RESULT_OK)
+
                 finish()
             }
         }

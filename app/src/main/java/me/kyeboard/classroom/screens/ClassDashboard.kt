@@ -1,13 +1,16 @@
 package me.kyeboard.classroom.screens
 
 import MembersList
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
@@ -57,6 +60,12 @@ class ClassDashboard : AppCompatActivity() {
         val client = get_appwrite_client(this)
         val databases = Databases(client)
 
+        val handler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == Activity.RESULT_OK) {
+                Log.d("tt", "done")
+            }
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             // Get class info from registery
             val classInfo = databases.getDocument("classes", "registery", classId).data.tryJsonCast<ClassItem>()!!
@@ -82,7 +91,7 @@ class ClassDashboard : AppCompatActivity() {
                     intent.putExtra("accent_color", classInfo.color)
 
                     // Start
-                    startActivity(intent)
+                    handler.launch(intent)
                 }
 
                 // Change name and subject

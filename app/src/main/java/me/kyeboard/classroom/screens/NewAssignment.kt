@@ -132,6 +132,10 @@ class NewAssignment : ComponentActivity() {
                 database.createDocument("classes", "646f432ad59caafabf74", "unique()",
                     Assignment(title, desc, attachment_ids, "kyeboard", grade, duedate, class_id)
                 )
+
+                setResult(Activity.RESULT_OK)
+
+                finish()
             }
         }
     }
