@@ -71,6 +71,7 @@ class ClassDashboard : AppCompatActivity() {
             runOnUiThread {
                 // Change tint of the topbar
                 val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
+
                 topbar.background.apply {
                     setTint(Color.parseColor(classInfo.color))
                 }

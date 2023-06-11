@@ -1,14 +1,11 @@
 package me.kyeboard.classroom.screens
 
 import android.app.Activity
-import android.content.ContentResolver
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -17,10 +14,10 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import io.appwrite.models.InputFile
+import io.appwrite.Client
+import io.appwrite.services.Account
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
 import kotlinx.coroutines.CoroutineScope
@@ -29,74 +26,75 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
-import me.kyeboard.classroom.fragments.AnnouncementItem
+import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.InputStream
-import java.io.OutputStream
+import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 
-data class AnnouncementItem(val author: String, val message: String, val attachments: ArrayList<String>, val classid: String)
+data class AnnouncementItem(val author: String, val message: String, val attachments: ArrayList<String>, val classid: String, val userId: String)
 
 class NewAnnouncement : AppCompatActivity() {
     val attachments: ArrayList<Attachment> = arrayListOf()
-    val attachments_uri: ArrayList<Uri> = arrayListOf()
+    val uris: ArrayList<Uri> = arrayListOf()
+
+    private lateinit var client: Client
+    private lateinit var databases: Databases
+    private lateinit var storage: Storage
+    private lateinit var account: Account
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Setup view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newannouncement)
 
+        // Handle maniacs
         findViewById<ImageView>(R.id.destroy_self).setOnClickListener {
             finish()
         }
 
+        // Get items from bundle
         val class_id = intent.extras!!.getString("class_id")!!
-        val accent_color = intent.extras!!.getString("accent_color")
+        val accentColor = intent.extras!!.getString("accent_color")!!
 
-        window.statusBarColor = Color.parseColor(accent_color)
+        // Set the accent
+        applyAccent(accentColor)
 
-        findViewById<ConstraintLayout>(R.id.newannouncement_topbar).background.apply {
-            setTint(Color.parseColor(accent_color))
-        }
-
-        val bg = findViewById<Button>(R.id.new_announcement_create_announcement).background.mutate() as GradientDrawable
-
-        bg.setColor(Color.parseColor(accent_color))
-        bg.setStroke(5, Color.parseColor("#000000"))
-        bg.cornerRadius = 5F
-
+        // Create adapter for attachments
         val adapter = AttachmentAdapter(attachments)
         val recyclerView = findViewById<RecyclerView>(R.id.new_announcement_attachments_list)
-
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val client = get_appwrite_client(this)
-        val databases = Databases(client)
-        val storage = Storage(client)
+        // Initiate appwrite services
+        client = get_appwrite_client(this)
+        databases = Databases(client)
+        storage = Storage(client)
+        account = Account(client)
 
+        // Intent to input files
         val intent = Intent().apply {
             action = Intent.ACTION_GET_CONTENT
             type = "*/*"
         }
 
+        // Handle picking ip files
         val pickFiles = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK) {
-                val content_uri = result.data?.data!!
-                val file_name = getFileName(this.contentResolver, content_uri)
+                val contentsURI = result.data?.data!!
+                val fileName = getFileName(this.contentResolver, contentsURI)
 
-                attachments.add(Attachment(file_name.substringAfterLast('.', ""), file_name))
-                attachments_uri.add(content_uri)
+                attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
+                uris.add(contentsURI)
 
                 adapter.notifyItemChanged(attachments.size - 1)
             }
         }
 
+        // Launch intent on Add Attachment button click
         findViewById<Button>(R.id.new_announcement_attach_files).setOnClickListener {
             pickFiles.launch(intent)
         }
 
+        // Handle creation of announcement
         findViewById<Button>(R.id.new_announcement_create_announcement).setOnClickListener {
             val message = findViewById<EditText>(R.id.new_announcement_message).text.toString()
 
@@ -108,14 +106,27 @@ class NewAnnouncement : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val attachment_ids = arrayListOf<String>()
+            val attachmentIds = arrayListOf<String>()
 
             CoroutineScope(Dispatchers.IO).launch {
-                for(uri in attachments_uri) {
-                    attachment_ids.add(uploadToAppwriteStorage(this@NewAnnouncement.contentResolver, uri, storage))
+                for(uri in uris) {
+                    attachmentIds.add(uploadToAppwriteStorage(this@NewAnnouncement.contentResolver, uri, storage))
                 }
 
-                databases.createDocument("classes", "647c1b704310bb8f0fed", "unique()", AnnouncementItem("kyeboard", message, attachment_ids, class_id))
+                val currentUser = account.get()
+
+                databases.createDocument(
+                    "classes",
+                    "647c1b704310bb8f0fed",
+                    "unique()",
+                    AnnouncementItem(
+                        currentUser.name,
+                        message,
+                        attachmentIds,
+                        class_id,
+                        currentUser.id
+                    )
+                )
 
                 setResult(Activity.RESULT_OK)
 
@@ -124,36 +135,18 @@ class NewAnnouncement : AppCompatActivity() {
         }
     }
 
-
-    @Throws(IOException::class)
-    fun copyStream(`in`: InputStream, out: OutputStream) {
-        val buffer = ByteArray(1024)
-        var read: Int
-        while (`in`.read(buffer).also { read = it } != -1) {
-            out.write(buffer, 0, read)
+    private fun applyAccent(accentColor: String){
+        // Set the accent color
+        window.statusBarColor = Color.parseColor(accentColor)
+        findViewById<ConstraintLayout>(R.id.newannouncement_topbar).background.apply {
+            setTint(Color.parseColor(accentColor))
         }
-    }
 
-    private suspend fun uploadToAppwriteStorage(resolver: ContentResolver, uri: Uri, storage: Storage): String {
-        val input_stream = resolver.openInputStream(uri)
-        val file_name = getFileName(resolver, uri)
+        // Set the button accent theme
+        val bg = findViewById<Button>(R.id.new_announcement_create_announcement).background.mutate() as GradientDrawable
 
-        val file = File.createTempFile(file_name, "tmp")
-        val output_stream = FileOutputStream(file)
-
-        copyStream(input_stream!!, output_stream)
-
-        val appwrite_file = storage.createFile("6465d3dd2e3905c17280", "unique()", InputFile.fromFile(file))
-
-        return appwrite_file.id
-    }
-
-    private fun getFileName(resolver: ContentResolver, uri: Uri): String {
-        val returnCursor: Cursor = resolver.query(uri, null, null, null, null)!!
-        val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        returnCursor.moveToFirst()
-        val name = returnCursor.getString(nameIndex)
-        returnCursor.close()
-        return name
+        bg.setColor(Color.parseColor(accentColor))
+        bg.setStroke(5, Color.parseColor("#000000"))
+        bg.cornerRadius = 5F
     }
 }
