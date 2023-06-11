@@ -16,6 +16,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import io.appwrite.Client
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Databases
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +29,9 @@ import me.kyeboard.classroom.fragments.ClassDashboardStream
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class ClassDashboard : AppCompatActivity() {
+    private lateinit var client: Client
+    private lateinit var databases: Databases
+
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup view
         super.onCreate(savedInstanceState)
@@ -57,14 +61,8 @@ class ClassDashboard : AppCompatActivity() {
         val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
 
         // Initiate appwrite services
-        val client = get_appwrite_client(this)
-        val databases = Databases(client)
-
-        val handler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if(it.resultCode == Activity.RESULT_OK) {
-                Log.d("tt", "done")
-            }
-        }
+        client = get_appwrite_client(this)
+        databases = Databases(client)
 
         CoroutineScope(Dispatchers.IO).launch {
             // Get class info from registery
@@ -78,7 +76,7 @@ class ClassDashboard : AppCompatActivity() {
                 }
 
                 // Handle plus button clicks
-                findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
+                findViewById<ImageButton>(R.id.dashboard_stream_create_new).setOnClickListener {
                     // Select the intent to show
                     val intent = if(viewPager.currentItem == 0) {
                         Intent(this@ClassDashboard, NewAnnouncement::class.java)
@@ -91,7 +89,7 @@ class ClassDashboard : AppCompatActivity() {
                     intent.putExtra("accent_color", classInfo.color)
 
                     // Start
-                    handler.launch(intent)
+                    startActivity(intent)
                 }
 
                 // Change name and subject

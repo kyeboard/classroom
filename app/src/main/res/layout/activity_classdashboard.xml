@@ -118,11 +118,11 @@
         app:layout_constraintTop_toBottomOf="@id/class_dashboard_tablayout" />
 
     <ImageButton
-        android:id="@+id/class_dashboard_new_announcement"
+        android:id="@+id/dashboard_stream_create_new"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:src="@drawable/plus"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         app:flow_verticalAlign="center"
         android:backgroundTint="@color/white"
@@ -130,5 +130,5 @@
         app:flow_horizontalAlign="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/action_button" />
+        android:contentDescription="Create a new announcement" />
 </androidx.constraintlayout.widget.ConstraintLayout>

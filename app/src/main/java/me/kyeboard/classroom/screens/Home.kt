@@ -77,7 +77,7 @@ class Home : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             // Show current user info
             try {
-                val session = account.get();
+                val session = account.get()
 
                 runOnUiThread {
                     val pfp = findViewById<ImageView>(R.id.current_user_profile)

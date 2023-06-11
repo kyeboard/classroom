@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import io.appwrite.Client
 import io.appwrite.Query
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Databases
@@ -24,6 +26,9 @@ import me.kyeboard.classroom.screens.AnnouncementView
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class ClassDashboardStream : Fragment() {
+    private lateinit var client: Client
+    private lateinit var databases: Databases
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,21 +36,23 @@ class ClassDashboardStream : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_class_dashboard_stream, container, false)
 
+        // Get items from bundle
+        val classId = requireArguments().getString("class_id")!!
+
         // Get the view items
         val recyclerView = view.findViewById<RecyclerView>(R.id.class_dashboard_stream_announcements)
-        val classId = requireArguments().getString("class_id")!!
         val loading = view.findViewById<ConstraintLayout>(R.id.class_dashboard_stream_loading)
         val noAnnouncements = view.findViewById<ConstraintLayout>(R.id.no_announcements_parent)
-
-        // Initiate appwrite services
-        val client = get_appwrite_client(view.context)
-        val databases = Databases(client)
-
         val swipeToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.class_dashboard_stream_refresh)
 
+        // Initiate appwrite services
+        client = get_appwrite_client(view.context)
+        databases = Databases(client)
+
+        // Handle on swipe
         swipeToRefresh.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
-                updateStreamItems(databases, classId, loading, noAnnouncements, recyclerView, view)
+                updateStreamItems(classId, loading, noAnnouncements, recyclerView, view)
 
                 requireActivity().runOnUiThread {
                     swipeToRefresh.isRefreshing = false
@@ -55,13 +62,13 @@ class ClassDashboardStream : Fragment() {
 
         // Load data
         CoroutineScope(Dispatchers.IO).launch {
-            updateStreamItems(databases, classId, loading, noAnnouncements, recyclerView, view)
+            updateStreamItems(classId, loading, noAnnouncements, recyclerView, view)
         }
 
         return view
     }
 
-    private suspend fun updateStreamItems(databases: Databases, classId: String, loading: ConstraintLayout, noAnnouncements: ConstraintLayout, recyclerView: RecyclerView, view: View) {
+    private suspend fun updateStreamItems(classId: String, loading: ConstraintLayout, noAnnouncements: ConstraintLayout, recyclerView: RecyclerView, view: View) {
         val data = databases.listDocuments("classes", "647c1b704310bb8f0fed", arrayListOf(Query.orderDesc("\$createdAt"))).documents
         val announcements = arrayListOf<Announcement>()
 
