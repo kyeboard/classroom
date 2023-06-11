@@ -37,7 +37,9 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.screens.AssignmentItem
+import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -46,43 +48,11 @@ import java.io.OutputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 
-data class SubmissionItem(val grade: Int, val submissions: ArrayList<String>)
+data class SubmissionItem(val grade: Int, val submissions: ArrayList<String>, val studentId: String, val studentName: String)
 
 class NewAssignmentTask : Fragment() {
     private lateinit var attachment_uri: Uri
     private val attachments = arrayListOf<Attachment>()
-
-    @Throws(IOException::class)
-    fun copyStream(`in`: InputStream, out: OutputStream) {
-        val buffer = ByteArray(1024)
-        var read: Int
-        while (`in`.read(buffer).also { read = it } != -1) {
-            out.write(buffer, 0, read)
-        }
-    }
-
-    private suspend fun uploadToAppwriteStorage(id: String, resolver: ContentResolver, uri: Uri, storage: Storage): String {
-        val input_stream = resolver.openInputStream(uri)
-        val file_name = getFileName(resolver, uri)
-
-        val file = File.createTempFile(file_name, "tmp")
-        val output_stream = FileOutputStream(file)
-
-        copyStream(input_stream!!, output_stream)
-
-        val appwrite_file = storage.createFile("647713fa9be2a68d4458", id, InputFile.fromFile(file))
-
-        return appwrite_file.id
-    }
-
-    private fun getFileName(resolver: ContentResolver, uri: Uri): String {
-        val returnCursor: Cursor = resolver.query(uri, null, null, null, null)!!
-        val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        returnCursor.moveToFirst()
-        val name = returnCursor.getString(nameIndex)
-        returnCursor.close()
-        return name
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -90,8 +60,7 @@ class NewAssignmentTask : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_new_assignment_task, container, false)
 
-        //val assignment_id = requireArguments().getString("assignment_id")!!
-        val assignment_id = "646f5e9c8ba221bf2df1"
+        val assignment_id = requireArguments().getString("assignment_id")!!
 
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
@@ -102,20 +71,38 @@ class NewAssignmentTask : Fragment() {
 
         view.findViewById<ImageView>(R.id.assignment_task_expand_submission).setOnClickListener {
             val initialHeight = submission_area.height
-            val targetHeight = 900 // Increase the height by 200 pixels
-            val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
-            valueAnimator.duration = 100 // Animation duration in milliseconds
 
-            valueAnimator.addUpdateListener { animator ->
-                val layoutParams = submission_area.layoutParams
-                layoutParams.height = animator.animatedValue as Int
-                submission_area.layoutParams = layoutParams
+            if(initialHeight == 900) {
+                val targetHeight = 310 // Increase the height by 200 pixels
+                val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
+                valueAnimator.duration = 100 // Animation duration in milliseconds
+
+                valueAnimator.addUpdateListener { animator ->
+                    val layoutParams = submission_area.layoutParams
+                    layoutParams.height = animator.animatedValue as Int
+                    submission_area.layoutParams = layoutParams
+                }
+
+                view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.GONE
+                view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).visibility = View.GONE
+
+                valueAnimator.start()
+            } else {
+                val targetHeight = 900 // Increase the height by 200 pixels
+                val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
+                valueAnimator.duration = 100 // Animation duration in milliseconds
+
+                valueAnimator.addUpdateListener { animator ->
+                    val layoutParams = submission_area.layoutParams
+                    layoutParams.height = animator.animatedValue as Int
+                    submission_area.layoutParams = layoutParams
+                }
+
+                valueAnimator.start()
+
+                view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.VISIBLE
+                view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).visibility = View.VISIBLE
             }
-
-            valueAnimator.start()
-
-            view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.VISIBLE
-            view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).visibility = View.VISIBLE
         }
 
         CoroutineScope(Dispatchers.IO).launch {
@@ -191,9 +178,13 @@ class NewAssignmentTask : Fragment() {
                 val current_user = account.get()
                 val id = "$assignment_id-${current_user.id}"
                 val hashed_id = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
-                val attachments = uploadToAppwriteStorage("unique()", view.context.contentResolver, attachment_uri, storage)
+                val attachments = uploadToAppwriteStorage(view.context.contentResolver, attachment_uri, storage)
 
-                // databases.createDocument("classes", "64782b0c5957666e7bee", hashed_id, SubmissionItem(0, arrayListOf(attachments)))
+                databases.createDocument("classes", "64782b0c5957666e7bee", hashed_id, SubmissionItem(0, arrayListOf(attachments), current_user.id, current_user.name))
+
+                activity?.runOnUiThread {
+                    Toast.makeText(this@NewAssignmentTask.context, "Successfully sumbitted the assignment", Toast.LENGTH_LONG).show()
+                }
             }
         }
 

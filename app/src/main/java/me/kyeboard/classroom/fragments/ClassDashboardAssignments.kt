@@ -31,6 +31,7 @@ import java.util.Date
 class ClassDashboardAssignments : Fragment() {
     private lateinit var client: Client
     private lateinit var databases: Databases
+    private lateinit var accent_color: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +45,7 @@ class ClassDashboardAssignments : Fragment() {
         databases = Databases(client)
 
         val class_id = requireArguments().getString("class_id")!!
+        accent_color = requireArguments().getString("accent_color")!!
 
         val today = Date()
 
@@ -123,6 +125,7 @@ class ClassDashboardAssignments : Fragment() {
         val intent = Intent(this.context, AssignmentView::class.java)
 
         intent.putExtra("assignment_id", id)
+        intent.putExtra("accent_color", accent_color)
 
         startActivity(intent)
     }
