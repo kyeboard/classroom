@@ -4,7 +4,9 @@ import android.content.ContentResolver
 import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
 import io.appwrite.models.InputFile
+import io.appwrite.models.UploadProgress
 import io.appwrite.services.Storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,6 +16,15 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
+
+fun getMimeType(url: String?): String? {
+    var type: String? = null
+    val extension = MimeTypeMap.getFileExtensionFromUrl(url)
+    if (extension != null) {
+        type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+    }
+    return type
+}
 
 /// Copes a input stream to a output stream
 @Throws(IOException::class)
@@ -48,8 +59,12 @@ suspend fun uploadToAppwriteStorage(resolver: ContentResolver, uri: Uri, storage
     // Copy uri stream to output stream
     copyStream(inputStream!!, outputStream)
 
+    val inputFile = InputFile.fromFile(file)
+
+    inputFile.filename = fileName
+
     // Upload the temporary file to appwrite
-    val appwriteFile = storage.createFile("6465d3dd2e3905c17280", "unique()", InputFile.fromFile(file))
+    val appwriteFile = storage.createFile("6465d3dd2e3905c17280", "unique()", inputFile)
 
     // Close input stream after usage
     withContext(Dispatchers.IO) {
