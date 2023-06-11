@@ -43,15 +43,17 @@ class ClassDashboardAssignments : Fragment() {
         client = get_appwrite_client(view.context)
         databases = Databases(client)
 
+        val class_id = requireArguments().getString("class_id")!!
+
         val today = Date()
 
         // Filters
         val missed_filter: (Date, Boolean) -> Boolean = { date, _ -> date.before(today) }
-        val assigned_filter: (Date, Boolean) -> Boolean = { date, _ -> date == today }
+        val assigned_filter: (Date, Boolean) -> Boolean = { date, _ -> date.after(today) || date == today }
         val submitted_filter: (Date, Boolean) -> Boolean = { _, has_submitted -> has_submitted }
 
         CoroutineScope(Dispatchers.IO).launch {
-            populateAssignments(recyclerView, view, assigned_filter)
+            populateAssignments(recyclerView, view, assigned_filter, class_id)
         }
 
         // Handle tab layout chances
@@ -66,7 +68,7 @@ class ClassDashboardAssignments : Fragment() {
                 Log.d("tt", tab!!.position.toString())
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    populateAssignments(recyclerView, view, filter)
+                    populateAssignments(recyclerView, view, filter, class_id)
                 }
             }
 
@@ -78,7 +80,7 @@ class ClassDashboardAssignments : Fragment() {
         return view
     }
 
-    private suspend fun populateAssignments(recyclerView: RecyclerView, view: View, filter: (Date, Boolean) -> Boolean) {
+    private suspend fun populateAssignments(recyclerView: RecyclerView, view: View, filter: (Date, Boolean) -> Boolean, class_id: String) {
         val loading = view.findViewById<ProgressBar>(R.id.class_dashboard_assignments_loading)
         val no_items_found = view.findViewById<ConstraintLayout>(R.id.no_assignments_parent)
 
@@ -86,6 +88,7 @@ class ClassDashboardAssignments : Fragment() {
             activity?.runOnUiThread {
                 loading.visibility = View.VISIBLE
                 recyclerView.visibility = View.GONE
+                no_items_found.visibility = View.GONE
             }
 
             val data = databases.listDocuments("classes", "646f432ad59caafabf74", listOf(Query.orderAsc("due_date"))).documents
@@ -94,7 +97,7 @@ class ClassDashboardAssignments : Fragment() {
             for(item in data) {
                 val parsed = item.data.tryJsonCast<Assignment>()!!
 
-                if(filter(parsed.due_date, true)) {
+                if(filter(parsed.due_date, true) && parsed.classid == class_id) {
                     parsed_data.add(parsed)
                 }
             }
@@ -106,6 +109,10 @@ class ClassDashboardAssignments : Fragment() {
                 recyclerView.visibility = View.VISIBLE
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+                if(parsed_data.isEmpty()) {
+                    no_items_found.visibility = View.VISIBLE
+                }
             }
         } catch(e: Exception) {
             Log.e("eee", e.message.toString())

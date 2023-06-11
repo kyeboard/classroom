@@ -47,7 +47,7 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-data class Assignment(val title: String, val description: String, val attachments: ArrayList<String>, val author: String, val grade: Number, val due_date: String, val classid: String, val authorid: String)
+data class Assignment(val title: String, val description: String, val attachments: ArrayList<String>, val author: String, val grade: Number, val due_date: String, val classid: String, val authorId: String)
 
 class NewAssignment : ComponentActivity() {
     val attachments: ArrayList<Attachment> = arrayListOf()

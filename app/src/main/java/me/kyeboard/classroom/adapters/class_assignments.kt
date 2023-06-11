@@ -19,7 +19,7 @@ import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
-data class Assignment(val author: String, val title: String, val due_date: Date, val `$id`: String)
+data class Assignment(val author: String, val title: String, val due_date: Date, val `$id`: String, val classid: String)
 
 val dateFormat = SimpleDateFormat("d MMMM, yyyy", Locale.ENGLISH)
 
