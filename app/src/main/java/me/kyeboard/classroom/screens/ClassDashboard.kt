@@ -109,6 +109,7 @@ class ClassDashboard : AppCompatActivity() {
         // Setup dashboard stream fragment
         val bundle = Bundle().apply {
             putString("class_id", classId)
+            putString("accent_color", accent_color)
         }
         val classDashboardStream = ClassDashboardStream().apply {
             arguments = bundle

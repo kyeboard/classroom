@@ -28,6 +28,7 @@ import me.kyeboard.classroom.utils.get_appwrite_client
 class ClassDashboardStream : Fragment() {
     private lateinit var client: Client
     private lateinit var databases: Databases
+    private lateinit var accent_color: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +38,9 @@ class ClassDashboardStream : Fragment() {
         val view = inflater.inflate(R.layout.fragment_class_dashboard_stream, container, false)
 
         // Get items from bundle
-        val classId = requireArguments().getString("class_id")!!
+        val arguments = requireArguments()
+        val classId = arguments.getString("class_id")!!
+        accent_color = arguments.getString("accent_color")!!
 
         // Get the view items
         val recyclerView = view.findViewById<RecyclerView>(R.id.class_dashboard_stream_announcements)
@@ -72,6 +75,10 @@ class ClassDashboardStream : Fragment() {
         val data = databases.listDocuments("classes", "647c1b704310bb8f0fed", arrayListOf(Query.orderDesc("\$createdAt"))).documents
         val announcements = arrayListOf<Announcement>()
 
+        activity?.runOnUiThread {
+            noAnnouncements.visibility = View.GONE
+        }
+
         for(i in data) {
             val casted = i.data.tryJsonCast<Announcement>()!!
 
@@ -103,6 +110,7 @@ class ClassDashboardStream : Fragment() {
 
         // Add announcement id
         intent.putExtra("announcement_id", id)
+        intent.putExtra("accent_color", accent_color)
 
         // Start
         startActivity(intent)

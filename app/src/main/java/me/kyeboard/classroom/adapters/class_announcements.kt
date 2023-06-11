@@ -10,8 +10,13 @@ import com.squareup.picasso.Picasso
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.models.Document
 import me.kyeboard.classroom.R
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-data class Announcement(val author: String, val message: String, val classid: String, val attachments: ArrayList<String>, val `$id`: String)
+data class Announcement(val author: String, val message: String, val classid: String, val attachments: ArrayList<String>, val `$id`: String, val userId: String, val `$createdAt`: String)
+
+val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
+val outputFormat = SimpleDateFormat("d MMMM, yyyy", Locale.US)
 
 class AnnouncementAdapter(private val dataSet: List<Announcement>, private val onClick: (id: String) -> Unit) :
     RecyclerView.Adapter<AnnouncementAdapter.ViewHolder>() {
@@ -51,12 +56,13 @@ class AnnouncementAdapter(private val dataSet: List<Announcement>, private val o
 
         viewHolder.description.text = data.message
         viewHolder.username.text = data.author
+        viewHolder.time.text = outputFormat.format(inputFormat.parse(data.`$createdAt`)!!)
 
         viewHolder.parent.setOnClickListener {
             onClick(data.`$id`)
         }
 
-        Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/647dd94e7155f82fb365/view?project=fryday").into(viewHolder.pfp)
+        Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${data.userId}/view?project=fryday").into(viewHolder.pfp)
     }
 
     // Return the size of your dataset (invoked by the layout manager)
