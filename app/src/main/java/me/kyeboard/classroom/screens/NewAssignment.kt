@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.models.InputFile
+import io.appwrite.services.Account
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
 import kotlinx.coroutines.CoroutineScope
@@ -37,65 +38,69 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.screens.ui.theme.OxideTheme
+import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
 
-data class Assignment(val title: String, val description: String, val attachments: ArrayList<String>, val author: String, val grade: Number, val due_date: String, val classid: String)
+data class Assignment(val title: String, val description: String, val attachments: ArrayList<String>, val author: String, val grade: Number, val due_date: String, val classid: String, val authorid: String)
 
 class NewAssignment : ComponentActivity() {
     val attachments: ArrayList<Attachment> = arrayListOf()
     val attachments_uri: ArrayList<Uri> = arrayListOf()
 
-    private fun getFileName(resolver: ContentResolver, uri: Uri): String {
-        val returnCursor: Cursor = resolver.query(uri, null, null, null, null)!!
-        val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        returnCursor.moveToFirst()
-        val name = returnCursor.getString(nameIndex)
-        returnCursor.close()
-        return name
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Setup view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newassignment)
 
-        val adapter = AttachmentAdapter(attachments)
-        val recyclerView = findViewById<RecyclerView>(R.id.new_assignment_attachments)
+        // Get items from bundle
         val class_id = intent.extras!!.getString("class_id")!!
         val accent_color = intent.extras!!.getString("accent_color")!!
 
+        // View items
+        val recyclerView = findViewById<RecyclerView>(R.id.new_assignment_attachments)
+
+        // Set accent
         (findViewById<ConstraintLayout>(R.id.newassignment_topbar).background as GradientDrawable).apply {
             setTint(android.graphics.Color.parseColor(accent_color))
         }
-
-        findViewById<ImageView>(R.id.destroy_self).setOnClickListener {
-            finish()
-        }
-
+        window.statusBarColor = android.graphics.Color.parseColor(accent_color)
         (findViewById<Button>(R.id.newassignment_create_assignment).background as GradientDrawable).apply {
             setColor(android.graphics.Color.parseColor(accent_color))
             setStroke(5, android.graphics.Color.parseColor("#000000"))
             cornerRadius = 5F
         }
 
-        window.statusBarColor = android.graphics.Color.parseColor(accent_color)
+        // Adapters
+        val adapter = AttachmentAdapter(attachments)
 
+        // Set finish listener
+        findViewById<ImageView>(R.id.destroy_self).setOnClickListener {
+            finish()
+        }
+
+        // Add adapters
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
+        // Initialize appwrite services
         val client = get_appwrite_client(this)
         val database = Databases(client)
         val storage = Storage(client)
+        val account = Account(client)
 
+        // Handle input
         val intent = Intent().apply {
             action = Intent.ACTION_GET_CONTENT
             type = "*/*"
         }
 
+        // handler
         val pickFiles = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK) {
                 val content_uri = result.data?.data!!
@@ -108,6 +113,7 @@ class NewAssignment : ComponentActivity() {
             }
         }
 
+        // Add attachment listener
         findViewById<Button>(R.id.new_assignment_add_attachment).setOnClickListener {
             pickFiles.launch(intent)
         }
@@ -126,12 +132,14 @@ class NewAssignment : ComponentActivity() {
             val attachment_ids = arrayListOf<String>()
 
             CoroutineScope(Dispatchers.IO).launch {
+                val user = account.get()
+
                 for(uri in attachments_uri) {
                     attachment_ids.add(uploadToAppwriteStorage(contentResolver, uri, storage))
                 }
 
                 database.createDocument("classes", "646f432ad59caafabf74", "unique()",
-                    Assignment(title, desc, attachment_ids, "kyeboard", grade, duedate, class_id)
+                    Assignment(title, desc, attachment_ids, user.name, grade, duedate, class_id, user.id)
                 )
 
                 setResult(Activity.RESULT_OK)
@@ -140,28 +148,4 @@ class NewAssignment : ComponentActivity() {
             }
         }
     }
-
-    @Throws(IOException::class)
-    fun copyStream(`in`: InputStream, out: OutputStream) {
-        val buffer = ByteArray(1024)
-        var read: Int
-        while (`in`.read(buffer).also { read = it } != -1) {
-            out.write(buffer, 0, read)
-        }
-    }
-
-    private suspend fun uploadToAppwriteStorage(resolver: ContentResolver, uri: Uri, storage: Storage): String {
-        val input_stream = resolver.openInputStream(uri)
-        val file_name = getFileName(resolver, uri)
-
-        val file = File.createTempFile(file_name, "tmp")
-        val output_stream = FileOutputStream(file)
-
-        copyStream(input_stream!!, output_stream)
-
-        val appwrite_file = storage.createFile("6465d3dd2e3905c17280", "unique()", InputFile.fromFile(file))
-
-        return appwrite_file.id
-    }
-
 }
