@@ -110,6 +110,7 @@ class NewAssignmentTask : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val session = account.get()
+            Log.d("tt", "$assignment_id is being hashed wth ${session.id}")
             val id = "$assignment_id-${session.id}"
             val hashed_id = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
 

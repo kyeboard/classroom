@@ -22,22 +22,31 @@ class AssignmentView : AppCompatActivity() {
         val tabLayout = findViewById<TabLayout>(R.id.assignment_view_tablayout)
 
         val assignment_id = intent.extras!!.getString("assignment_id")!!
+        val class_id = intent.extras!!.getString("class_id")!!
         val accent_color = intent.extras!!.getString("accent_color")!!
 
         // Apply accent color
         window.statusBarColor = Color.parseColor(accent_color)
         findViewById<ConstraintLayout>(R.id.assignment_view_topbar).background.setTint(Color.parseColor(accent_color))
 
+        val bundle = Bundle().apply {
+            putString("assignment_id", assignment_id)
+            putString("class_id", class_id)
+            putString("accent_color", accent_color)
+        }
+
         // Create adapters
         val newAssignmentTask = NewAssignmentTask().apply {
-            arguments = Bundle().apply {
-                putString("assignment_id", assignment_id)
-            }
+            arguments = bundle
+        }
+
+        val newAssignmentSubmissions = AssignmentViewSubmissions().apply {
+            arguments = bundle
         }
 
         val adapter = ViewPagerAdapter(this)
         adapter.addFragment(newAssignmentTask)
-        adapter.addFragment(AssignmentViewSubmissions())
+        adapter.addFragment(newAssignmentSubmissions)
 
         viewPager.adapter = adapter
 

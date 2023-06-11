@@ -32,6 +32,7 @@ class ClassDashboardAssignments : Fragment() {
     private lateinit var client: Client
     private lateinit var databases: Databases
     private lateinit var accent_color: String
+    private lateinit var class_id: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +45,7 @@ class ClassDashboardAssignments : Fragment() {
         client = get_appwrite_client(view.context)
         databases = Databases(client)
 
-        val class_id = requireArguments().getString("class_id")!!
+        class_id = requireArguments().getString("class_id")!!
         accent_color = requireArguments().getString("accent_color")!!
 
         val today = Date()
@@ -126,6 +127,7 @@ class ClassDashboardAssignments : Fragment() {
 
         intent.putExtra("assignment_id", id)
         intent.putExtra("accent_color", accent_color)
+        intent.putExtra("class_id", class_id)
 
         startActivity(intent)
     }
