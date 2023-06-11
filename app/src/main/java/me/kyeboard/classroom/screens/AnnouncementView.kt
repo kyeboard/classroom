@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -87,7 +88,7 @@ class AnnouncementView : ComponentActivity() {
                 description.text = data.message
 
                 view.adapter = AttachmentAdapter(attachments)
-                view.layoutManager = LinearLayoutManager(this@AnnouncementView)
+                view.layoutManager = GridLayoutManager(this@AnnouncementView, 2)
             }
         }
     }

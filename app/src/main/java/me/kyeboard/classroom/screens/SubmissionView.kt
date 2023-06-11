@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.extensions.tryJsonCast
@@ -99,10 +100,10 @@ class SubmissionView : ComponentActivity() {
 
             runOnUiThread {
                 attachment_view.adapter = AttachmentAdapter(attachment_list)
-                attachment_view.layoutManager = LinearLayoutManager(this@SubmissionView)
+                attachment_view.layoutManager = GridLayoutManager(this@SubmissionView, 2)
 
                 comments_view.adapter = CommentAdapter(comment_list)
-                comments_view.layoutManager = LinearLayoutManager(this@SubmissionView)
+                comments_view.layoutManager = GridLayoutManager(this@SubmissionView, 2)
             }
         }
     }

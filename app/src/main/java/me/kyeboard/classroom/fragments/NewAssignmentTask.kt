@@ -22,6 +22,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.extensions.tryJsonCast
@@ -143,7 +144,7 @@ class NewAssignmentTask : Fragment() {
 
                     view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).apply {
                         adapter = AttachmentAdapter(attachments)
-                        layoutManager = LinearLayoutManager(this@NewAssignmentTask.context)
+                        layoutManager = GridLayoutManager(this@NewAssignmentTask.context, 2)
                     }
                 }
             } catch(e: Exception) {
@@ -157,7 +158,7 @@ class NewAssignmentTask : Fragment() {
         val sumbissionsAdapter = AttachmentAdapter(attachments)
 
         sumbissionlist.adapter = sumbissionsAdapter
-        sumbissionlist.layoutManager = LinearLayoutManager(view.context)
+        sumbissionlist.layoutManager = GridLayoutManager(view.context, 2)
 
         val intent = Intent().apply {
             action = Intent.ACTION_GET_CONTENT
@@ -211,7 +212,7 @@ class NewAssignmentTask : Fragment() {
                     description.text = data.description
 
                     listview.adapter = AttachmentAdapter(attachments)
-                    listview.layoutManager = LinearLayoutManager(view.context)
+                    listview.layoutManager = GridLayoutManager(view.context, 2)
                 }
             } catch(e: Exception) {
                 activity?.runOnUiThread {

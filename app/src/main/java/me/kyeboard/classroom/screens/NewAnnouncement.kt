@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.Client
@@ -62,7 +63,7 @@ class NewAnnouncement : AppCompatActivity() {
         val adapter = AttachmentAdapter(attachments)
         val recyclerView = findViewById<RecyclerView>(R.id.new_announcement_attachments_list)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         // Initiate appwrite services
         client = get_appwrite_client(this)
