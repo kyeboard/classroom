@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,7 +79,15 @@ class ClassDashboardAssignments : Fragment() {
     }
 
     private suspend fun populateAssignments(recyclerView: RecyclerView, view: View, filter: (Date, Boolean) -> Boolean) {
+        val loading = view.findViewById<ProgressBar>(R.id.class_dashboard_assignments_loading)
+        val no_items_found = view.findViewById<ConstraintLayout>(R.id.no_assignments_parent)
+
         try {
+            activity?.runOnUiThread {
+                loading.visibility = View.VISIBLE
+                recyclerView.visibility = View.GONE
+            }
+
             val data = databases.listDocuments("classes", "646f432ad59caafabf74", listOf(Query.orderAsc("due_date"))).documents
             val parsed_data = arrayListOf<Assignment>()
 
@@ -92,6 +102,8 @@ class ClassDashboardAssignments : Fragment() {
             val adapter = AssignmentAdapter(parsed_data, this@ClassDashboardAssignments::openAssignment)
 
             activity?.runOnUiThread {
+                loading.visibility = View.GONE
+                recyclerView.visibility = View.VISIBLE
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(view.context)
             }
