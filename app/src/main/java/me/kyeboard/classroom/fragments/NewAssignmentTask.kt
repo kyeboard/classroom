@@ -53,6 +53,7 @@ data class SubmissionItem(val grade: Int, val submissions: ArrayList<String>, va
 class NewAssignmentTask : Fragment() {
     private lateinit var attachment_uri: Uri
     private val attachments = arrayListOf<Attachment>()
+    private var already_submitted = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -100,7 +101,9 @@ class NewAssignmentTask : Fragment() {
 
                 valueAnimator.start()
 
-                view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.VISIBLE
+                if(!already_submitted) {
+                    view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.VISIBLE
+                }
                 view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).visibility = View.VISIBLE
             }
         }
@@ -112,6 +115,8 @@ class NewAssignmentTask : Fragment() {
 
             try {
                 val submission = databases.getDocument("classes", "64782b0c5957666e7bee", hashed_id).data.tryJsonCast<SubmissionItem>()!!
+
+                already_submitted = true
 
                 val attachments = arrayListOf<Attachment>()
 
@@ -178,7 +183,7 @@ class NewAssignmentTask : Fragment() {
                 val current_user = account.get()
                 val id = "$assignment_id-${current_user.id}"
                 val hashed_id = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
-                val attachments = uploadToAppwriteStorage(view.context.contentResolver, attachment_uri, storage)
+                val attachments = uploadToAppwriteStorage(view.context.contentResolver, attachment_uri, storage, "647713fa9be2a68d4458")
 
                 databases.createDocument("classes", "64782b0c5957666e7bee", hashed_id, SubmissionItem(0, arrayListOf(attachments), current_user.id, current_user.name))
 

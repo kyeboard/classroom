@@ -42,7 +42,7 @@ fun copyStream(`in`: InputStream, out: OutputStream) {
 }
 
 /// Uploads a uri to appwrite storage and returns the id of the file
-suspend fun uploadToAppwriteStorage(resolver: ContentResolver, uri: Uri, storage: Storage): String {
+suspend fun uploadToAppwriteStorage(resolver: ContentResolver, uri: Uri, storage: Storage, bucketId: String = "6465d3dd2e3905c17280"): String {
     val inputStream = resolver.openInputStream(uri)
     val fileName = getFileName(resolver, uri)
 
@@ -64,7 +64,7 @@ suspend fun uploadToAppwriteStorage(resolver: ContentResolver, uri: Uri, storage
     inputFile.filename = fileName
 
     // Upload the temporary file to appwrite
-    val appwriteFile = storage.createFile("6465d3dd2e3905c17280", "unique()", inputFile)
+    val appwriteFile = storage.createFile(bucketId, "unique()", inputFile)
 
     // Close input stream after usage
     withContext(Dispatchers.IO) {
