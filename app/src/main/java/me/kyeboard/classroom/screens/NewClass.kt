@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import io.appwrite.Client
 import io.appwrite.services.Databases
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
@@ -22,27 +23,38 @@ import me.kyeboard.classroom.utils.get_appwrite_client
 data class ClassItem(val name: String, val subject: String, val color: String)
 
 class NewClass : ComponentActivity() {
-    private val colorsIndex = listOf(
-        listOf(R.id.color_select_green, "#a3be8c"),
-        listOf(R.id.color_select_yellow, "#fee587"),
-        listOf(R.id.color_select_orange, "#d08770"),
-        listOf(R.id.color_select_pink, "#b48ead")
+    private val colorsIndex: Map<Int, String> = mapOf(
+        R.id.color_select_green to "#a3be8c",
+        R.id.color_select_yellow to "#fee587",
+        R.id.color_select_orange to "#d08770",
+        R.id.color_select_pink to "#b48ead"
     )
 
+    private lateinit var client: Client
+    private lateinit var teams: Teams
+    private lateinit var databases: Databases
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Initiate view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newclass)
 
+        // Initiate variables
         var selectedColor = "#fee587"
+        client = get_appwrite_client(applicationContext)
+        teams = Teams(client)
+        databases = Databases(client)
 
+        // Initiate view items
         val loader = findViewById<ConstraintLayout>(R.id.new_class_loading)
 
-         updateAccent(selectedColor)
+        // Update accept for the first time
+        updateAccent(selectedColor)
 
-        for((selector, color) in colorsIndex) {
-            findViewById<View>(selector as Int).setOnClickListener {
-                selectedColor = color as String
-
+        // Add listener to all the elements
+        colorsIndex.forEach { (k, v) ->
+            findViewById<View>(k).setOnClickListener {
+                selectedColor = v
                 updateAccent(selectedColor)
             }
         }
@@ -52,11 +64,6 @@ class NewClass : ComponentActivity() {
             finish()
         }
 
-        // Default items
-        val client = get_appwrite_client(this)
-        val teams = Teams(client)
-        val database = Databases(client)
-
         // Handle new class create button clicks
         findViewById<Button>(R.id.new_class_create).setOnClickListener {
             // Get the values entered by the user
@@ -65,7 +72,7 @@ class NewClass : ComponentActivity() {
 
             // Make sure they are not blank
             if (className.isBlank() || classSubject.isBlank()) {
-                Toast.makeText(this, "Fill in all details before continuing", Toast.LENGTH_LONG).show()
+                Toast.makeText(applicationContext, "Fill in all details before continuing", Toast.LENGTH_LONG).show()
 
                 return@setOnClickListener
             }
@@ -80,7 +87,7 @@ class NewClass : ComponentActivity() {
 
                 // Create the registry in the database
                 // TODO: Fix the registry spelling
-                database.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, selectedColor))
+                databases.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, selectedColor))
 
                 runOnUiThread {
                     // Set the result
@@ -94,9 +101,13 @@ class NewClass : ComponentActivity() {
     }
 
     private fun updateAccent(color: String) {
+        // Update status bar color
         window.statusBarColor = Color.parseColor(color)
 
+        // Update topbar bg tint
         findViewById<ConstraintLayout>(R.id.topbar_parent).background.setTint(Color.parseColor(color))
+
+        // Update Create button bg tint
         val buttonBackground = findViewById<Button>(R.id.new_class_create).background as GradientDrawable
 
         buttonBackground.apply {
@@ -106,10 +117,10 @@ class NewClass : ComponentActivity() {
         }
 
         // Reset selections
-        for((selector, respColor) in colorsIndex) {
-            val background = findViewById<View>(selector as Int).background as GradientDrawable
+        colorsIndex.forEach { (k, v) ->
+            val background = findViewById<View>(k).background as GradientDrawable
 
-            if(color == respColor as String) {
+            if(color == v) {
                 background.apply {
                     setColor(Color.parseColor(color))
                     setStroke(5, Color.parseColor("#000000"))
@@ -117,7 +128,7 @@ class NewClass : ComponentActivity() {
                 }
             } else {
                 background.apply {
-                    setColor(Color.parseColor(respColor))
+                    setColor(Color.parseColor(v))
                     setStroke(0, Color.parseColor("#000000"))
                     cornerRadius = 10F
                 }

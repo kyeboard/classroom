@@ -88,7 +88,7 @@ class Home : AppCompatActivity() {
                     Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday").into(pfp)
                 }
             } catch(e: Exception) {
-                // User has some issue with session so its better for a relogin
+                // User has some issue with session so its better for a login
                 val intent = Intent(this@Home, Login::class.java)
 
                 // Start
