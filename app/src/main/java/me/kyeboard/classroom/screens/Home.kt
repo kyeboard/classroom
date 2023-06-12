@@ -2,6 +2,7 @@ package me.kyeboard.classroom.screens
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -45,7 +46,10 @@ class Home : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         // Status bar color
-        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.yellow, theme)
+        val accent = ResourcesCompat.getColor(resources, R.color.yellow, theme)
+        window.statusBarColor = accent
+
+        findViewById<ConstraintLayout>(R.id.home_topbar).background.setTint(accent)
 
         // Setup appwrite services
         client = get_appwrite_client(applicationContext)
