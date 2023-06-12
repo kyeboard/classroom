@@ -36,6 +36,8 @@ class Home : AppCompatActivity() {
     private lateinit var account: Account
     private lateinit var databases: Databases
     private lateinit var teams: Teams
+    private lateinit var listview: RecyclerView
+    private lateinit var loading: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Initialize view
@@ -72,6 +74,11 @@ class Home : AppCompatActivity() {
         // View holders
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
         val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
+        listview = findViewById<RecyclerView>(R.id.home_classes_list)
+        loading = findViewById<ProgressBar>(R.id.home_classes_list_loading)
+
+        // Setup view
+        listview.layoutManager = LinearLayoutManager(applicationContext)
 
         // Handle refreshing layout when the new class finishes creating a new class
         val handler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
@@ -139,13 +146,9 @@ class Home : AppCompatActivity() {
         val classes = teams.list().teams
         val userClasses = arrayListOf<ClassItem>()
 
-        // Get the view
-        val view = findViewById<RecyclerView>(R.id.home_classes_list)
-        val loading = findViewById<ProgressBar>(R.id.home_classes_list_loading)
-
         runOnUiThread {
             noClassesParent.visibility = View.GONE
-            view.visibility = View.GONE
+            listview.visibility = View.GONE
 
             if(showLoading) {
                 loading.visibility = View.VISIBLE
@@ -172,11 +175,10 @@ class Home : AppCompatActivity() {
             }
 
             loading.visibility = View.GONE
-            view.visibility = View.VISIBLE
+            listview.visibility = View.VISIBLE
 
             // Add the adapter
-            view.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)
-            view.layoutManager = LinearLayoutManager(this@Home)
+            listview.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)
         }
     }
 
