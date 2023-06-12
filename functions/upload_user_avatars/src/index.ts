@@ -1,4 +1,4 @@
-import { Client, Storage, InputFile } from "node-appwrite"
+import { Client, Storage, InputFile, Permission, Role } from "node-appwrite"
 import fs from "fs"
 
 interface Request {
@@ -52,7 +52,12 @@ module.exports = async function(req: Request, res: Response) {
         })
 
         // Upload it back to the user profiles bucket
-        await storage.createFile("646ef17593d213adfcf2", data.userId, InputFile.fromPath("profile.png", "profile.png"))
+        await storage.createFile(
+            "646ef17593d213adfcf2",
+            data.userId,
+            InputFile.fromPath("profile.png", "profile.png"),
+            [Permission.read(Role.any())]
+        )
 
         // Delete the file
         fs.unlinkSync("profile.png")
