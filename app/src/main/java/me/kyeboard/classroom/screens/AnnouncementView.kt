@@ -1,15 +1,17 @@
 package me.kyeboard.classroom.screens
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import io.appwrite.Client
@@ -19,10 +21,14 @@ import io.appwrite.services.Storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.openAttachment
+import java.io.File
+import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -73,10 +79,10 @@ class AnnouncementView : ComponentActivity() {
 
             // Get the files attached
             for(attachment_id in data.attachments) {
-                val file = storage.getFile("6465d3dd2e3905c17280", attachment_id).name
-                attachments.add(Attachment(file.substringAfterLast('.', ""), file) {
+                val file = storage.getFile("6465d3dd2e3905c17280", attachment_id)
+                attachments.add(Attachment(file.name.substringAfterLast('.', ""), file.name) {
                     CoroutineScope(Dispatchers.IO).launch {
-                        this@AnnouncementView.openAttachment(attachment_id)
+                        startActivity(openAttachment(applicationContext, storage, attachment_id, file.name, file.mimeType))
                     }
                 })
             }
@@ -95,12 +101,5 @@ class AnnouncementView : ComponentActivity() {
                 view.layoutManager = GridLayoutManager(this@AnnouncementView, 2)
             }
         }
-    }
-
-    public suspend fun openAttachment(file_id: String) {
-        val file_for_download = storage.getFileDownload("6465d3dd2e3905c17280", file_id)
-
-        // Download the file and save it
-        val directory =
     }
 }
