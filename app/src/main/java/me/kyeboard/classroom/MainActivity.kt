@@ -2,8 +2,10 @@ package me.kyeboard.classroom
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition { true }
+
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         // Check if the session exists
         CoroutineScope(Dispatchers.IO).launch {

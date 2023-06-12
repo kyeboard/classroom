@@ -15,6 +15,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -23,6 +24,7 @@ import io.appwrite.Client
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
+import io.appwrite.services.Storage
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,11 +47,11 @@ class Home : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // Status bar color
-        val accent = ResourcesCompat.getColor(resources, R.color.yellow, theme)
-        window.statusBarColor = accent
-
-        findViewById<ConstraintLayout>(R.id.home_topbar).background.setTint(accent)
+        // Remove status bar (make it transparent)
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         // Setup appwrite services
         client = get_appwrite_client(applicationContext)
@@ -78,8 +80,8 @@ class Home : AppCompatActivity() {
         // View holders
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
         val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
-        listview = findViewById<RecyclerView>(R.id.home_classes_list)
-        loading = findViewById<ProgressBar>(R.id.home_classes_list_loading)
+        listview = findViewById(R.id.home_classes_list)
+        loading = findViewById(R.id.home_classes_list_loading)
 
         // Setup view
         listview.layoutManager = LinearLayoutManager(applicationContext)
@@ -109,12 +111,13 @@ class Home : AppCompatActivity() {
                 val session = account.get()
 
                 runOnUiThread {
-                    val pfp = findViewById<ImageView>(R.id.current_user_profile)
-
                     findViewById<TextView>(R.id.current_user_name).text = session.name
                     findViewById<TextView>(R.id.current_user_email).text = session.email
 
-                    Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday").into(pfp)
+                    Picasso
+                        .get()
+                        .load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday")
+                        .into(findViewById<ImageView>(R.id.current_user_profile))
                 }
             } catch(e: Exception) {
                 // User has some issue with session so its better for a login

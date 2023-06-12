@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="@color/bg"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_topbar"
+        android:paddingTop="55dp"
+        android:paddingBottom="20dp"
         android:paddingHorizontal="20dp"
-        android:paddingVertical="15dp"
         android:layout_width="match_parent"
         android:background="@color/yellow"
         android:layout_height="wrap_content"
