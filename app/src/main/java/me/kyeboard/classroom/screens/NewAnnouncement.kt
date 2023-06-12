@@ -1,5 +1,6 @@
 package me.kyeboard.classroom.screens
 
+import android.R.attr.data
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -14,8 +15,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.Client
 import io.appwrite.services.Account
@@ -30,6 +31,7 @@ import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
+
 
 data class AnnouncementItem(val author: String, val message: String, val attachments: ArrayList<String>, val classid: String, val userId: String)
 
@@ -46,6 +48,11 @@ class NewAnnouncement : AppCompatActivity() {
         // Setup view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newannouncement)
+
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         // Handle maniacs
         findViewById<ImageView>(R.id.destroy_self).setOnClickListener {
@@ -75,18 +82,35 @@ class NewAnnouncement : AppCompatActivity() {
         val intent = Intent().apply {
             action = Intent.ACTION_GET_CONTENT
             type = "*/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
 
         // Handle picking ip files
         val pickFiles = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK) {
-                val contentsURI = result.data?.data!!
-                val fileName = getFileName(this.contentResolver, contentsURI)
+                if(result.data != null) {
+                    val clip_data = result.data!!.clipData
 
-                attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
-                uris.add(contentsURI)
+                    if(clip_data != null) {
+                        for (index in 0 until clip_data.itemCount) {
+                            val uri: Uri = clip_data.getItemAt(index).uri
 
-                adapter.notifyItemChanged(attachments.size - 1)
+                            val fileName = getFileName(this.contentResolver, uri)
+                            attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
+                            uris.add(uri)
+                        }
+
+                        adapter.notifyItemRangeChanged(attachments.size - 1, clip_data.itemCount)
+                    } else {
+                        val contentsURI = result.data?.data!!
+                        val fileName = getFileName(this.contentResolver, contentsURI)
+
+                        attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
+                        uris.add(contentsURI)
+
+                        adapter.notifyItemChanged(attachments.size - 1)
+                    }
+                }
             }
         }
 
@@ -99,8 +123,6 @@ class NewAnnouncement : AppCompatActivity() {
         findViewById<Button>(R.id.new_announcement_create_announcement).setOnClickListener {
             val message = findViewById<EditText>(R.id.new_announcement_message).text.toString()
 
-            findViewById<ConstraintLayout>(R.id.new_announcement_loading_screen).visibility = View.VISIBLE
-
             if(message.isBlank()) {
                 Toast.makeText(this, "Fill in all details before submitting", Toast.LENGTH_SHORT).show()
 
@@ -108,6 +130,7 @@ class NewAnnouncement : AppCompatActivity() {
             }
 
             val attachmentIds = arrayListOf<String>()
+            findViewById<ConstraintLayout>(R.id.new_announcement_loading_screen).visibility = View.VISIBLE
 
             CoroutineScope(Dispatchers.IO).launch {
                 for(uri in uris) {
@@ -116,7 +139,7 @@ class NewAnnouncement : AppCompatActivity() {
 
                 val currentUser = account.get()
 
-                databases.createDocument(
+                val res = databases.createDocument(
                     "classes",
                     "647c1b704310bb8f0fed",
                     "unique()",
@@ -131,6 +154,14 @@ class NewAnnouncement : AppCompatActivity() {
 
                 setResult(Activity.RESULT_OK)
 
+                // Open the announcement view page
+                val announcement = Intent(applicationContext, AnnouncementView::class.java)
+
+                announcement.putExtra("announcement_id", res.id)
+                announcement.putExtra("accent_color", accentColor)
+
+                startActivity(announcement)
+
                 finish()
             }
         }
@@ -138,7 +169,6 @@ class NewAnnouncement : AppCompatActivity() {
 
     private fun applyAccent(accentColor: String){
         // Set the accent color
-        window.statusBarColor = Color.parseColor(accentColor)
         findViewById<ConstraintLayout>(R.id.newannouncement_topbar).background.apply {
             setTint(Color.parseColor(accentColor))
         }

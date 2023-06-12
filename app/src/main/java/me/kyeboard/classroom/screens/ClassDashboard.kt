@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.WindowCompat
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayout
@@ -34,7 +35,11 @@ class ClassDashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classdashboard)
 
-        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.bg, null)
+        // Remove status bar (make it transparent)
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         // Get class id sent along
         val extras = intent.extras!!
@@ -70,7 +75,7 @@ class ClassDashboard : AppCompatActivity() {
                 // Change tint of the topbar
                 val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
 
-                topbar.background.apply {
+                topbar.background.mutate().apply {
                     setTint(Color.parseColor(classInfo.color))
                 }
 
@@ -98,9 +103,6 @@ class ClassDashboard : AppCompatActivity() {
                 topbar.visibility = View.VISIBLE
                 tabLayout.visibility = View.VISIBLE
                 findViewById<View>(R.id.class_dashboard_bottom_bar).visibility = View.VISIBLE
-
-                // Change the status bar color according to the selected accent color
-                window.statusBarColor = Color.parseColor(classInfo.color)
             }
         }
 
@@ -141,6 +143,7 @@ class ClassDashboard : AppCompatActivity() {
             }
         })
 
+        // Handle changes in viewpager
         viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

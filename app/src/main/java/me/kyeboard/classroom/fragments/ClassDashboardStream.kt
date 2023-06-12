@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -55,15 +56,23 @@ class ClassDashboardStream : Fragment() {
         // Handle on swipe
         swipeToRefresh.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
-                updateStreamItems(classId, loading, noAnnouncements, recyclerView, view)
+                try {
+                    updateStreamItems(classId, loading, noAnnouncements, recyclerView, view)
 
-                requireActivity().runOnUiThread {
-                    swipeToRefresh.isRefreshing = false
+                    requireActivity().runOnUiThread {
+                        swipeToRefresh.isRefreshing = false
+                    }
+                } catch(e: Exception) {
+                    Log.e("update_stream_list", e.message.toString())
+
+                    activity?.runOnUiThread {
+                        Toast.makeText(activity?.applicationContext, "Error while fetching data, are you connected to internet?", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
 
-        // Load data
+        // Load data for the first time
         CoroutineScope(Dispatchers.IO).launch {
             updateStreamItems(classId, loading, noAnnouncements, recyclerView, view)
         }
