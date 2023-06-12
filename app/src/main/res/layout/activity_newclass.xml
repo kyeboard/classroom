@@ -11,7 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/yellow"
-        android:padding="20dp"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="55dp"
+        android:paddingBottom="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -19,13 +22,13 @@
             android:id="@+id/newclass_destory_self"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/image_caret_left"
             android:src="@drawable/back"
+            android:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:tint="@color/black"
-            tools:ignore="UseAppTint"
-            android:contentDescription="@string/image_caret_left" />
+            tools:ignore="UseAppTint" />
 
         <TextView
             android:id="@+id/textView3"
@@ -200,7 +203,7 @@
         android:id="@+id/new_class_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#EE2E3440"
+        android:background="#FD2E3440"
         android:visibility="gone"
         android:translationZ="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -209,8 +212,8 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ProgressBar
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:indeterminateTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

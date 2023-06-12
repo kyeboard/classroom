@@ -4,6 +4,7 @@ import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -11,6 +12,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowCompat
 import io.appwrite.Client
 import io.appwrite.services.Databases
 import io.appwrite.services.Teams
@@ -38,6 +40,12 @@ class NewClass : ComponentActivity() {
         // Initiate view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newclass)
+
+        // Remove status bar (make it transparent)
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         // Initiate variables
         var selectedColor = "#fee587"
@@ -77,59 +85,66 @@ class NewClass : ComponentActivity() {
                 return@setOnClickListener
             }
 
-            window.statusBarColor = Color.parseColor("#DD2E3440")
             loader.visibility = View.VISIBLE
 
             // Create a team
             CoroutineScope(Dispatchers.IO).launch {
-                // Create a new team for the user
-                val team = teams.create("unique()", className)
+                try {
+                    // Create a new team for the user
+                    val team = teams.create("unique()", className)
 
-                // Create the registry in the database
-                // TODO: Fix the registry spelling
-                databases.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, selectedColor))
+                    // Create the registry in the database
+                    // TODO: Fix the registry spelling
+                    databases.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, selectedColor))
 
-                runOnUiThread {
-                    // Set the result
-                    setResult(Activity.RESULT_OK)
+                    runOnUiThread {
+                        // Set the result
+                        setResult(Activity.RESULT_OK)
 
-                    // End the current activity (the class is created)
-                    finish()
+                        // End the current activity (the class is created)
+                        finish()
+                    }
+                } catch(e: Exception) {
+                    Log.e("new_class_create", e.message.toString())
+
+                    runOnUiThread {
+                        Toast.makeText(applicationContext, "Error while creating a class, try again!", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
     }
 
-    private fun updateAccent(color: String) {
-        // Update status bar color
-        window.statusBarColor = Color.parseColor(color)
-
+    private fun updateAccent(raw_color: String) {
         // Update topbar bg tint
-        findViewById<ConstraintLayout>(R.id.topbar_parent).background.setTint(Color.parseColor(color))
+        val color = Color.parseColor(raw_color)
+        val black = Color.parseColor("#000000")
+
+        findViewById<ConstraintLayout>(R.id.topbar_parent).background.mutate().setTint(color)
 
         // Update Create button bg tint
-        val buttonBackground = findViewById<Button>(R.id.new_class_create).background as GradientDrawable
+        val buttonBackground = findViewById<Button>(R.id.new_class_create).background.mutate() as GradientDrawable
 
         buttonBackground.apply {
-            setColor(Color.parseColor(color))
-            setStroke(5, Color.parseColor("#000000"))
+            setColor(color)
+            setStroke(5, black)
             cornerRadius = 10F
         }
 
         // Reset selections
         colorsIndex.forEach { (k, v) ->
-            val background = findViewById<View>(k).background as GradientDrawable
+            val background = findViewById<View>(k).background.mutate() as GradientDrawable
 
-            if(color == v) {
+            if(color == Color.parseColor(v)) {
                 background.apply {
-                    setColor(Color.parseColor(color))
-                    setStroke(5, Color.parseColor("#000000"))
+                    setColor(color)
+                    setStroke(5, black)
                     cornerRadius = 10F
                 }
             } else {
                 background.apply {
                     setColor(Color.parseColor(v))
-                    setStroke(0, Color.parseColor("#000000"))
+                    setStroke(0, black)
                     cornerRadius = 10F
                 }
             }
