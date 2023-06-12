@@ -74,7 +74,11 @@ class AnnouncementView : ComponentActivity() {
             // Get the files attached
             for(attachment_id in data.attachments) {
                 val file = storage.getFile("6465d3dd2e3905c17280", attachment_id).name
-                attachments.add(Attachment(file.substringAfterLast('.', ""), file))
+                attachments.add(Attachment(file.substringAfterLast('.', ""), file) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        this@AnnouncementView.openAttachment(attachment_id)
+                    }
+                })
             }
 
             // Set the items to the view
@@ -91,5 +95,12 @@ class AnnouncementView : ComponentActivity() {
                 view.layoutManager = GridLayoutManager(this@AnnouncementView, 2)
             }
         }
+    }
+
+    public suspend fun openAttachment(file_id: String) {
+        val file_for_download = storage.getFileDownload("6465d3dd2e3905c17280", file_id)
+
+        // Download the file and save it
+        val directory =
     }
 }
