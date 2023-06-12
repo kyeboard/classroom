@@ -85,15 +85,30 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view9" />
 
+    <CheckBox
+        android:id="@+id/invite_as_teacher"
+        android:theme="@style/Theme.MaterialComponents"
+        android:layout_width="wrap_content"
+        android:textColor="@color/black"
+        android:buttonTint="@color/black"
+        android:fontFamily="@font/nekst_semibold"
+        android:layout_height="wrap_content"
+        android:text="Invite as a teacher"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/send_invite" />
+
+
     <View
         android:id="@+id/view10"
         android:layout_width="match_parent"
         android:layout_height="3dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/send_invite" />
+        app:layout_constraintTop_toBottomOf="@+id/invite_as_teacher" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/members_list_refresh_layout"
@@ -107,6 +122,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/members_list"
+            android:paddingBottom="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
