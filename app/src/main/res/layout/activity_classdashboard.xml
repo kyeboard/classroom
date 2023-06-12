@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#e5e9f0"
+    android:background="@color/bg"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView10"
             app:layout_constraintTop_toTopOf="parent">
@@ -84,15 +85,14 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/class_dashboard_tablayout"
         android:layout_marginTop="5dp"
-        app:tabIndicatorColor="#2E3440"
-        app:layout_goneMarginTop="10dp"
+        app:tabIndicatorColor="@color/black"
         android:layout_marginHorizontal="10dp"
-        app:tabRippleColor="#00000000"
         android:visibility="invisible"
         android:layout_width="match_parent"
         style="@style/customTabLayout"
         app:tabIndicatorFullWidth="false"
         app:layout_constraintStart_toStartOf="parent"
+        app:tabRippleColor="#00e5e9f0"
         app:layout_constraintTop_toBottomOf="@+id/class_dashboard_bottom_bar"
         android:layout_height="wrap_content">
 
@@ -125,8 +125,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         app:flow_verticalAlign="center"
-        android:backgroundTint="@color/white"
-        android:background="@drawable/rounded"
+        android:background="@drawable/border_white"
         app:flow_horizontalAlign="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

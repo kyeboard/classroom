@@ -1,20 +1,17 @@
 package me.kyeboard.classroom.screens
 
-import MembersList
-import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayout
 import io.appwrite.Client
 import io.appwrite.extensions.tryJsonCast
@@ -40,8 +37,9 @@ class ClassDashboard : AppCompatActivity() {
         window.statusBarColor = ResourcesCompat.getColor(resources, R.color.bg, null)
 
         // Get class id sent along
-        val classId = intent.extras!!.getString("class_id")!!
-        val accent_color = intent.extras!!.getString("accent_color")!!
+        val extras = intent.extras!!
+        val classId = extras.getString("class_id")!!
+        val accentColor = extras.getString("accent_color")!!
 
         // Handle members list opener
         findViewById<ImageView>(R.id.class_members_open).setOnClickListener {
@@ -50,7 +48,7 @@ class ClassDashboard : AppCompatActivity() {
 
             // Add class id
             intent.putExtra("class_id", classId)
-            intent.putExtra("accent_color", accent_color)
+            intent.putExtra("accent_color", accentColor)
 
             // Start the intent
             startActivity(intent)
@@ -109,7 +107,7 @@ class ClassDashboard : AppCompatActivity() {
         // Setup dashboard stream fragment
         val bundle = Bundle().apply {
             putString("class_id", classId)
-            putString("accent_color", accent_color)
+            putString("accent_color", accentColor)
         }
         val classDashboardStream = ClassDashboardStream().apply {
             arguments = bundle
@@ -140,6 +138,14 @@ class ClassDashboard : AppCompatActivity() {
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
 
+            }
+        })
+
+        viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+
+                tabLayout.getTabAt(position)!!.select()
             }
         })
     }
