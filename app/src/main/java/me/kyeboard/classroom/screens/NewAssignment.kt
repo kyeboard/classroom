@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
-import me.kyeboard.classroom.screens.ui.theme.OxideTheme
+import me.kyeboard.classroom.screens.ui.theme.ClassroomTheme
 import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage

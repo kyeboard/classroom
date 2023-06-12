@@ -30,7 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
-import me.kyeboard.classroom.screens.ui.theme.OxideTheme
+import me.kyeboard.classroom.screens.ui.theme.ClassroomTheme
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class ClassPeople : ComponentActivity() {
