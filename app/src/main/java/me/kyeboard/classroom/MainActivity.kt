@@ -12,19 +12,20 @@ import me.kyeboard.classroom.screens.AssignmentView
 import me.kyeboard.classroom.screens.Home
 import me.kyeboard.classroom.screens.Login
 import me.kyeboard.classroom.utils.get_appwrite_client
+import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
 
-        val client = get_appwrite_client(this)
-        val account = Account(client)
-
         splashScreen.setKeepOnScreenCondition { true }
 
         // Check if the session exists
         CoroutineScope(Dispatchers.IO).launch {
+            val client = get_appwrite_client(applicationContext)
+            val account = Account(client)
+
             val nextIntent = try {
                 // Try to get the session
                 account.get()

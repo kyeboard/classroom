@@ -51,6 +51,24 @@ class Home : AppCompatActivity() {
         databases = Databases(client)
         teams = Teams(client)
 
+        // Handle logout
+        findViewById<ImageView>(R.id.logout_user).setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                // Delete current session
+                account.deleteSession("current")
+
+                // Send toast
+                runOnUiThread {
+                    Toast.makeText(applicationContext, "Successfully logged out!", Toast.LENGTH_SHORT).show()
+                }
+
+                // Redirect to login activity
+                val login = Intent(this@Home, Login::class.java)
+                startActivity(login)
+                finish()
+            }
+        }
+
         // View holders
         val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
         val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
@@ -123,14 +141,14 @@ class Home : AppCompatActivity() {
 
         // Get the view
         val view = findViewById<RecyclerView>(R.id.home_classes_list)
-        val bar = findViewById<ProgressBar>(R.id.home_classes_list_loading)
+        val loading = findViewById<ProgressBar>(R.id.home_classes_list_loading)
 
         runOnUiThread {
             noClassesParent.visibility = View.GONE
             view.visibility = View.GONE
 
             if(showLoading) {
-                bar.visibility = View.VISIBLE
+                loading.visibility = View.VISIBLE
             }
         }
 
@@ -153,7 +171,7 @@ class Home : AppCompatActivity() {
                 noClassesParent.visibility = View.VISIBLE
             }
 
-            bar.visibility = View.GONE
+            loading.visibility = View.GONE
             view.visibility = View.VISIBLE
 
             // Add the adapter
