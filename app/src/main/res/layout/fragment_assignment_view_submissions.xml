@@ -4,19 +4,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingHorizontal="20dp"
     tools:context=".fragments.AssignmentViewSubmissions">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/textView14"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:fontFamily="@font/nekst_bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Student's work" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Student work" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/submissions_view_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

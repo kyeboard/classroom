@@ -2,10 +2,10 @@
     <string name="app_name">Classroom</string>
     <string name="login_button_home">Get\u00A0\u00A0Started</string>
     <string name="app_description">Effortlessly manage assignments, streamline grading, and enhance classroom collaboration.</string>
-    <string name="app_title">Bridging the gap between students and teachers.</string>
+    <string name="app_title">Bridging the gap\nbetween students\nand teachers.</string>
     <string name="title_activity_home">Home</string>
     <string name="create_new_class">Create new class</string>
-    <string name="action_button">Action Button</string>
+    <string name="action_button">Create new class</string>
     <string name="title_activity_new_announcement">NewAnnouncement</string>
     <string name="title_activity_meeting">Meeting</string>
     <string name="title_activity_meeting_chat">MeetingChat</string>
@@ -30,4 +30,18 @@
     <string name="title_activity_new_assignment">NewAssignment</string>
     <string name="title_activity_assignment_view">AssignmentView</string>
     <string name="title_activity_submission_view">SubmissionView</string>
+    <string name="title_activity_login">Login</string>
+    <string name="home_cover_content_desc">Home cover image</string>
+    <string name="home_tip">Are you sure you can\ncomplete your assignments today?</string>
+    <string name="your_classes_header">Your classes</string>
+    <string name="no_classes_found">No classes found!\nCreate a new class or join one.</string>
+    <string name="no_items_found_img_desc">No items found</string>
+    <string name="user_pfp_desc">User profile</string>
+    <string name="new_class_name_header">Name</string>
+    <string name="new_class_name_hint">Name for your class</string>
+    <string name="new_class_subject_hint">Subject for your class</string>
+    <string name="new_class_color_header">Colour</string>
+    <string name="terms_and_conditions">By creating a new class,\nyou agree to our terms and conditions</string>
+    <string name="new_class_btn_create_text">Create class</string>
+    <string name="title_activity_class_people">ClassPeople</string>
 </resources>

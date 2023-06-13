@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "me.kyeboard.classroom"
-        minSdk 24
+        minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -54,7 +54,6 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
     //noinspection GradleDependency (breaks app)
     implementation 'androidx.activity:activity-compose:1.5.1'
-    implementation platform('androidx.compose:compose-bom:2022.10.00')
     implementation 'androidx.compose.ui:ui'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
     implementation 'com.squareup.picasso:picasso:2.8'
@@ -63,21 +62,17 @@ dependencies {
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
+    //noinspection GradleDependency
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.3.0'
     implementation 'com.google.android.material:material:1.9.0'
-    implementation platform('androidx.compose:compose-bom:2022.10.00')
-    implementation platform('androidx.compose:compose-bom:2022.10.00')
-    implementation platform('androidx.compose:compose-bom:2022.10.00')
     implementation platform('androidx.compose:compose-bom:2022.10.00')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
     androidTestImplementation 'androidx.compose.ui:ui-test-junit4'
-    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
-    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
-    androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
     androidTestImplementation platform('androidx.compose:compose-bom:2022.10.00')
     debugImplementation 'androidx.compose.ui:ui-tooling'
     debugImplementation 'androidx.compose.ui:ui-test-manifest'

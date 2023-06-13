@@ -3,52 +3,123 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/black"
+    android:background="#E5E9F0"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/textView15"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="kyeboard's Submission"
-        android:textColor="@color/white"
+        android:background="#fee587"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="Submitted on 24th January, 2023 at 16:40"
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#fee587"
+            android:src="@drawable/back"
+            android:layout_marginTop="3dp"
+            android:tint="@color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseAppTint" />
+
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/nekst_bold"
+            android:includeFontPadding="false"
+            android:text="Student work"
+            android:textColor="@color/black"
+            android:textSize="23sp"
+            android:layout_marginLeft="10dp"
+            app:layout_constraintStart_toEndOf="@+id/imageButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/submission_view_attachment_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView16" />
+        app:layout_constraintTop_toBottomOf="@+id/view" />
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#50333333"
-        app:layout_constraintTop_toBottomOf="@+id/submission_view_attachment_list"
-        tools:layout_editor_absoluteX="20dp" />
 
     <TextView
         android:id="@+id/textView17"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Comments"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/view"
-        tools:layout_editor_absoluteX="8dp" />
+        android:textColor="@color/black"
+        android:fontFamily="@font/nekst_bold"
+        app:layout_constraintTop_toBottomOf="@+id/submission_view_attachment_list" />
 
+    <EditText
+        android:id="@+id/submission_view_msg_textbox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:layout_marginTop="8dp"
+        android:inputType="text"
+        android:hint="Your message"
+        android:layout_marginLeft="20dp"
+        android:padding="16dp"
+        android:background="@drawable/rounded"
+        android:backgroundTint="#d8dee9"
+        android:textSize="13sp"
+        android:layout_marginRight="10dp"
+        android:textColorHint="#4C566A"
+        android:includeFontPadding="false"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toStartOf="@+id/submission_view_msg_send"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <ImageView
+        android:id="@+id/submission_view_msg_send"
+        android:padding="13dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/rounded"
+        android:backgroundTint="#d8dee9"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/send"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/submission_view_comments_list"
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/submission_view_msg_textbox" />
+
+    <!--
     <EditText
         android:id="@+id/submission_view_msg_textbox"
         android:layout_width="0dp"
@@ -67,11 +138,5 @@
         android:text="Button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/submission_view_comments_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submission_view_msg_textbox" />
+-->
 </androidx.constraintlayout.widget.ConstraintLayout>

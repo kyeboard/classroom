@@ -3,14 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/black"
-    android:padding="20dp"
+    android:background="@color/bg"
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/topbar_parent"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
+        android:background="@color/yellow"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="55dp"
+        android:paddingBottom="25dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -18,93 +22,80 @@
             android:id="@+id/newclass_destory_self"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/image_caret_left"
             android:src="@drawable/back"
+            android:tint="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:tint="@color/white"
-            tools:ignore="UseAppTint"
-            android:contentDescription="@string/image_caret_left" />
+            tools:ignore="UseAppTint" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:fontFamily="@font/plusjakartasans_extrabold"
+            android:fontFamily="@font/nekst_bold"
             android:includeFontPadding="false"
             android:text="@string/new_class_title"
-            android:textColor="@color/white"
+            android:textColor="@color/black"
             android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/newclass_destory_self"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:background="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/topbar_parent" />
+
     <TextView
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/newclass_header_title"
-        android:fontFamily="@font/plusjakartasans_extrabold"
-        android:textColor="@color/white"
+        android:text="@string/new_class_name_header"
+        android:layout_marginStart="15dp"
+        android:fontFamily="@font/nekst_bold"
+        android:textColor="@color/black"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/select_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8">
-
-        <ImageView
-            android:id="@+id/selected_header_preview"
-            android:layout_width="match_parent"
-            android:layout_height="130dp"
-            android:scaleType="centerCrop"
-            android:contentDescription="@string/newclass_header_selected_text" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:fontFamily="@font/plusjakartasans_extrabold"
-        android:text="@string/newclass_name_title"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/select_header" />
+        app:layout_constraintTop_toBottomOf="@+id/view3" />
 
     <EditText
         android:id="@+id/new_class_name"
         android:layout_width="match_parent"
-        android:background="@drawable/rounded"
-        android:backgroundTint="#99333333"
-        android:includeFontPadding="false"
-        android:padding="16dp"
-        android:textSize="15sp"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:autofillHints="name"
+        android:background="@drawable/rounded"
+        android:backgroundTint="#d8dee9"
         android:ems="10"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="15dp"
+        android:hint="@string/new_class_name_hint"
+        android:textColorHint="#4c566a"
+        android:includeFontPadding="false"
         android:inputType="text"
-        android:hint="@string/newclass_name_hint"
+        android:padding="18dp"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView9"
-        android:autofillHints="name" />
+        app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/plusjakartasans_extrabold"
+        android:fontFamily="@font/nekst_bold"
         android:layout_marginTop="20dp"
+        android:layout_marginStart="15dp"
         android:text="@string/newclass_subject_header"
-        android:textColor="@color/white"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_class_name" />
 
@@ -113,42 +104,122 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:autofillHints="name"
         android:background="@drawable/rounded"
-        android:backgroundTint="#99333333"
+        android:backgroundTint="#d8dee9"
         android:ems="10"
-        android:hint="@string/newclass_subject_hint"
+        android:textColor="@color/black"
+        android:layout_marginHorizontal="15dp"
+        android:hint="@string/new_class_subject_hint"
         android:includeFontPadding="false"
         android:inputType="text"
-        android:padding="16dp"
-        android:textSize="15sp"
+        android:textColorHint="#4c566a"
+        android:padding="18dp"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6"
-        android:autofillHints="name" />
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
-    <Button
-        android:id="@+id/new_class_create"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView10"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@drawable/rounded"
-        android:backgroundTint="@color/white"
-        android:includeFontPadding="false"
-        android:text="@string/newclass_create_btn_title"
-        android:textAllCaps="false"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/nekst_bold"
+        android:text="@string/new_class_color_header"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/new_class_subject" />
 
-    <Button
-        android:id="@+id/newclass_cancel_self"
-        android:layout_marginTop="10dp"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/rounded"
-        android:backgroundTint="#00000000"
-        android:text="@string/newclass_cancel_btn_text"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/terms_and_conditions"
+        android:textColor="#2E3440"
+        android:textSize="12sp"
+        android:lineSpacingMultiplier="1.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_class_create" />
+        app:layout_constraintTop_toBottomOf="@+id/color_select_yellow" />
+
+    <Button
+        android:id="@+id/new_class_create"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border_yellow"
+        android:text="@string/new_class_btn_create_text"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+    <View
+        android:id="@+id/color_select_yellow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <View
+        android:id="@+id/color_select_green"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@+id/color_select_yellow"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <View
+        android:id="@+id/color_select_orange"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@+id/color_select_green"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <View
+        android:id="@+id/color_select_pink"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@drawable/rounded"
+        android:layout_marginStart="15dp"
+        app:layout_constraintStart_toEndOf="@+id/color_select_orange"
+        app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/new_class_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FD2E3440"
+        android:visibility="gone"
+        android:translationZ="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:indeterminateTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

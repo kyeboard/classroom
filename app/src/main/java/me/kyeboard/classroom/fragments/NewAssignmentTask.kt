@@ -1,5 +1,7 @@
 package me.kyeboard.classroom.fragments
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
@@ -7,18 +9,25 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.AppCompatButton
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.models.InputFile
+import io.appwrite.services.Account
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +37,9 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.screens.AssignmentItem
+import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -37,41 +48,12 @@ import java.io.OutputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 
+data class SubmissionItem(val grade: Int, val submissions: ArrayList<String>, val studentId: String, val studentName: String)
+
 class NewAssignmentTask : Fragment() {
     private lateinit var attachment_uri: Uri
     private val attachments = arrayListOf<Attachment>()
-
-    @Throws(IOException::class)
-    fun copyStream(`in`: InputStream, out: OutputStream) {
-        val buffer = ByteArray(1024)
-        var read: Int
-        while (`in`.read(buffer).also { read = it } != -1) {
-            out.write(buffer, 0, read)
-        }
-    }
-
-    private suspend fun uploadToAppwriteStorage(id: String, resolver: ContentResolver, uri: Uri, storage: Storage): String {
-        val input_stream = resolver.openInputStream(uri)
-        val file_name = getFileName(resolver, uri)
-
-        val file = File.createTempFile(file_name, "tmp")
-        val output_stream = FileOutputStream(file)
-
-        copyStream(input_stream!!, output_stream)
-
-        val appwrite_file = storage.createFile("647713fa9be2a68d4458", id, InputFile.fromFile(file))
-
-        return appwrite_file.id
-    }
-
-    private fun getFileName(resolver: ContentResolver, uri: Uri): String {
-        val returnCursor: Cursor = resolver.query(uri, null, null, null, null)!!
-        val nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-        returnCursor.moveToFirst()
-        val name = returnCursor.getString(nameIndex)
-        returnCursor.close()
-        return name
-    }
+    private var already_submitted = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -79,11 +61,89 @@ class NewAssignmentTask : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_new_assignment_task, container, false)
 
-        val assignment_id = "646f5e9c8ba221bf2df1"
+        val assignment_id = requireArguments().getString("assignment_id")!!
 
         val client = get_appwrite_client(view.context)
         val databases = Databases(client)
         val storage = Storage(client)
+        val account = Account(client)
+
+        val submission_area = view.findViewById<ConstraintLayout>(R.id.assignment_task_submission)
+
+        view.findViewById<ImageView>(R.id.assignment_task_expand_submission).setOnClickListener {
+            val initialHeight = submission_area.height
+
+            if(initialHeight == 900) {
+                val targetHeight = 310 // Increase the height by 200 pixels
+                val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
+                valueAnimator.duration = 100 // Animation duration in milliseconds
+
+                valueAnimator.addUpdateListener { animator ->
+                    val layoutParams = submission_area.layoutParams
+                    layoutParams.height = animator.animatedValue as Int
+                    submission_area.layoutParams = layoutParams
+                }
+
+                view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.GONE
+                view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).visibility = View.GONE
+
+                valueAnimator.start()
+            } else {
+                val targetHeight = 900 // Increase the height by 200 pixels
+                val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
+                valueAnimator.duration = 100 // Animation duration in milliseconds
+
+                valueAnimator.addUpdateListener { animator ->
+                    val layoutParams = submission_area.layoutParams
+                    layoutParams.height = animator.animatedValue as Int
+                    submission_area.layoutParams = layoutParams
+                }
+
+                valueAnimator.start()
+
+                if(!already_submitted) {
+                    view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.VISIBLE
+                }
+                view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).visibility = View.VISIBLE
+            }
+        }
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val session = account.get()
+            Log.d("tt", "$assignment_id is being hashed wth ${session.id}")
+            val id = "$assignment_id-${session.id}"
+            val hashed_id = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
+
+            try {
+                val submission = databases.getDocument("classes", "64782b0c5957666e7bee", hashed_id).data.tryJsonCast<SubmissionItem>()!!
+
+                already_submitted = true
+
+                val attachments = arrayListOf<Attachment>()
+
+                for(attachment_id in submission.submissions) {
+                    val file = storage.getFile("647713fa9be2a68d4458", attachment_id).name
+                    attachments.add(Attachment(file.substringAfterLast('.', ""), file))
+                }
+
+                requireActivity().runOnUiThread {
+                    Toast.makeText(this@NewAssignmentTask.context, "You have already submitted bruh", Toast.LENGTH_SHORT).show()
+
+                    view.findViewById<Button>(R.id.assignment_view_add_files).visibility = View.GONE
+                    view.findViewById<Button>(R.id.assignment_view_submit_assignment).apply {
+                        text = "Already submitted"
+                        isEnabled = false
+                    }
+
+                    view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list).apply {
+                        adapter = AttachmentAdapter(attachments)
+                        layoutManager = GridLayoutManager(this@NewAssignmentTask.context, 2)
+                    }
+                }
+            } catch(e: Exception) {
+                Log.e("ee", e.message.toString())
+            }
+        }
 
         val description = view.findViewById<TextView>(R.id.assignment_view_description)
         val listview = view.findViewById<RecyclerView>(R.id.assignment_view_attachment_list)
@@ -91,7 +151,7 @@ class NewAssignmentTask : Fragment() {
         val sumbissionsAdapter = AttachmentAdapter(attachments)
 
         sumbissionlist.adapter = sumbissionsAdapter
-        sumbissionlist.layoutManager = LinearLayoutManager(view.context)
+        sumbissionlist.layoutManager = GridLayoutManager(view.context, 2)
 
         val intent = Intent().apply {
             action = Intent.ACTION_GET_CONTENT
@@ -114,15 +174,23 @@ class NewAssignmentTask : Fragment() {
             }
         }
 
+
         view.findViewById<Button>(R.id.assignment_view_add_files).setOnClickListener {
             pickFiles.launch(intent)
         }
 
         view.findViewById<Button>(R.id.assignment_view_submit_assignment).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                val id = "$assignment_id-64735c4d22a9a24664e8"
+                val current_user = account.get()
+                val id = "$assignment_id-${current_user.id}"
                 val hashed_id = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
-                uploadToAppwriteStorage(hashed_id, view.context.contentResolver, attachment_uri, storage)
+                val attachments = uploadToAppwriteStorage(view.context.contentResolver, attachment_uri, storage, "647713fa9be2a68d4458")
+
+                databases.createDocument("classes", "64782b0c5957666e7bee", hashed_id, SubmissionItem(0, arrayListOf(attachments), current_user.id, current_user.name))
+
+                activity?.runOnUiThread {
+                    Toast.makeText(this@NewAssignmentTask.context, "Successfully sumbitted the assignment", Toast.LENGTH_LONG).show()
+                }
             }
         }
 
@@ -141,7 +209,7 @@ class NewAssignmentTask : Fragment() {
                     description.text = data.description
 
                     listview.adapter = AttachmentAdapter(attachments)
-                    listview.layoutManager = LinearLayoutManager(view.context)
+                    listview.layoutManager = GridLayoutManager(view.context, 2)
                 }
             } catch(e: Exception) {
                 activity?.runOnUiThread {

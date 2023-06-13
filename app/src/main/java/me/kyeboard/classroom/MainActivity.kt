@@ -1,101 +1,50 @@
 package me.kyeboard.classroom
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import com.google.android.material.button.MaterialButton
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.WindowCompat
 import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import me.kyeboard.classroom.screens.AnnouncementView
 import me.kyeboard.classroom.screens.AssignmentView
-import me.kyeboard.classroom.screens.ClassDashboard
 import me.kyeboard.classroom.screens.Home
-import me.kyeboard.classroom.screens.Meeting
-import me.kyeboard.classroom.screens.NewAnnouncement
-import me.kyeboard.classroom.screens.NewAssignment
-import me.kyeboard.classroom.screens.NewClass
-import me.kyeboard.classroom.screens.SubmissionView
+import me.kyeboard.classroom.screens.Login
 import me.kyeboard.classroom.utils.get_appwrite_client
+import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        // Setup activity
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
-        actionBar?.hide()
+        splashScreen.setKeepOnScreenCondition { true }
 
-        // Initialize appwrite client and req services
-        val client = get_appwrite_client(this)
-        val account = Account(client)
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
-        startHomeActivity()
-
-        // Redirect users to home page if service exists
-        redirectIfSessionExists(account)
-
-        // Handle get started button click
-        findViewById<MaterialButton>(R.id.login).setOnClickListener {
-            startGoogleOAuth(account)
-        }
-    }
-
-    // Starts the home activity and ends the current activity
-    private fun startHomeActivity() {
-        // Create an intent
-        val intent = Intent(this, SubmissionView::class.java)
-
-        // Start the activity
-        startActivity(intent)
-
-        // End the current activity
-        finish()
-    }
-
-    // Function that starts oauth activity
-    private fun startGoogleOAuth(account: Account) {
-        CoroutineScope(Dispatchers.IO).launch {
-            // TODO: Add redirect to the website to prevent redirect attack
-            try {
-                // Create oauth session
-                account.createOAuth2Session(this@MainActivity, "google")
-
-                // Send an successful toast message
-                runOnUiThread {
-                    Toast.makeText(this@MainActivity, "Successfully logged in!", Toast.LENGTH_SHORT).show()
-                }
-
-                // Start home activity'''
-                startHomeActivity()
-            } catch(_: Exception) {
-                runOnUiThread {
-                    Toast.makeText(this@MainActivity, "Login failed, try again!", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun redirectIfSessionExists(account: Account) {
         // Check if the session exists
         CoroutineScope(Dispatchers.IO).launch {
-            // Check if the session exists
-            try {
+            val client = get_appwrite_client(applicationContext)
+            val account = Account(client)
+
+            val nextIntent = try {
                 // Try to get the session
                 account.get()
 
-                // If exists, redirect to the home page
-                startHomeActivity()
+                // Session exists... move on
+                Intent(this@MainActivity, Home::class.java)
             } catch(_: Exception) {
-
+                Intent(this@MainActivity, Login::class.java)
             }
+
+            startActivity(nextIntent)
+            finish()
         }
     }
 }

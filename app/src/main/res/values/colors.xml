@@ -5,6 +5,20 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF2E3440</color>
+    <color name="white">#FFD8DEE9</color>
+
+    <!--  Background  -->
+    <color name="bg">#E5E9F0</color>
+
+    <!--  Others  -->
+    <color name="yellow">#fee587</color>
+
+    <!-- Blacks' shades -->
+    <color name="black2">#3B4252</color>
+    <color name="black3">#434C5E</color>
+    <color name="black4">#4C566A</color>
+
+    <!--  Home colors  -->
+    <color name="home_bg">#e2d1ca</color>
 </resources>

@@ -2,15 +2,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.models.Document
 import me.kyeboard.classroom.R
+import java.text.SimpleDateFormat
+import java.util.Locale
 
-data class Announcement(val author: String, val description: String)
+data class Announcement(val author: String, val message: String, val classid: String, val attachments: ArrayList<String>, val `$id`: String, val userId: String, val `$createdAt`: String)
 
-class AnnouncementAdapter(private val dataSet: List<Document>) :
+val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
+val outputFormat = SimpleDateFormat("d MMMM, yyyy", Locale.US)
+
+class AnnouncementAdapter(private val dataSet: List<Announcement>, private val onClick: (id: String) -> Unit) :
     RecyclerView.Adapter<AnnouncementAdapter.ViewHolder>() {
 
     /**
@@ -20,10 +28,14 @@ class AnnouncementAdapter(private val dataSet: List<Document>) :
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val username: TextView
         val description: TextView
+        val parent: ConstraintLayout
+        val pfp: ImageView
         val time: TextView
 
         init {
+            parent = view.findViewById(R.id.announcement_item_parent)
             username = view.findViewById(R.id.announcement_item_username)
+            pfp = view.findViewById(R.id.announcement_item_author_pfp)
             description = view.findViewById(R.id.announcement_item_description)
             time = view.findViewById(R.id.announcement_item_time)
         }
@@ -40,13 +52,17 @@ class AnnouncementAdapter(private val dataSet: List<Document>) :
 
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        Log.d("tt", dataSet[position].data.toString())
-        val data = dataSet[position].data.tryJsonCast<Announcement>()!!
+        val data = dataSet[position]
 
-        viewHolder.description.text = data.description
+        viewHolder.description.text = data.message
         viewHolder.username.text = data.author
+        viewHolder.time.text = outputFormat.format(inputFormat.parse(data.`$createdAt`)!!)
 
-        // Picasso.get().load(data.profile_url).into(viewHolder.user_profile)
+        viewHolder.parent.setOnClickListener {
+            onClick(data.`$id`)
+        }
+
+        Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${data.userId}/view?project=fryday").into(viewHolder.pfp)
     }
 
     // Return the size of your dataset (invoked by the layout manager)

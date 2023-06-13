@@ -2,10 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/announcement_item_parent"
     android:layout_width="match_parent"
     android:layout_marginBottom="15dp"
     android:background="@drawable/rounded"
-    android:backgroundTint="#55333333"
+    android:backgroundTint="#d8dee9"
     android:padding="20dp"
     android:layout_height="wrap_content">
 
@@ -17,31 +18,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            app:cardCornerRadius="18dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:background="@drawable/pfp_border"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/imageView6"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView2"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/pfp" />
-        </androidx.cardview.widget.CardView>
+                app:cardCornerRadius="18dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/announcement_item_author_pfp"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp" />
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/announcement_item_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:fontFamily="@font/plusjakartasans_extrabold"
-            android:textColor="@color/white"
+            android:fontFamily="@font/nekst_bold"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cardView2"
+            app:layout_constraintStart_toEndOf="@+id/constraintLayout7"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -49,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="16 hours ago"
+            android:textColor="#4c566a"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -60,8 +71,9 @@
         android:id="@+id/announcement_item_description"
         android:layout_width="0dp"
         android:maxLines="6"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="15dp"
         android:lineHeight="21sp"
+        android:textColor="#4c566a"
         android:ellipsize="end"
         android:textSize="13sp"
         android:layout_height="wrap_content"

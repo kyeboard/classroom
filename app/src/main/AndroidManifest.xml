@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,8 +12,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Classroom"
+        android:theme="@style/Theme.App.Starting"
+        android:fitsSystemWindows="true"
         tools:targetApi="31">
+        <activity
+            android:name=".screens.ClassPeople"
+            android:exported="false"
+            android:label="@string/title_activity_class_people"
+            android:theme="@style/Theme.App.Starting" />
         <activity
             android:name=".screens.SubmissionView"
             android:exported="false"
@@ -23,6 +29,11 @@
             android:name=".screens.AssignmentView"
             android:exported="false"
             android:label="@string/title_activity_assignment_view"
+            android:theme="@style/Theme.Classroom" />
+        <activity
+            android:name=".screens.Login"
+            android:exported="false"
+            android:label="Login"
             android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.NewAssignment"
@@ -40,24 +51,9 @@
             android:label="@string/title_activity_class_dashboard"
             android:theme="@style/Theme.Classroom" />
         <activity
-            android:name=".screens.SelectHeader"
-            android:exported="false"
-            android:label="@string/title_activity_select_header"
-            android:theme="@style/Theme.Classroom" />
-        <activity
             android:name=".screens.NewClass"
             android:exported="false"
             android:label="@string/title_activity_new_class"
-            android:theme="@style/Theme.Classroom" />
-        <activity
-            android:name=".screens.MeetingChat"
-            android:exported="false"
-            android:label="@string/title_activity_meeting_chat"
-            android:theme="@style/Theme.Classroom" />
-        <activity
-            android:name=".screens.Meeting"
-            android:exported="false"
-            android:label="@string/title_activity_meeting"
             android:theme="@style/Theme.Classroom" />
         <activity
             android:name=".screens.NewAnnouncement"
@@ -69,17 +65,6 @@
             android:exported="false"
             android:label="@string/title_activity_home"
             android:theme="@style/Theme.Classroom" />
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="me.kyeboard.classroom.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
         <activity
             android:name="io.appwrite.views.CallbackActivity"
             android:exported="true">
@@ -96,13 +81,21 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Classroom">
+            android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="me.kyeboard.classroom.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
-
 </manifest>

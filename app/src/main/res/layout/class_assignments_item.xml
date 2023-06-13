@@ -4,38 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_marginBottom="5dp"
-
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/class_assignments_time_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:textSize="13sp"
-        android:fontFamily="@font/plusjakartasans_extrabold"
-        android:paddingVertical="6dp"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/layout10"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout10"
+        android:id="@+id/assignment_item_parent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/rounded"
-        android:backgroundTint="#50444444"
-        android:padding="18dp"
+        android:backgroundTint="#d8dee9"
+        android:padding="20dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/class_assignments_time_header">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/class_assignment_item_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:textColor="#EEFFFFFF"
+            android:includeFontPadding="false"
+            android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -44,7 +31,9 @@
             android:id="@+id/class_assignment_item_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:includeFontPadding="false"
             android:textSize="11sp"
+            android:textColor="#4c566a"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

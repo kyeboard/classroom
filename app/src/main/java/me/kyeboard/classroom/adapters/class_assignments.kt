@@ -3,6 +3,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.models.Document
@@ -14,42 +15,27 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Date
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
 
-data class Assignment(val author: String, val title: String, val due_date: String)
+data class Assignment(val author: String, val title: String, val due_date: Date, val `$id`: String, val classid: String)
 
-val isoDateFormatter = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+val dateFormat = SimpleDateFormat("d MMMM, yyyy", Locale.ENGLISH)
 
-class AssignmentAdapter(private val dataSet: List<Document>) :
+class AssignmentAdapter(private val dataSet: List<Assignment>, private val onClick: (id: String) -> Unit) :
     RecyclerView.Adapter<AssignmentAdapter.ViewHolder>() {
 
-    var previousDiff = -2
-    val today = Date()
-
-    /**
-     * Provide a reference to the type of views that you are using
-     * (custom ViewHolder)
-     */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val title: TextView
         val time: TextView
-        val timeDiff: TextView
+        val parent: ConstraintLayout
 
         init {
             title = view.findViewById(R.id.class_assignment_item_title)
+            parent = view.findViewById(R.id.assignment_item_parent)
             time = view.findViewById(R.id.class_assignment_item_time)
-            timeDiff = view.findViewById(R.id.class_assignments_time_header)
         }
-    }
-
-    private fun getDayDifference(date: String): Int {
-        val date = isoDateFormatter.parse(date)!!
-
-        val cal = Calendar.getInstance()
-        cal.time = date
-
-        return cal.get(Calendar.DAY_OF_MONTH) - today.date
     }
 
     // Create new views (invoked by the layout manager)
@@ -61,47 +47,18 @@ class AssignmentAdapter(private val dataSet: List<Document>) :
         return ViewHolder(view)
     }
 
-    fun getHumanReadableTimeDifference(date: String): String {
-        val diff = getDayDifference(date)
-
-        return when {
-            diff == 0 -> "Today"
-            diff == -1 -> "Yesterday"
-            diff >= -7 -> "${abs(diff)} days ago"
-            else -> diff.toString()
-        }
-    }
-
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val data = dataSet[position].data.tryJsonCast<Assignment>()!!
+        val data = dataSet[position]
 
-        Log.d("assignments_service", getDayDifference(data.due_date).toString())
-
-        val diff = getDayDifference(data.due_date)
+        viewHolder.parent.setOnClickListener {
+            onClick(data.`$id`)
+        }
 
         viewHolder.title.text = data.title
-        viewHolder.time.text = getHumanReadableTimeDifference(dataSet[position].createdAt)
-
-        if(diff != previousDiff) {
-            viewHolder.timeDiff.text = getReadableFormat(diff)
-            previousDiff = diff
-        } else {
-            viewHolder.timeDiff.visibility = View.GONE
-        }
-    }
-
-    private fun getReadableFormat(diff: Int): CharSequence {
-        return when {
-            diff < 0 -> "Missed"
-            diff == 0 -> "Today"
-            diff == 1 -> "Tomorrow"
-            diff <= 7 -> "This week"
-            else -> "Later"
-        }
+        viewHolder.time.text = "Due on ${dateFormat.format(data.due_date)}"
     }
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = dataSet.size
-
 }

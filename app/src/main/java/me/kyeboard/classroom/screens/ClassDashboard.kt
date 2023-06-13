@@ -1,37 +1,132 @@
 package me.kyeboard.classroom.screens
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.WindowCompat
 import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayout
+import io.appwrite.Client
+import io.appwrite.extensions.tryJsonCast
+import io.appwrite.services.Databases
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.ViewPagerAdapter
 import me.kyeboard.classroom.fragments.ClassDashboardAssignments
-import me.kyeboard.classroom.fragments.ClassDashboardClasses
 import me.kyeboard.classroom.fragments.ClassDashboardStream
+import me.kyeboard.classroom.utils.get_appwrite_client
 
 class ClassDashboard : AppCompatActivity() {
+    private lateinit var client: Client
+    private lateinit var databases: Databases
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        // Setup view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classdashboard)
 
-        findViewById<ImageButton>(R.id.class_dashboard_new_announcement).setOnClickListener {
-            val intent = Intent(this, NewAnnouncement::class.java)
+        // Remove status bar (make it transparent)
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
+
+        // Get class id sent along
+        val extras = intent.extras!!
+        val classId = extras.getString("class_id")!!
+        val accentColor = extras.getString("accent_color")!!
+
+        // Handle members list opener
+        findViewById<ImageView>(R.id.class_members_open).setOnClickListener {
+            // Create an intent
+            val intent = Intent(this, ClassPeople::class.java)
+
+            // Add class id
+            intent.putExtra("class_id", classId)
+            intent.putExtra("accent_color", accentColor)
+
+            // Start the intent
             startActivity(intent)
         }
 
+        // Viewpager and tab layout for nav
         val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
         val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
 
-        val adapter = ViewPagerAdapter(this)
-        adapter.addFragment(ClassDashboardStream())
-        adapter.addFragment(ClassDashboardAssignments())
-        adapter.addFragment(ClassDashboardClasses())
+        // Initiate appwrite services
+        client = get_appwrite_client(this)
+        databases = Databases(client)
 
+        CoroutineScope(Dispatchers.IO).launch {
+            // Get class info from registery
+            val classInfo = databases.getDocument("classes", "registery", classId).data.tryJsonCast<ClassItem>()!!
+
+            runOnUiThread {
+                // Change tint of the topbar
+                val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
+
+                topbar.background.mutate().apply {
+                    setTint(Color.parseColor(classInfo.color))
+                }
+
+                // Handle plus button clicks
+                findViewById<ImageButton>(R.id.dashboard_stream_create_new).setOnClickListener {
+                    // Select the intent to show
+                    val intent = if(viewPager.currentItem == 0) {
+                        Intent(this@ClassDashboard, NewAnnouncement::class.java)
+                    } else {
+                        Intent(this@ClassDashboard, NewAssignment::class.java)
+                    }
+
+                    // Add class id
+                    intent.putExtra("class_id", classId)
+                    intent.putExtra("accent_color", classInfo.color)
+
+                    // Start
+                    startActivity(intent)
+                }
+
+                // Change name and subject
+                findViewById<TextView>(R.id.current_class_name).text = classInfo.name
+                findViewById<TextView>(R.id.current_class_subject).text = classInfo.subject
+
+                topbar.visibility = View.VISIBLE
+                tabLayout.visibility = View.VISIBLE
+                findViewById<View>(R.id.class_dashboard_bottom_bar).visibility = View.VISIBLE
+            }
+        }
+
+        // Setup dashboard stream fragment
+        val bundle = Bundle().apply {
+            putString("class_id", classId)
+            putString("accent_color", accentColor)
+        }
+        val classDashboardStream = ClassDashboardStream().apply {
+            arguments = bundle
+        }
+        val classDashboardAssignments = ClassDashboardAssignments().apply {
+            arguments = bundle
+        }
+
+        // Setup pager adapter
+        val adapter = ViewPagerAdapter(this)
+        adapter.addFragment(classDashboardStream)
+        adapter.addFragment(classDashboardAssignments)
+
+        // Set the adapter
         viewPager.adapter = adapter
 
+        // Change view pager position according to tab clicks
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
@@ -40,16 +135,21 @@ class ClassDashboard : AppCompatActivity() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // Do nothing
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                // Do nothing
+
             }
         })
-    }
 
-    fun open_announcement_activity(id: String): Unit {
+        // Handle changes in viewpager
+        viewPager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
 
+                tabLayout.getTabAt(position)!!.select()
+            }
+        })
     }
 }

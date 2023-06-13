@@ -1,6 +1,7 @@
 package me.kyeboard.classroom.fragments
 
 import SubmissionsAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -14,9 +15,13 @@ import io.appwrite.services.Teams
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
+import me.kyeboard.classroom.screens.SubmissionView
 import me.kyeboard.classroom.utils.get_appwrite_client
 
 class AssignmentViewSubmissions : Fragment() {
+    private lateinit var accent_color: String
+    private lateinit var assignment_id: String
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -28,10 +33,13 @@ class AssignmentViewSubmissions : Fragment() {
         val teams = Teams(client)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.submissions_view_list)
+        val class_id = requireArguments().getString("class_id")!!
+        assignment_id = requireArguments().getString("assignment_id")!!
+        accent_color = requireArguments().getString("accent_color")!!
 
         GlobalScope.launch {
-            val memberships = teams.listMemberships("646f2bcaea321c445741")
-            val adapter = SubmissionsAdapter(memberships.memberships)
+            val memberships = teams.listMemberships(class_id)
+            val adapter = SubmissionsAdapter(memberships.memberships, this@AssignmentViewSubmissions::openSubmissionView)
 
             activity?.runOnUiThread {
                 recyclerView.adapter = adapter
@@ -40,5 +48,15 @@ class AssignmentViewSubmissions : Fragment() {
         }
 
         return view
+    }
+
+    public fun openSubmissionView(id: String) {
+        val intent = Intent(this.context, SubmissionView::class.java)
+
+        intent.putExtra("accent_color", accent_color)
+        intent.putExtra("user_id", id)
+        intent.putExtra("assignment_id", assignment_id)
+
+        startActivity(intent)
     }
 }

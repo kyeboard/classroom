@@ -1,18 +1,21 @@
 package me.kyeboard.classroom.adapters
 
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.ShapeDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import me.kyeboard.classroom.R
 
-data class ClassItem(val name: String, val header: String, val subject: String)
+data class ClassItem(val name: String, val header: String, val subject: String, val `$id`: String, val color: String, var total: Long)
 
-class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String) -> Unit) :
+class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String, accent_color: String) -> Unit, private val context: Context) :
     RecyclerView.Adapter<ClassesListAdapter.ViewHolder>() {
 
     /**
@@ -20,15 +23,12 @@ class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val 
      * (custom ViewHolder)
      */
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val headerImage: ImageView
         val title: TextView
         val subject: TextView
         val parent: ConstraintLayout
 
         init {
             parent = view.findViewById(R.id.classes_list_item_parent)
-            // Define click listener for the ViewHolder's View
-            headerImage = view.findViewById(R.id.classes_list_item_header)
             title = view.findViewById(R.id.classes_list_item_name)
             subject = view.findViewById(R.id.classes_list_item_subject)
         }
@@ -48,10 +48,15 @@ class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val 
         val data = dataSet[position]
 
         viewHolder.parent.setOnClickListener {
-            onClick("646c4200c2459aafcae8")
+            onClick(data.`$id`, data.color)
         }
 
-        Picasso.get().load(data.header).into(viewHolder.headerImage)
+        val bg = (viewHolder.parent.background as GradientDrawable)
+
+        bg.setColor(Color.parseColor(data.color))
+        bg.setStroke(6, Color.parseColor("#000000"))
+        bg.cornerRadius = 5F
+
         viewHolder.title.text = data.name
         viewHolder.subject.text = data.subject
     }

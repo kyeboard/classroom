@@ -14,7 +14,8 @@ module.exports = {
             }
         },
         fontFamily: {
-            "montserrat": ["Montserrat"]
+            "montserrat": ["Montserrat"],
+            "jakarta": ["Plus Jakarta Sans"]
         }
     },
     plugins: [

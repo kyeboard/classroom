@@ -4,21 +4,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import me.kyeboard.classroom.R
 
-data class Attachment(val file_extension: String, val file_name: String)
+data class Attachment(val file_extension: String, val file_name: String, val onClick: () -> Unit = {  })
 
 class AttachmentAdapter(private val dataSet: ArrayList<Attachment>) :
     RecyclerView.Adapter<AttachmentAdapter.ViewHolder>() {
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val extension: TextView
+        val parent: ConstraintLayout
         val name: TextView
 
         init {
             extension = view.findViewById(R.id.new_announcement_attachment_item_extension)
             name = view.findViewById(R.id.new_announcement_attachment_item_name)
+            parent = view.findViewById(R.id.attachment_item_parent)
         }
     }
 
@@ -37,6 +40,10 @@ class AttachmentAdapter(private val dataSet: ArrayList<Attachment>) :
 
         viewHolder.extension.text = data.file_extension
         viewHolder.name.text = data.file_name
+
+        viewHolder.parent.setOnClickListener {
+            data.onClick()
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)

@@ -3,34 +3,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:backgroundTint="#50333333"
-    android:layout_marginBottom="10dp"
-    android:background="@drawable/rounded"
+    android:id="@+id/attachment_item_parent"
+    android:layout_marginRight="10dp"
+    android:layout_marginBottom="20dp"
     android:layout_height="wrap_content">
+
+    <View
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/myView"
+        android:layout_width="match_parent"
+        android:background="@drawable/rounded"
+        app:layout_constraintDimensionRatio="1:0.6"
+        android:backgroundTint="@color/white"
+        android:layout_height="0dp"/>
 
     <TextView
         android:id="@+id/new_announcement_attachment_item_extension"
         android:layout_width="70dp"
-        android:includeFontPadding="false"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/nekst_bold"
+        android:includeFontPadding="false"
         android:padding="18dp"
-        android:textAlignment="center"
-        android:background="@drawable/rounded_left"
-        android:textColor="@color/black"
-        android:backgroundTint="#88C0D0"
         android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="@+id/myView"
+        app:layout_constraintEnd_toEndOf="@+id/myView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/new_announcement_attachment_item_name"
         android:layout_width="wrap_content"
-        android:maxLines="1"
-        android:ellipsize="marquee"
-        android:layout_marginLeft="15dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/new_announcement_attachment_item_extension"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:textSize="12sp"
+        android:paddingHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/splash_screen_foreground"
+    android:insetLeft="82dp"
+    android:insetRight="82dp"
+    android:insetTop="82dp"
+    android:insetBottom="82dp"/>

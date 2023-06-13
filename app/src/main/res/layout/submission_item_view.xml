@@ -4,21 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/submissions_view_parent"
     android:layout_width="match_parent"
+    android:background="@drawable/rounded"
+    android:backgroundTint="#d8dee9"
+    android:layout_marginBottom="10dp"
+    android:padding="20dp"
     android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/submission_item_view_name"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/nekst_bold"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/submission_item_view_submitted_at"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submission_item_view_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

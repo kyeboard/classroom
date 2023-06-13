@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,57 +9,100 @@
     <TextView
         android:id="@+id/assignment_view_description"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_marginTop="136dp"
-        android:text="TextView"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:lineSpacingMultiplier="1.6"
+        android:textColor="#4c566a"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/assignment_view_attachment_list"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/assignment_view_description" />
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/assignment_task_submission"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
+        android:background="#d8dee9"
+        android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/assignment_task_expand_submission"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/chevron_up"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textView11"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/nekst_bold"
             android:text="Your work"
-            android:textColor="@color/white"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/assignment_task_expand_submission" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/assignment_view_submissions_list"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/assignment_view_add_files"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:text="Button"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/rounded"
+            android:backgroundTint="#e5e9f0"
+            android:includeFontPadding="false"
+            android:outlineProvider="none"
+            android:padding="16dp"
+            android:text="Add attachments"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/assignment_view_submit_assignment"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/assignment_view_submissions_list" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/assignment_view_submit_assignment"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_marginTop="20dp"
+            android:background="@drawable/border_yellow"
+            android:includeFontPadding="false"
+            android:outlineProvider="none"
+            android:padding="16dp"
+            android:text="Submit"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/assignment_view_add_files" /> <!-- Currently, start is constrained to the "Your work" textview, when expanded, it constraints to add attachment button -->
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
