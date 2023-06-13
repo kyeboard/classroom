@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
@@ -15,8 +16,11 @@ import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayout
 import io.appwrite.Client
+import io.appwrite.Query
 import io.appwrite.extensions.tryJsonCast
+import io.appwrite.services.Account
 import io.appwrite.services.Databases
+import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,12 +29,15 @@ import me.kyeboard.classroom.adapters.ViewPagerAdapter
 import me.kyeboard.classroom.fragments.ClassDashboardAssignments
 import me.kyeboard.classroom.fragments.ClassDashboardStream
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.setText
 import me.kyeboard.classroom.utils.visible
 
 class ClassDashboard : AppCompatActivity() {
     private lateinit var client: Client
     private lateinit var databases: Databases
+    private lateinit var teams: Teams
+    private lateinit var account: Account
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup view
@@ -64,12 +71,23 @@ class ClassDashboard : AppCompatActivity() {
         // Viewpager and tab layout for nav
         val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
         val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
+        val create_new_btn = findViewById<ImageButton>(R.id.dashboard_stream_create_new)
 
         // Initiate appwrite services
         client = get_appwrite_client(this)
         databases = Databases(client)
+        teams = Teams(client)
+        account = Account(client)
 
         CoroutineScope(Dispatchers.IO).launch {
+            val roles = teams.listMemberships(classId, arrayListOf(Query.equal("userId", account.get().id))).memberships[0].roles
+
+            if(roles.contains("owner")) {
+                runOnUiThread {
+                    visible(create_new_btn)
+                }
+            }
+
             // Get class info from registery
             val classInfo = databases.getDocument("classes", "registery", classId).data.tryJsonCast<ClassItem>()!!
 
@@ -83,7 +101,7 @@ class ClassDashboard : AppCompatActivity() {
                 }
 
                 // Handle plus button clicks
-                findViewById<ImageButton>(R.id.dashboard_stream_create_new).setOnClickListener {
+                create_new_btn.setOnClickListener {
                     // Select the intent to show
                     val intent = if(viewPager.currentItem == 0) {
                         Intent(this@ClassDashboard, NewAnnouncement::class.java)
