@@ -25,6 +25,8 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.AnnouncementView
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.invisible
+import me.kyeboard.classroom.utils.visible
 
 class ClassDashboardStream : Fragment() {
     private lateinit var client: Client
@@ -81,13 +83,22 @@ class ClassDashboardStream : Fragment() {
     }
 
     private suspend fun updateStreamItems(classId: String, loading: ConstraintLayout, noAnnouncements: ConstraintLayout, recyclerView: RecyclerView, view: View) {
-        val data = databases.listDocuments("classes", "647c1b704310bb8f0fed", arrayListOf(Query.orderDesc("\$createdAt"))).documents
+        // Get the list of the documents
+        val data = databases.listDocuments(
+            "classes",
+            "647c1b704310bb8f0fed",
+            arrayListOf(Query.orderDesc("\$createdAt"))
+        ).documents
+
+        // Create an array for announcements
         val announcements = arrayListOf<Announcement>()
 
+        // Hide no announcements
         activity?.runOnUiThread {
-            noAnnouncements.visibility = View.GONE
+            invisible(noAnnouncements)
         }
 
+        // Iterate over the data
         for(i in data) {
             val casted = i.data.tryJsonCast<Announcement>()!!
 
@@ -102,10 +113,10 @@ class ClassDashboardStream : Fragment() {
 
         // Set adapter and layout
         activity?.runOnUiThread {
-            loading.visibility = View.GONE
+            invisible(loading)
 
             if(announcements.isEmpty()) {
-                noAnnouncements.visibility = View.VISIBLE
+                visible(noAnnouncements)
             }
 
             recyclerView.adapter = adapter

@@ -21,6 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.visible
 
 data class ClassItem(val name: String, val subject: String, val color: String)
 
@@ -85,7 +86,7 @@ class NewClass : ComponentActivity() {
                 return@setOnClickListener
             }
 
-            loader.visibility = View.VISIBLE
+            visible(loader)
 
             // Create a team
             CoroutineScope(Dispatchers.IO).launch {
@@ -94,7 +95,6 @@ class NewClass : ComponentActivity() {
                     val team = teams.create("unique()", className)
 
                     // Create the registry in the database
-                    // TODO: Fix the registry spelling
                     databases.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, selectedColor))
 
                     runOnUiThread {

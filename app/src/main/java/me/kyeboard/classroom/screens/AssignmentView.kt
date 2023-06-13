@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowCompat
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import me.kyeboard.classroom.R
@@ -21,25 +22,27 @@ class AssignmentView : AppCompatActivity() {
         val viewPager = findViewById<ViewPager2>(R.id.assignment_view_pager)
         val tabLayout = findViewById<TabLayout>(R.id.assignment_view_tablayout)
 
-        val assignment_id = intent.extras!!.getString("assignment_id")!!
-        val class_id = intent.extras!!.getString("class_id")!!
-        val accent_color = intent.extras!!.getString("accent_color")!!
+        val assignmentId = intent.extras!!.getString("assignment_id")!!
+        val classId = intent.extras!!.getString("class_id")!!
+        val accentColor = intent.extras!!.getString("accent_color")!!
+
+        // Hide status bar
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         // Apply accent color
-        window.statusBarColor = Color.parseColor(accent_color)
-        findViewById<ConstraintLayout>(R.id.assignment_view_topbar).background.setTint(Color.parseColor(accent_color))
+        findViewById<ConstraintLayout>(R.id.assignment_view_topbar).background.mutate().setTint(Color.parseColor(accentColor))
 
+        // Create bundle
         val bundle = Bundle().apply {
-            putString("assignment_id", assignment_id)
-            putString("class_id", class_id)
-            putString("accent_color", accent_color)
+            putString("assignment_id", assignmentId)
+            putString("class_id", classId)
+            putString("accent_color", accentColor)
         }
 
         // Create adapters
         val newAssignmentTask = NewAssignmentTask().apply {
             arguments = bundle
         }
-
         val newAssignmentSubmissions = AssignmentViewSubmissions().apply {
             arguments = bundle
         }
@@ -57,13 +60,8 @@ class AssignmentView : AppCompatActivity() {
                 }
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                // Do nothing
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                // Do nothing
-            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
     }
 }

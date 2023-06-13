@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.WindowCompat
 import io.appwrite.Client
 import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
@@ -13,6 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.startActivityWrapper
 
 class Login : ComponentActivity() {
     private lateinit var client: Client
@@ -23,7 +25,11 @@ class Login : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.home_bg, null)
+        // Hide status bar
+        WindowCompat.setDecorFitsSystemWindows(
+            window,
+            false
+        )
 
         client = get_appwrite_client(applicationContext)
         account = Account(client)
@@ -36,11 +42,7 @@ class Login : ComponentActivity() {
 
     // Starts the home activity and ends the current activity
     private fun startHomeActivity() {
-        // Create an intent
-        val intent = Intent(this, Home::class.java)
-
-        // Start the activity
-        startActivity(intent)
+        startActivityWrapper(this, Home::class.java)
 
         // End the current activity
         finish()

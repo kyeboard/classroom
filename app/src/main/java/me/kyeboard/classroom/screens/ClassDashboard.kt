@@ -25,6 +25,8 @@ import me.kyeboard.classroom.adapters.ViewPagerAdapter
 import me.kyeboard.classroom.fragments.ClassDashboardAssignments
 import me.kyeboard.classroom.fragments.ClassDashboardStream
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.setText
+import me.kyeboard.classroom.utils.visible
 
 class ClassDashboard : AppCompatActivity() {
     private lateinit var client: Client
@@ -75,6 +77,7 @@ class ClassDashboard : AppCompatActivity() {
                 // Change tint of the topbar
                 val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
 
+                // Set background color
                 topbar.background.mutate().apply {
                     setTint(Color.parseColor(classInfo.color))
                 }
@@ -97,12 +100,12 @@ class ClassDashboard : AppCompatActivity() {
                 }
 
                 // Change name and subject
-                findViewById<TextView>(R.id.current_class_name).text = classInfo.name
-                findViewById<TextView>(R.id.current_class_subject).text = classInfo.subject
+                setText(this@ClassDashboard, R.id.current_class_name, classInfo.name)
+                setText(this@ClassDashboard, R.id.current_class_subject, classInfo.subject)
 
-                topbar.visibility = View.VISIBLE
-                tabLayout.visibility = View.VISIBLE
-                findViewById<View>(R.id.class_dashboard_bottom_bar).visibility = View.VISIBLE
+                visible(topbar)
+                visible(tabLayout)
+                visible(findViewById(R.id.class_dashboard_bottom_bar))
             }
         }
 
@@ -134,13 +137,8 @@ class ClassDashboard : AppCompatActivity() {
                 }
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-
-            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
         // Handle changes in viewpager

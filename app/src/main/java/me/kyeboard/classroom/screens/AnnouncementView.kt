@@ -1,16 +1,14 @@
 package me.kyeboard.classroom.screens
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.FileProvider
+import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
@@ -21,19 +19,20 @@ import io.appwrite.services.Storage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.imageInto
+import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.openAttachment
-import java.io.File
-import java.io.FileOutputStream
+import me.kyeboard.classroom.utils.setText
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 data class Announcement(val author: String, val message: String, val attachments: ArrayList<String>, val userId: String)
 
+// Date forms
 val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSX", Locale.US)
 val outputFormat = SimpleDateFormat("d MMMM, yyyy", Locale.US)
 
@@ -49,12 +48,13 @@ class AnnouncementView : ComponentActivity() {
 
         // Get args
         val bundle = intent.extras!!
-        val announcement_id = bundle.getString("announcement_id")!!
-        val accent_color = bundle.getString("accent_color")!!
+        val announcementId = bundle.getString("announcement_id")!!
+        val accentColor = bundle.getString("accent_color")!!
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
         // Set accent color
-        window.statusBarColor = Color.parseColor(accent_color)
-        findViewById<ConstraintLayout>(R.id.announcement_view_topbar).background.setTint(Color.parseColor(accent_color))
+        findViewById<ConstraintLayout>(R.id.announcement_view_topbar).background.mutate().setTint(Color.parseColor(accentColor))
 
         // Initialize appwrite services
         client = get_appwrite_client(applicationContext)
@@ -62,25 +62,27 @@ class AnnouncementView : ComponentActivity() {
         storage = Storage(client)
 
         // Get the views
-        val description = findViewById<TextView>(R.id.announcement_itemview_description)
         val view = findViewById<RecyclerView>(R.id.announcement_itemview_attachment_list)
-        val pfp = findViewById<ImageView>(R.id.announcement_item_author_pfp)
 
         // Get the data and populate views
         CoroutineScope(Dispatchers.IO).launch {
             // Get the announcement
-            val announcement_obj = databases.getDocument("classes", "647c1b704310bb8f0fed", announcement_id)
+            val announcementObj = databases.getDocument("classes", "647c1b704310bb8f0fed", announcementId)
 
             // Get the data and parse it
-            val data = announcement_obj.data.tryJsonCast<Announcement>()!!
+            val data = announcementObj.data.tryJsonCast<Announcement>()!!
 
             // List of attachments
             val attachments = arrayListOf<Attachment>()
 
             // Get the files attached
             for(attachment_id in data.attachments) {
+                // Get the file
                 val file = storage.getFile("6465d3dd2e3905c17280", attachment_id)
+
+                // Add it to the list
                 attachments.add(Attachment(file.name.substringAfterLast('.', ""), file.name) {
+                    // Handle on click
                     CoroutineScope(Dispatchers.IO).launch {
                         startActivity(openAttachment(applicationContext, storage, attachment_id, file.name, file.mimeType))
                     }
@@ -89,13 +91,14 @@ class AnnouncementView : ComponentActivity() {
 
             // Set the items to the view
             runOnUiThread {
-                findViewById<ProgressBar>(R.id.announcement_view_loading).visibility = View.GONE
-                findViewById<TextView>(R.id.announcement_view_author).text = data.author
-                findViewById<TextView>(R.id.announcement_view_time).text = outputFormat.format(inputFormat.parse(announcement_obj.createdAt)!!)
+                invisible(findViewById<ProgressBar>(R.id.announcement_view_loading))
+                setText(this@AnnouncementView, R.id.announcement_view_author, data.author)
+                setText(this@AnnouncementView, R.id.announcement_view_time, outputFormat.format(inputFormat.parse(announcementObj.createdAt)!!))
 
-                Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${data.userId}/view?project=fryday").into(pfp)
+                // Load pfp
+                imageInto(this@AnnouncementView, "https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${data.userId}/view?project=fryday", R.id.announcement_item_author_pfp)
 
-                description.text = data.message
+                setText(this@AnnouncementView, R.id.announcement_itemview_description, data.message)
 
                 view.adapter = AttachmentAdapter(attachments)
                 view.layoutManager = GridLayoutManager(this@AnnouncementView, 2)

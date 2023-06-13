@@ -1,6 +1,5 @@
 package me.kyeboard.classroom.screens
 
-import android.R.attr.data
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
@@ -36,8 +35,8 @@ import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 data class AnnouncementItem(val author: String, val message: String, val attachments: ArrayList<String>, val classid: String, val userId: String)
 
 class NewAnnouncement : AppCompatActivity() {
-    val attachments: ArrayList<Attachment> = arrayListOf()
-    val uris: ArrayList<Uri> = arrayListOf()
+    private val attachments: ArrayList<Attachment> = arrayListOf()
+    private val uris: ArrayList<Uri> = arrayListOf()
 
     private lateinit var client: Client
     private lateinit var databases: Databases
@@ -49,6 +48,7 @@ class NewAnnouncement : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newannouncement)
 
+        // Hide status bar
         WindowCompat.setDecorFitsSystemWindows(
             window,
             false
@@ -60,8 +60,9 @@ class NewAnnouncement : AppCompatActivity() {
         }
 
         // Get items from bundle
-        val class_id = intent.extras!!.getString("class_id")!!
-        val accentColor = intent.extras!!.getString("accent_color")!!
+        val extras = intent.extras!!
+        val classId = extras.getString("class_id")!!
+        val accentColor = extras.getString("accent_color")!!
 
         // Set the accent
         applyAccent(accentColor)
@@ -89,18 +90,18 @@ class NewAnnouncement : AppCompatActivity() {
         val pickFiles = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK) {
                 if(result.data != null) {
-                    val clip_data = result.data!!.clipData
+                    val clipData = result.data!!.clipData
 
-                    if(clip_data != null) {
-                        for (index in 0 until clip_data.itemCount) {
-                            val uri: Uri = clip_data.getItemAt(index).uri
+                    if(clipData != null) {
+                        for (index in 0 until clipData.itemCount) {
+                            val uri: Uri = clipData.getItemAt(index).uri
 
                             val fileName = getFileName(this.contentResolver, uri)
                             attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
                             uris.add(uri)
                         }
 
-                        adapter.notifyItemRangeChanged(attachments.size - 1, clip_data.itemCount)
+                        adapter.notifyItemRangeChanged(attachments.size - 1, clipData.itemCount)
                     } else {
                         val contentsURI = result.data?.data!!
                         val fileName = getFileName(this.contentResolver, contentsURI)
@@ -147,7 +148,7 @@ class NewAnnouncement : AppCompatActivity() {
                         currentUser.name,
                         message,
                         attachmentIds,
-                        class_id,
+                        classId,
                         currentUser.id
                     )
                 )

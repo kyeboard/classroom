@@ -25,14 +25,15 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.AssignmentView
 import me.kyeboard.classroom.utils.get_appwrite_client
-import java.time.LocalDate
+import me.kyeboard.classroom.utils.invisible
+import me.kyeboard.classroom.utils.visible
 import java.util.Date
 
 class ClassDashboardAssignments : Fragment() {
     private lateinit var client: Client
     private lateinit var databases: Databases
-    private lateinit var accent_color: String
-    private lateinit var class_id: String
+    private lateinit var accentColor: String
+    private lateinit var classId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,42 +42,45 @@ class ClassDashboardAssignments : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_class_dashboard_assignments, container, false)
 
+        // View holders
         val recyclerView = view.findViewById<RecyclerView>(R.id.classdashboard_assignments_recyclerview)
+
+        // Appwrite services
         client = get_appwrite_client(view.context)
         databases = Databases(client)
 
-        class_id = requireArguments().getString("class_id")!!
-        accent_color = requireArguments().getString("accent_color")!!
+        // Get items from bundle
+        classId = requireArguments().getString("class_id")!!
+        accentColor = requireArguments().getString("accent_color")!!
 
+        // Get today's date
         val today = Date()
 
         // Filters
-        val missed_filter: (Date, Boolean) -> Boolean = { date, _ -> date.before(today) }
-        val assigned_filter: (Date, Boolean) -> Boolean = { date, _ -> date.after(today) || date == today }
-        val submitted_filter: (Date, Boolean) -> Boolean = { _, has_submitted -> has_submitted }
+        val missedFilter: (Date, Boolean) -> Boolean = { date, _ -> date.before(today) }
+        val assignedFilter: (Date, Boolean) -> Boolean = { date, _ -> date.after(today) || date == today }
+        val submittedFilter: (Date, Boolean) -> Boolean = { _, has_submitted -> has_submitted }
 
+        // Initial
         CoroutineScope(Dispatchers.IO).launch {
-            populateAssignments(recyclerView, view, assigned_filter, class_id)
+            populateAssignments(recyclerView, view, assignedFilter, classId)
         }
 
         // Handle tab layout chances
         view.findViewById<TabLayout>(R.id.assignments_tablayout).addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val filter = when(tab!!.position) {
-                    0 -> missed_filter
-                    1 -> assigned_filter
-                    else -> submitted_filter
+                    0 -> missedFilter
+                    1 -> assignedFilter
+                    else -> submittedFilter
                 }
 
-                Log.d("tt", tab!!.position.toString())
-
                 CoroutineScope(Dispatchers.IO).launch {
-                    populateAssignments(recyclerView, view, filter, class_id)
+                    populateAssignments(recyclerView, view, filter, classId)
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
@@ -85,40 +89,48 @@ class ClassDashboardAssignments : Fragment() {
 
     private suspend fun populateAssignments(recyclerView: RecyclerView, view: View, filter: (Date, Boolean) -> Boolean, class_id: String) {
         val loading = view.findViewById<ProgressBar>(R.id.class_dashboard_assignments_loading)
-        val no_items_found = view.findViewById<ConstraintLayout>(R.id.no_assignments_parent)
+        val noItemsFound = view.findViewById<ConstraintLayout>(R.id.no_assignments_parent)
 
         try {
             activity?.runOnUiThread {
-                loading.visibility = View.VISIBLE
-                recyclerView.visibility = View.GONE
-                no_items_found.visibility = View.GONE
+                visible(loading)
+                invisible(recyclerView)
+                invisible(noItemsFound)
             }
 
-            val data = databases.listDocuments("classes", "646f432ad59caafabf74", listOf(Query.orderAsc("due_date"))).documents
-            val parsed_data = arrayListOf<Assignment>()
+            val data = databases.listDocuments(
+                "classes",
+                "646f432ad59caafabf74",
+                listOf(Query.orderAsc("due_date"))
+            ).documents
+            val parsedData = arrayListOf<Assignment>()
 
+            // Filter data here
             for(item in data) {
                 val parsed = item.data.tryJsonCast<Assignment>()!!
 
                 if(filter(parsed.due_date, true) && parsed.classid == class_id) {
-                    parsed_data.add(parsed)
+                    parsedData.add(parsed)
                 }
             }
 
-            val adapter = AssignmentAdapter(parsed_data, this@ClassDashboardAssignments::openAssignment)
+            // Adapter initialization
+            val adapter = AssignmentAdapter(parsedData, this@ClassDashboardAssignments::openAssignment)
 
             activity?.runOnUiThread {
-                loading.visibility = View.GONE
-                recyclerView.visibility = View.VISIBLE
+                invisible( loading)
+                visible(recyclerView)
+
+                // Set adapter
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(view.context)
 
-                if(parsed_data.isEmpty()) {
-                    no_items_found.visibility = View.VISIBLE
+                if(parsedData.isEmpty()) {
+                    visible(noItemsFound)
                 }
             }
         } catch(e: Exception) {
-            Log.e("eee", e.message.toString())
+            Log.e("load_assignments_error", e.message.toString())
         }
     }
 
@@ -126,8 +138,8 @@ class ClassDashboardAssignments : Fragment() {
         val intent = Intent(this.context, AssignmentView::class.java)
 
         intent.putExtra("assignment_id", id)
-        intent.putExtra("accent_color", accent_color)
-        intent.putExtra("class_id", class_id)
+        intent.putExtra("accent_color", accentColor)
+        intent.putExtra("class_id", classId)
 
         startActivity(intent)
     }

@@ -33,6 +33,11 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.ClassItem
 import me.kyeboard.classroom.adapters.ClassesListAdapter
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.imageInto
+import me.kyeboard.classroom.utils.invisible
+import me.kyeboard.classroom.utils.setText
+import me.kyeboard.classroom.utils.startActivityWrapper
+import me.kyeboard.classroom.utils.visible
 
 class Home : AppCompatActivity() {
     private lateinit var client: Client
@@ -60,7 +65,7 @@ class Home : AppCompatActivity() {
         teams = Teams(client)
 
         // Handle logout
-        findViewById<ImageView>(R.id.logout_user).setOnClickListener {
+        findViewById<ImageButton>(R.id.logout_user).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 // Delete current session
                 account.deleteSession("current")
@@ -71,8 +76,7 @@ class Home : AppCompatActivity() {
                 }
 
                 // Redirect to login activity
-                val login = Intent(this@Home, Login::class.java)
-                startActivity(login)
+                startActivityWrapper(applicationContext, Login::class.java)
                 finish()
             }
         }
@@ -99,7 +103,6 @@ class Home : AppCompatActivity() {
         refreshView.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
                 populateClassesList(noClassesParent, false)
-
                 refreshView.isRefreshing = false
             }
         }
@@ -111,20 +114,18 @@ class Home : AppCompatActivity() {
                 val session = account.get()
 
                 runOnUiThread {
-                    findViewById<TextView>(R.id.current_user_name).text = session.name
-                    findViewById<TextView>(R.id.current_user_email).text = session.email
+                    setText(this@Home, R.id.current_user_name, session.name)
+                    setText(this@Home, R.id.current_user_email, session.email)
 
-                    Picasso
-                        .get()
-                        .load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday")
-                        .into(findViewById<ImageView>(R.id.current_user_profile))
+                    imageInto(
+                        this@Home,
+                        "https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday",
+                        R.id.current_user_profile
+                    )
                 }
             } catch(e: Exception) {
                 // User has some issue with session so its better for a login
-                val intent = Intent(this@Home, Login::class.java)
-
-                // Start
-                startActivity(intent)
+                startActivityWrapper(this@Home, Login::class.java)
 
                 // Finish current since there is no more usage of it
                 finish()
@@ -154,11 +155,11 @@ class Home : AppCompatActivity() {
         val userClasses = arrayListOf<ClassItem>()
 
         runOnUiThread {
-            noClassesParent.visibility = View.GONE
-            listview.visibility = View.GONE
+            invisible(noClassesParent)
+            invisible( listview)
 
             if(showLoading) {
-                loading.visibility = View.VISIBLE
+                invisible(loading)
             }
         }
 
@@ -178,11 +179,11 @@ class Home : AppCompatActivity() {
         runOnUiThread {
             // If there are no teams, show the no found widget
             if(classes.isEmpty()) {
-                noClassesParent.visibility = View.VISIBLE
+                visible(noClassesParent)
             }
 
-            loading.visibility = View.GONE
-            listview.visibility = View.VISIBLE
+            invisible(loading)
+            visible(listview)
 
             // Add the adapter
             listview.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)
