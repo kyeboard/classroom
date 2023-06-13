@@ -25,11 +25,7 @@ class Login : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Hide status bar
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
+        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.home_bg, theme)
 
         client = get_appwrite_client(applicationContext)
         account = Account(client)

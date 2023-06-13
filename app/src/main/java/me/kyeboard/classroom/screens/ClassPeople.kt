@@ -27,6 +27,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.appwrite.Client
+import io.appwrite.Query
+import io.appwrite.services.Account
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -35,6 +37,8 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.ui.theme.ClassroomTheme
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.invisible
+import me.kyeboard.classroom.utils.visible
 
 val email_check_regex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,})+$")
 
@@ -42,6 +46,11 @@ class ClassPeople : ComponentActivity() {
     private lateinit var client: Client
     private lateinit var teams: Teams
     private lateinit var classId: String
+    private var isOwner: Boolean = false
+    private lateinit var adapter: MembersList
+    private lateinit var view: RecyclerView
+    private lateinit var account: Account
+    private lateinit var loading: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Set view
@@ -58,8 +67,8 @@ class ClassPeople : ComponentActivity() {
         window.statusBarColor = Color.parseColor(accentColor)
 
         // View holders
-        val loading = findViewById<ProgressBar>(R.id.members_list_loading)
-        val view = findViewById<RecyclerView>(R.id.members_list)
+        loading = findViewById(R.id.members_list_loading)
+        view = findViewById(R.id.members_list)
         val refreshLayout = findViewById<SwipeRefreshLayout>(R.id.members_list_refresh_layout)
 
         // Set accent
@@ -68,11 +77,12 @@ class ClassPeople : ComponentActivity() {
         // Initiate appwrite services
         client = get_appwrite_client(applicationContext)
         teams = Teams(client)
+        account = Account(client)
 
         // Handle refreshing
         refreshLayout.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
-                populateList(view, loading, false)
+                populateList(false)
                 refreshLayout.isRefreshing = false
             }
         }
@@ -83,7 +93,18 @@ class ClassPeople : ComponentActivity() {
         }
 
         // Initial load
-        CoroutineScope(Dispatchers.IO).launch { populateList(view, loading) }
+        CoroutineScope(Dispatchers.IO).launch {
+            val session = account.get()
+
+            val membership = teams.listMemberships(
+                classId,
+                arrayListOf(Query.equal("userId", session.id))
+            ).memberships[0]
+
+            isOwner = membership.roles.contains("owner")
+
+            populateList()
+        }
 
         // Handle sending invite
         findViewById<ImageView>(R.id.send_invite).setOnClickListener {
@@ -114,7 +135,7 @@ class ClassPeople : ComponentActivity() {
                 teams.createMembership(classId, email_address, roles, "https://fryday.vercel.app")
 
                 // Refresh layout
-                populateList(view, loading)
+                populateList()
 
                 // Send a toast msg
                 runOnUiThread {
@@ -124,7 +145,7 @@ class ClassPeople : ComponentActivity() {
         }
     }
 
-    private suspend fun populateList(view: RecyclerView, loading: ProgressBar, showLoading: Boolean = true) {
+    private suspend fun populateList(showLoading: Boolean = true) {
         runOnUiThread {
             if(showLoading) {
                 loading.visibility = View.VISIBLE
@@ -134,12 +155,36 @@ class ClassPeople : ComponentActivity() {
 
         val members = teams.listMemberships(classId).memberships
 
+        adapter = MembersList(members, isOwner, this@ClassPeople::removeUser)
+
         runOnUiThread {
             loading.visibility = View.GONE
             view.visibility = View.VISIBLE
 
-            view.adapter = MembersList(members)
+            view.adapter = adapter
             view.layoutManager = LinearLayoutManager(this@ClassPeople)
+
+            if(isOwner) {
+                visible(findViewById<RecyclerView>(R.id.invite_new_member_parent))
+            }
+        }
+    }
+
+    private fun removeUser(membershipId: String, index: Int) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                teams.deleteMembership(classId, membershipId)
+
+                populateList(true)
+
+                runOnUiThread {
+                    Toast.makeText(this@ClassPeople, "Successfully removed the user!", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this@ClassPeople, "Error while removing the user", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

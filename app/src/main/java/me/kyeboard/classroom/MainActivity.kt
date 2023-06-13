@@ -30,8 +30,8 @@ class MainActivity : ComponentActivity() {
                 // Try to get the session
                  account.get()
 
-                // Session exists... move on
-                NewClass::class.java
+                 // Session exists... move on
+                 Home::class.java
             } catch(_: Exception) {
                  Login::class.java
             }
