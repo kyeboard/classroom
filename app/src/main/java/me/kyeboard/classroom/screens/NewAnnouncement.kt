@@ -18,6 +18,8 @@ import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.Client
+import io.appwrite.Permission
+import io.appwrite.Role
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
@@ -30,6 +32,7 @@ import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
+import me.kyeboard.classroom.utils.visible
 
 
 data class AnnouncementItem(val author: String, val message: String, val attachments: ArrayList<String>, val classid: String, val userId: String)
@@ -131,7 +134,11 @@ class NewAnnouncement : AppCompatActivity() {
             }
 
             val attachmentIds = arrayListOf<String>()
-            findViewById<ConstraintLayout>(R.id.new_announcement_loading_screen).visibility = View.VISIBLE
+            val loading = findViewById<ConstraintLayout>(R.id.new_announcement_loading_screen);
+
+            loading.alpha = 0f
+            visible(loading)
+            loading.animate().alpha(1f).duration = 200
 
             CoroutineScope(Dispatchers.IO).launch {
                 for(uri in uris) {
@@ -150,7 +157,7 @@ class NewAnnouncement : AppCompatActivity() {
                         attachmentIds,
                         classId,
                         currentUser.id
-                    )
+                    ),
                 )
 
                 setResult(Activity.RESULT_OK)

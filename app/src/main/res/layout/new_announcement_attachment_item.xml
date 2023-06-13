@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:id="@+id/attachment_item_parent"
     android:layout_marginRight="10dp"
-    android:layout_marginBottom="20dp"
+    android:layout_marginBottom="10dp"
     android:layout_height="wrap_content">
 
     <View
