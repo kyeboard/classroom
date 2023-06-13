@@ -65,7 +65,7 @@ class Home : AppCompatActivity() {
         teams = Teams(client)
 
         // Handle logout
-        findViewById<ImageButton>(R.id.logout_user).setOnClickListener {
+        findViewById<ImageView>(R.id.logout_user).setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 // Delete current session
                 account.deleteSession("current")

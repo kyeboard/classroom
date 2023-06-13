@@ -86,7 +86,9 @@ class NewClass : ComponentActivity() {
                 return@setOnClickListener
             }
 
+            loader.alpha = 0f
             visible(loader)
+            loader.animate().alpha(1f).duration = 200
 
             // Create a team
             CoroutineScope(Dispatchers.IO).launch {

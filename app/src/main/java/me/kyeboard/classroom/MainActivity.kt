@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.screens.Home
 import me.kyeboard.classroom.screens.Login
+import me.kyeboard.classroom.screens.NewClass
 import me.kyeboard.classroom.utils.get_appwrite_client
 import me.kyeboard.classroom.utils.startActivityWrapper
 
@@ -19,11 +20,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         splashScreen.setKeepOnScreenCondition { true }
-
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
 
         // Check if the session exists
         CoroutineScope(Dispatchers.IO).launch {
@@ -35,7 +31,7 @@ class MainActivity : ComponentActivity() {
                  account.get()
 
                 // Session exists... move on
-                Home::class.java
+                NewClass::class.java
             } catch(_: Exception) {
                  Login::class.java
             }

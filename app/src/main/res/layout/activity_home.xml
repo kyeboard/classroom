@@ -72,7 +72,7 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageButton
+        <ImageView
             android:id="@+id/logout_user"
             android:layout_width="20dp"
             android:layout_height="20dp"
