@@ -44,4 +44,6 @@
     <string name="terms_and_conditions">By creating a new class,\nyou agree to our terms and conditions</string>
     <string name="new_class_btn_create_text">Create class</string>
     <string name="title_activity_class_people">ClassPeople</string>
+    <string name="go_back">Go back</string>
+    <string name="pfp_desc">Profile photo</string>
 </resources>
