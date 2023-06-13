@@ -27,12 +27,13 @@ import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
+import me.kyeboard.classroom.utils.visible
 
 data class Assignment(val title: String, val description: String, val attachments: ArrayList<String>, val author: String, val grade: Number, val due_date: String, val classid: String, val authorId: String)
 
 class NewAssignment : ComponentActivity() {
     private val attachments: ArrayList<Attachment> = arrayListOf()
-    private val attachments_uri: ArrayList<Uri> = arrayListOf()
+    private val attachmentsUri: ArrayList<Uri> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup view
@@ -45,6 +46,7 @@ class NewAssignment : ComponentActivity() {
 
         // View items
         val recyclerView = findViewById<RecyclerView>(R.id.new_assignment_attachments)
+        val loading = findViewById<ConstraintLayout>(R.id.newassignment_loading)
 
         // Remove status bar
         WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -82,18 +84,35 @@ class NewAssignment : ComponentActivity() {
         val intent = Intent().apply {
             action = Intent.ACTION_GET_CONTENT
             type = "*/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
 
-        // handler
+        // Handle picking ip files
         val pickFiles = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK) {
-                val contentUri = result.data?.data!!
-                val fileName = getFileName(contentResolver, contentUri)
+                if(result.data != null) {
+                    val clipData = result.data!!.clipData
 
-                attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
-                attachments_uri.add(contentUri)
+                    if(clipData != null) {
+                        for (index in 0 until clipData.itemCount) {
+                            val uri: Uri = clipData.getItemAt(index).uri
 
-                adapter.notifyItemChanged(attachments.size - 1)
+                            val fileName = getFileName(this.contentResolver, uri)
+                            attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
+                            attachmentsUri.add(uri)
+                        }
+
+                        adapter.notifyItemRangeChanged(attachments.size - 1, clipData.itemCount)
+                    } else {
+                        val contentsURI = result.data?.data!!
+                        val fileName = getFileName(this.contentResolver, contentsURI)
+
+                        attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
+                        attachmentsUri.add(contentsURI)
+
+                        adapter.notifyItemChanged(attachments.size - 1)
+                    }
+                }
             }
         }
 
@@ -113,12 +132,16 @@ class NewAssignment : ComponentActivity() {
                 return@setOnClickListener
             }
 
+            loading.alpha = 0f
+            visible(loading)
+            loading.animate().alpha(1f).duration = 200
+
             val attachment_ids = arrayListOf<String>()
 
             CoroutineScope(Dispatchers.IO).launch {
                 val user = account.get()
 
-                for(uri in attachments_uri) {
+                for(uri in attachmentsUri) {
                     attachment_ids.add(uploadToAppwriteStorage(contentResolver, uri, storage))
                 }
 

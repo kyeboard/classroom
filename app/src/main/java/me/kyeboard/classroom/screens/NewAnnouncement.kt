@@ -1,12 +1,14 @@
 package me.kyeboard.classroom.screens
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -18,8 +20,6 @@ import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.Client
-import io.appwrite.Permission
-import io.appwrite.Role
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
@@ -33,6 +33,7 @@ import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import me.kyeboard.classroom.utils.visible
+import java.util.Date
 
 
 data class AnnouncementItem(val author: String, val message: String, val attachments: ArrayList<String>, val classid: String, val userId: String)
@@ -87,6 +88,25 @@ class NewAnnouncement : AppCompatActivity() {
             action = Intent.ACTION_GET_CONTENT
             type = "*/*"
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+        }
+
+        // Date items
+        val today = Date()
+        var mYear: Int = today.year;
+        var mMonth: Int = today.month;
+        var mDay: Int = today.day;
+
+        val mDateSetListener = OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+            mYear = year
+            mMonth = monthOfYear
+            mDay = dayOfMonth
+
+            Log.d("tt", "$mYear year $mMonth month and $mDay day")
+        }
+
+        // Date input handler
+        findViewById<EditText>(R.id.newassignment_duedate).setOnClickListener {
+            DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay).show()
         }
 
         // Handle picking ip files

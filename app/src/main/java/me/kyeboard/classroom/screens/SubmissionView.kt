@@ -3,11 +3,13 @@ package me.kyeboard.classroom.screens
 import Comment
 import CommentAdapter
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.activity.ComponentActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -46,6 +48,7 @@ class SubmissionView : ComponentActivity() {
         val submissionId = extras.getString("user_id")!!
 
         window.statusBarColor = Color.parseColor(accentColor)
+        (findViewById<ConstraintLayout>(R.id.submission_view_topbar).background.mutate() as GradientDrawable).setTint(Color.parseColor(accentColor))
 
         val client = get_appwrite_client(this)
         val databases = Databases(client)

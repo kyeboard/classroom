@@ -6,10 +6,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.NewAssignmentTask">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/assignment_task_loading"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_height="match_parent">
+        <ProgressBar
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:indeterminateTint="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
     <TextView
         android:id="@+id/assignment_view_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="10dp"
         android:layout_marginHorizontal="20dp"
         android:lineSpacingMultiplier="1.6"
         android:textColor="#4c566a"
@@ -23,6 +43,7 @@
         android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/assignment_view_description" />
@@ -30,8 +51,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/assignment_task_submission"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="#d8dee9"
+        android:layout_height="200dp"
+        android:background="#E5E9F0"
+        android:visibility="gone"
         android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -73,7 +95,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/rounded"
-            android:backgroundTint="#e5e9f0"
+            android:backgroundTint="#d8dee9"
             android:includeFontPadding="false"
             android:outlineProvider="none"
             android:padding="16dp"

@@ -39,7 +39,9 @@ import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.screens.AssignmentItem
 import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
+import me.kyeboard.classroom.utils.visible
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -50,8 +52,12 @@ import java.security.MessageDigest
 
 data class SubmissionItem(val grade: Int, val submissions: ArrayList<String>, val studentId: String, val studentName: String)
 
+fun hashmd5(target: String): String {
+    return BigInteger(1, MessageDigest.getInstance("MD5").digest(target.toByteArray())).toString(16).padStart(32, '0')
+}
+
 class NewAssignmentTask : Fragment() {
-    private lateinit var attachment_uri: Uri
+    private var attachment_uris: ArrayList<Uri> = arrayListOf()
     private val attachments = arrayListOf<Attachment>()
     private var already_submitted = false
 
@@ -69,12 +75,13 @@ class NewAssignmentTask : Fragment() {
         val account = Account(client)
 
         val submission_area = view.findViewById<ConstraintLayout>(R.id.assignment_task_submission)
+        val loading = view.findViewById<ConstraintLayout>(R.id.assignment_task_loading)
 
         view.findViewById<ImageView>(R.id.assignment_task_expand_submission).setOnClickListener {
             val initialHeight = submission_area.height
 
-            if(initialHeight == 900) {
-                val targetHeight = 310 // Increase the height by 200 pixels
+            if(initialHeight == 1200) {
+                val targetHeight = 540 // Increase the height by 200 pixels
                 val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
                 valueAnimator.duration = 100 // Animation duration in milliseconds
 
@@ -89,7 +96,7 @@ class NewAssignmentTask : Fragment() {
 
                 valueAnimator.start()
             } else {
-                val targetHeight = 900 // Increase the height by 200 pixels
+                val targetHeight = 1200 // Increase the height by 200 pixels
                 val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
                 valueAnimator.duration = 100 // Animation duration in milliseconds
 
@@ -110,9 +117,8 @@ class NewAssignmentTask : Fragment() {
 
         CoroutineScope(Dispatchers.IO).launch {
             val session = account.get()
-            Log.d("tt", "$assignment_id is being hashed wth ${session.id}")
             val id = "$assignment_id-${session.id}"
-            val hashed_id = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
+            val hashed_id = hashmd5(id)
 
             try {
                 val submission = databases.getDocument("classes", "64782b0c5957666e7bee", hashed_id).data.tryJsonCast<SubmissionItem>()!!
@@ -127,8 +133,7 @@ class NewAssignmentTask : Fragment() {
                 }
 
                 requireActivity().runOnUiThread {
-                    Toast.makeText(this@NewAssignmentTask.context, "You have already submitted bruh", Toast.LENGTH_SHORT).show()
-
+                    invisible(loading)
                     view.findViewById<Button>(R.id.assignment_view_add_files).visibility = View.GONE
                     view.findViewById<Button>(R.id.assignment_view_submit_assignment).apply {
                         text = "Already submitted"
@@ -141,6 +146,10 @@ class NewAssignmentTask : Fragment() {
                     }
                 }
             } catch(e: Exception) {
+                requireActivity().runOnUiThread {
+                    invisible(loading)
+                }
+
                 Log.e("ee", e.message.toString())
             }
         }
@@ -148,32 +157,44 @@ class NewAssignmentTask : Fragment() {
         val description = view.findViewById<TextView>(R.id.assignment_view_description)
         val listview = view.findViewById<RecyclerView>(R.id.assignment_view_attachment_list)
         val sumbissionlist = view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list)
-        val sumbissionsAdapter = AttachmentAdapter(attachments)
+        val submissionsAdapter = AttachmentAdapter(attachments)
 
-        sumbissionlist.adapter = sumbissionsAdapter
+        sumbissionlist.adapter = submissionsAdapter
         sumbissionlist.layoutManager = GridLayoutManager(view.context, 2)
 
         val intent = Intent().apply {
             action = Intent.ACTION_GET_CONTENT
             type = "*/*"
+            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
 
         val pickFiles = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK) {
-                val content_uri = result.data?.data!!
-                val file_name = getFileName(view.context.contentResolver, content_uri)
+                if(result.data != null) {
+                    val clipData = result.data!!.clipData
 
-                if(attachments.size == 0) {
-                    attachments.add(Attachment(file_name.substringAfterLast('.', ""), file_name))
-                } else {
-                    attachments[0] = Attachment(file_name.substringAfterLast('.', ""), file_name)
+                    if(clipData != null) {
+                        for (index in 0 until clipData.itemCount) {
+                            val uri: Uri = clipData.getItemAt(index).uri
+
+                            val fileName = getFileName(requireActivity().contentResolver, uri)
+                            attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
+                            attachment_uris.add(uri)
+                        }
+
+                        submissionsAdapter.notifyItemRangeChanged(attachments.size - 1, clipData.itemCount)
+                    } else {
+                        val contentsURI = result.data?.data!!
+                        val fileName = getFileName(requireActivity().contentResolver, contentsURI)
+
+                        attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
+                        attachment_uris.add(contentsURI)
+
+                        submissionsAdapter.notifyItemChanged(attachments.size - 1)
+                    }
                 }
-                attachment_uri = content_uri
-
-                sumbissionsAdapter.notifyItemChanged(attachments.size - 1)
             }
         }
-
 
         view.findViewById<Button>(R.id.assignment_view_add_files).setOnClickListener {
             pickFiles.launch(intent)
@@ -184,9 +205,14 @@ class NewAssignmentTask : Fragment() {
                 val current_user = account.get()
                 val id = "$assignment_id-${current_user.id}"
                 val hashed_id = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
-                val attachments = uploadToAppwriteStorage(view.context.contentResolver, attachment_uri, storage, "647713fa9be2a68d4458")
 
-                databases.createDocument("classes", "64782b0c5957666e7bee", hashed_id, SubmissionItem(0, arrayListOf(attachments), current_user.id, current_user.name))
+                val attachments_ids = arrayListOf<String>()
+
+                for(uri in attachment_uris) {
+                    attachments_ids.add(uploadToAppwriteStorage(view.context.contentResolver, uri, storage, "647713fa9be2a68d4458"))
+                }
+
+                databases.createDocument("classes", "64782b0c5957666e7bee", hashed_id, SubmissionItem(0, attachments_ids, current_user.id, current_user.name))
 
                 activity?.runOnUiThread {
                     Toast.makeText(this@NewAssignmentTask.context, "Successfully sumbitted the assignment", Toast.LENGTH_LONG).show()
@@ -207,6 +233,9 @@ class NewAssignmentTask : Fragment() {
 
                 activity?.runOnUiThread {
                     description.text = data.description
+                    visible(description)
+                    visible(listview)
+                    visible(submission_area)
 
                     listview.adapter = AttachmentAdapter(attachments)
                     listview.layoutManager = GridLayoutManager(view.context, 2)

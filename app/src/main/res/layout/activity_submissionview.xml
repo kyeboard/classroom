@@ -7,10 +7,11 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/submission_view_topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fee587"
+        android:background="@drawable/bg_null"
+        android:backgroundTint="@color/yellow"
         android:paddingHorizontal="20dp"
         android:paddingVertical="30dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/destroy_self"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#fee587"

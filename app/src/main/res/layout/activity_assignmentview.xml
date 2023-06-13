@@ -3,16 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="#e5e9f0"
+    android:background="#ECEFF4"
     android:layout_height="match_parent">
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/assignment_view_topbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#fee587"
         android:paddingHorizontal="20dp"
-        android:paddingVertical="30dp"
+        android:paddingBottom="30dp"
+        android:paddingTop="70dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -52,9 +52,8 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/assignment_view_tablayout"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         app:tabIndicatorColor="@color/black"
-        app:layout_goneMarginTop="10dp"
         android:layout_marginHorizontal="10dp"
         app:tabRippleColor="#00000000"
         android:layout_width="match_parent"
