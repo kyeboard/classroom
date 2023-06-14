@@ -48,83 +48,85 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/assignment_view_description" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:id="@+id/assignment_task_submission"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="#E5E9F0"
         android:visibility="gone"
+        android:background="#E5E9F0"
         android:padding="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/assignment_task_expand_submission"
-            android:layout_width="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="150dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_height="wrap_content"
-            android:src="@drawable/chevron_up"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="match_parent">
+            <ImageView
+                android:id="@+id/assignment_task_expand_submission"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/chevron_up"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/nekst_bold"
-            android:text="Your work"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/assignment_task_expand_submission" />
+            <TextView
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/nekst_bold"
+                android:text="Your work"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/assignment_task_expand_submission" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/assignment_view_submissions_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView11" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/assignment_view_submissions_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:visibility="gone"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/assignment_view_add_files"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/rounded"
-            android:backgroundTint="#d8dee9"
-            android:includeFontPadding="false"
-            android:outlineProvider="none"
-            android:padding="16dp"
-            android:text="Add attachments"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/assignment_view_submit_assignment"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/assignment_view_submissions_list" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/assignment_view_add_files"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/rounded"
+                android:backgroundTint="#d8dee9"
+                android:includeFontPadding="false"
+                android:outlineProvider="none"
+                android:padding="16dp"
+                android:text="Add attachments"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/assignment_view_submit_assignment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/assignment_view_submissions_list" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/assignment_view_submit_assignment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/border_yellow"
-            android:includeFontPadding="false"
-            android:outlineProvider="none"
-            android:padding="16dp"
-            android:text="Submit"
-            android:textAlignment="center"
-            android:textAllCaps="false"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/assignment_view_add_files" /> <!-- Currently, start is constrained to the "Your work" textview, when expanded, it constraints to add attachment button -->
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/assignment_view_submit_assignment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/border_yellow"
+                android:includeFontPadding="false"
+                android:outlineProvider="none"
+                android:padding="16dp"
+                android:text="Submit"
+                android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/assignment_view_add_files" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

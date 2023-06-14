@@ -26,8 +26,7 @@ class AssignmentView : AppCompatActivity() {
         val classId = intent.extras!!.getString("class_id")!!
         val accentColor = intent.extras!!.getString("accent_color")!!
 
-        // Hide status bar
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.statusBarColor = Color.parseColor(accentColor)
 
         // Apply accent color
         findViewById<ConstraintLayout>(R.id.assignment_view_topbar).background.mutate().setTint(Color.parseColor(accentColor))

@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +20,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.appwrite.Role
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
@@ -38,6 +40,7 @@ import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import me.kyeboard.classroom.utils.visible
 import java.math.BigInteger
 import java.security.MessageDigest
+import java.security.Permission
 
 data class SubmissionItem(val grade: Int, val submissions: ArrayList<String>, val studentId: String, val studentName: String)
 
@@ -49,6 +52,8 @@ class NewAssignmentTask : Fragment() {
     private var attachmentUris: ArrayList<Uri> = arrayListOf()
     private val attachments = arrayListOf<Attachment>()
     private var alreadySubmitted = false
+    private var unexpanded_height: Int = 0
+    private lateinit var classId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,24 +61,30 @@ class NewAssignmentTask : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_new_assignment_task, container, false)
 
-        val assignment_id = requireArguments().getString("assignment_id")!!
+        // Arguments
+        val args = requireArguments()
+        val assignment_id = args.getString("assignment_id")!!
+        classId = args.getString("class_id")!!
 
         val client = getAppwriteClient(view.context)
         val databases = Databases(client)
         val storage = Storage(client)
         val account = Account(client)
 
-        val submission_area = view.findViewById<ConstraintLayout>(R.id.assignment_task_submission)
+        val submission_area = view.findViewById<ScrollView>(R.id.assignment_task_submission)
         val loading = view.findViewById<ConstraintLayout>(R.id.assignment_task_loading)
         val submissionList = view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list)
 
+        unexpanded_height = submission_area.height
+
+        // Handle expansion
         view.findViewById<ImageView>(R.id.assignment_task_expand_submission).setOnClickListener {
             val initialHeight = submission_area.height
 
-            if(initialHeight == 1200) {
-                val targetHeight = 540 // Increase the height by 200 pixels
+            if(initialHeight == 600) {
+                val targetHeight = unexpanded_height
                 val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
-                valueAnimator.duration = 100 // Animation duration in milliseconds
+                valueAnimator.duration = 100
 
                 valueAnimator.addUpdateListener { animator ->
                     val layoutParams = submission_area.layoutParams
@@ -86,7 +97,7 @@ class NewAssignmentTask : Fragment() {
 
                 valueAnimator.start()
             } else {
-                val targetHeight = 1200 // Increase the height by 200 pixels
+                val targetHeight = 600 // Increase the height by 200 pixels
                 val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
                 valueAnimator.duration = 100 // Animation duration in milliseconds
 
@@ -105,20 +116,21 @@ class NewAssignmentTask : Fragment() {
             }
         }
 
+        // Check if the user has already submitted the assignment
         CoroutineScope(Dispatchers.IO).launch {
             val session = account.get()
             val id = "$assignment_id-${session.id}"
             val hashed_id = hashmd5(id)
 
             try {
-                val submission = databases.getDocument("classes", "64782b0c5957666e7bee", hashed_id).data.tryJsonCast<SubmissionItem>()!!
+                val submission = databases.getDocument("classes", "assignments", hashed_id).data.tryJsonCast<SubmissionItem>()!!
 
                 alreadySubmitted = true
 
                 val attachments = arrayListOf<Attachment>()
 
                 for(attachment_id in submission.submissions) {
-                    val file = storage.getFile("647713fa9be2a68d4458", attachment_id).name
+                    val file = storage.getFile("attachments", attachment_id).name
                     attachments.add(Attachment(file.substringAfterLast('.', ""), file))
                 }
 
@@ -193,6 +205,8 @@ class NewAssignmentTask : Fragment() {
 
         // Handle submitting assignment
         view.findViewById<Button>(R.id.assignment_view_submit_assignment).setOnClickListener {
+            Toast.makeText(this.context, "Submitting your assignment...", Toast.LENGTH_SHORT).show()
+
             CoroutineScope(Dispatchers.IO).launch {
                 val currentUser = account.get()
                 val id = "$assignment_id-${currentUser.id}"
@@ -201,10 +215,19 @@ class NewAssignmentTask : Fragment() {
                 val attachmentsIds = arrayListOf<String>()
 
                 for(uri in attachmentUris) {
-                    attachmentsIds.add(uploadToAppwriteStorage(view.context.contentResolver, uri, storage, "647713fa9be2a68d4458"))
+                    attachmentsIds.add(uploadToAppwriteStorage(view.context.contentResolver, uri, storage, "submissions"))
                 }
 
-                databases.createDocument("classes", "64782b0c5957666e7bee", hashedId, SubmissionItem(0, attachmentsIds, currentUser.id, currentUser.name))
+                databases.createDocument(
+                    "classes",
+                    "submissions",
+                    hashedId,
+                    SubmissionItem(0, attachmentsIds, currentUser.id, currentUser.name),
+                    arrayListOf(
+                        io.appwrite.Permission.read(Role.user(currentUser.id)),
+                        io.appwrite.Permission.read(Role.team(classId, "owner")),
+                    )
+                )
 
                 activity?.runOnUiThread {
                     Toast.makeText(this@NewAssignmentTask.context, "Successfully submitted the assignment!", Toast.LENGTH_LONG).show()
@@ -215,12 +238,12 @@ class NewAssignmentTask : Fragment() {
         // Load assignment
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val assignmentItem = databases.getDocument("classes", "646f432ad59caafabf74", assignment_id)
+                val assignmentItem = databases.getDocument("classes", "assignments", assignment_id)
                 val data = assignmentItem.data.tryJsonCast<AssignmentItem>()!!
                 val attachments = arrayListOf<Attachment>()
 
                 for(attachment_id in data.attachments) {
-                    val file = storage.getFile("6465d3dd2e3905c17280", attachment_id)
+                    val file = storage.getFile("attachments", attachment_id)
 
                     val attachment = Attachment(file.name.substringAfterLast('.', ""), file.name)  {
                         // Handle on click

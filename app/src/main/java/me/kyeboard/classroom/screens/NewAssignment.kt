@@ -1,6 +1,8 @@
 package me.kyeboard.classroom.screens
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -24,16 +26,34 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
-import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.getAppwriteClient
+import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import me.kyeboard.classroom.utils.visible
+import java.util.Calendar
+import java.util.Date
+
 
 data class Assignment(val title: String, val description: String, val attachments: ArrayList<String>, val author: String, val grade: Number, val due_date: String, val classid: String, val authorId: String)
 
 class NewAssignment : ComponentActivity() {
     private val attachments: ArrayList<Attachment> = arrayListOf()
     private val attachmentsUri: ArrayList<Uri> = arrayListOf()
+
+    private fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val year = calendar.get(Calendar.YEAR)
+        val month = calendar.get(Calendar.MONTH)
+        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
+
+        val datePickerDialog = DatePickerDialog(this, { view, selectedYear, selectedMonth, selectedDayOfMonth ->
+            // Do something with the selected date
+            val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDayOfMonth"
+            // You can display the selected date in a TextView or perform any other action
+        }, year, month, dayOfMonth)
+
+        datePickerDialog.show()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup view
@@ -50,6 +70,23 @@ class NewAssignment : ComponentActivity() {
 
         // Remove status bar
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        val dueDateInput = findViewById<EditText>(R.id.newassignment_duedate)
+
+        val today = Date()
+        var due_date_year = today.year
+        var due_date_month = today.month
+        var due_date_day = today.day
+
+        val myDateListener = OnDateSetListener { arg0, arg1, arg2, arg3 ->
+            due_date_year = arg1
+            due_date_month = arg2
+            due_date_day = arg3
+        }
+
+        dueDateInput.setOnClickListener {
+            showDatePickerDialog()
+        }
 
         // Set accent
         (findViewById<ConstraintLayout>(R.id.newassignment_topbar).background.mutate() as GradientDrawable).apply {
@@ -125,7 +162,7 @@ class NewAssignment : ComponentActivity() {
             val title = findViewById<EditText>(R.id.newassignment_title).text.toString()
             val desc = findViewById<EditText>(R.id.newassignment_description).text.toString()
             val grade = findViewById<EditText>(R.id.newassignment_grade).text.toString().toInt()
-            val duedate = findViewById<EditText>(R.id.newassignment_duedate).text.toString()
+            val duedate = dueDateInput.text.toString()
 
             if(title.isBlank() || desc.isBlank() || duedate.isBlank()) {
                 Toast.makeText(this, "Make sure to fill all the details", Toast.LENGTH_SHORT).show()
@@ -145,7 +182,7 @@ class NewAssignment : ComponentActivity() {
                     attachment_ids.add(uploadToAppwriteStorage(contentResolver, uri, storage))
                 }
 
-                database.createDocument("classes", "646f432ad59caafabf74", "unique()",
+                database.createDocument("classes", "assignments", "unique()",
                     Assignment(title, desc, attachment_ids, user.name, grade, duedate, classId, user.id)
                 )
 

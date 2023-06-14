@@ -194,7 +194,7 @@
                 android:textSize="13sp"
                 android:textColor="@color/black"
                 android:textColorHint="#4c566a"
-                android:hint="Due date"
+                android:hint="@string/due_date"
                 android:inputType="date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/newassignment_grade"

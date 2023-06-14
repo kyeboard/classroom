@@ -2,6 +2,7 @@ package me.kyeboard.classroom.fragments
 
 import Assignment
 import AssignmentAdapter
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -27,6 +28,7 @@ import me.kyeboard.classroom.screens.AssignmentView
 import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.visible
+import java.util.Calendar
 import java.util.Date
 
 class ClassDashboardAssignments : Fragment() {
@@ -100,7 +102,7 @@ class ClassDashboardAssignments : Fragment() {
 
             val data = databases.listDocuments(
                 "classes",
-                "646f432ad59caafabf74",
+                "assignments",
                 listOf(Query.orderAsc("due_date"))
             ).documents
             val parsedData = arrayListOf<Assignment>()
