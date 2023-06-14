@@ -20,6 +20,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
+import me.kyeboard.classroom.utils.animateTintWithBorder
+import me.kyeboard.classroom.utils.animationColor
 import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.visible
 
@@ -122,16 +124,12 @@ class NewClass : ComponentActivity() {
         val color = Color.parseColor(raw_color)
         val black = Color.parseColor("#000000")
 
-        findViewById<ConstraintLayout>(R.id.topbar_parent).background.mutate().setTint(color)
+        val topbar = findViewById<ConstraintLayout>(R.id.topbar_parent)
+
+        animationColor(topbar, color)
 
         // Update Create button bg tint
-        val buttonBackground = findViewById<Button>(R.id.new_class_create).background.mutate() as GradientDrawable
-
-        buttonBackground.apply {
-            setColor(color)
-            setStroke(5, black)
-            cornerRadius = 10F
-        }
+        animateTintWithBorder(findViewById<Button>(R.id.new_class_create), color, 200)
 
         // Reset selections
         colorsIndex.forEach { (k, v) ->
