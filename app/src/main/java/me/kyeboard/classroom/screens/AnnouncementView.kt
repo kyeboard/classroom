@@ -90,6 +90,9 @@ class AnnouncementView : ComponentActivity() {
                     // Add it to the list
                     attachments.add(Attachment(file.name.substringAfterLast('.', ""), file.name) {
                         // Handle on click
+                        runOnUiThread {
+                            Toast.makeText(this@AnnouncementView, "Please wait while the file is being downloaded", Toast.LENGTH_SHORT).show()
+                        }
                         CoroutineScope(Dispatchers.IO).launch {
                             startActivity(openAttachment(applicationContext, storage, attachment_id, file.name, file.mimeType))
                         }

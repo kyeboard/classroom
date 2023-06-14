@@ -7,7 +7,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/home_topbar"
-        android:paddingTop="55dp"
+        android:paddingTop="30dp"
         android:paddingBottom="20dp"
         android:paddingHorizontal="20dp"
         android:layout_width="match_parent"
@@ -74,8 +74,9 @@
 
         <ImageView
             android:id="@+id/logout_user"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

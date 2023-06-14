@@ -104,11 +104,6 @@ class NewAnnouncement : AppCompatActivity() {
             Log.d("tt", "$mYear year $mMonth month and $mDay day")
         }
 
-        // Date input handler
-        findViewById<EditText>(R.id.newassignment_duedate).setOnClickListener {
-            DatePickerDialog(this, mDateSetListener, mYear, mMonth, mDay).show()
-        }
-
         // Handle picking ip files
         val pickFiles = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK) {

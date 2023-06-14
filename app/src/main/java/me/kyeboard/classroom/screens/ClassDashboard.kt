@@ -44,12 +44,6 @@ class ClassDashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_classdashboard)
 
-        // Remove status bar (make it transparent)
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
-
         // Get class id sent along
         val extras = intent.extras!!
         val classId = extras.getString("class_id")!!
@@ -99,6 +93,7 @@ class ClassDashboard : AppCompatActivity() {
                 topbar.background.mutate().apply {
                     setTint(Color.parseColor(classInfo.color))
                 }
+                window.statusBarColor = Color.parseColor(accentColor)
 
                 // Handle plus button clicks
                 create_new_btn.setOnClickListener {

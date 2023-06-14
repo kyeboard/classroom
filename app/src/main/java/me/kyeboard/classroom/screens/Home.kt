@@ -52,17 +52,13 @@ class Home : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        // Remove status bar (make it transparent)
-        WindowCompat.setDecorFitsSystemWindows(
-            window,
-            false
-        )
-
         // Setup appwrite services
         client = get_appwrite_client(applicationContext)
         account = Account(client)
         databases = Databases(client)
         teams = Teams(client)
+
+        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.yellow, theme)
 
         // Handle logout
         findViewById<ImageView>(R.id.logout_user).setOnClickListener {
@@ -73,10 +69,12 @@ class Home : AppCompatActivity() {
                 // Send toast
                 runOnUiThread {
                     Toast.makeText(applicationContext, "Successfully logged out!", Toast.LENGTH_SHORT).show()
+
+                    val intent = Intent(applicationContext, Login::class.java)
+                    startActivity(intent)
                 }
 
                 // Redirect to login activity
-                startActivityWrapper(applicationContext, Login::class.java)
                 finish()
             }
         }

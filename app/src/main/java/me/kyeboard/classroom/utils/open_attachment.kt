@@ -27,7 +27,7 @@ public suspend fun openAttachment(context: Context, storage: Storage, file_id: S
     }
 
     val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-    val intent = Intent(Intent.ACTION_VIEW)
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
     intent.setDataAndType(uri, mimeType)
     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     return intent
