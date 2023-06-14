@@ -7,7 +7,16 @@
     android:paddingHorizontal="20dp"
     tools:context=".fragments.AssignmentViewSubmissions">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:indeterminateTint="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <TextView
         android:id="@+id/textView14"
         android:textColor="@color/black"

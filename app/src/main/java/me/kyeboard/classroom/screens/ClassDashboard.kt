@@ -45,6 +45,10 @@ class ClassDashboard : AppCompatActivity() {
         val classId = extras.getString("class_id")!!
         val accentColor = extras.getString("accent_color")!!
 
+        findViewById<ImageView>(R.id.destory_self).setOnClickListener {
+            finish()
+        }
+
         // Handle members list opener
         findViewById<ImageView>(R.id.class_members_open).setOnClickListener {
             // Create an intent

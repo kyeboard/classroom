@@ -20,11 +20,13 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import io.appwrite.Query
 import io.appwrite.Role
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
+import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,6 +55,7 @@ class NewAssignmentTask : Fragment() {
     private val attachments = arrayListOf<Attachment>()
     private var alreadySubmitted = false
     private var unexpanded_height: Int = 0
+    private var isOwner = false
     private lateinit var classId: String
 
     override fun onCreateView(
@@ -69,6 +72,7 @@ class NewAssignmentTask : Fragment() {
         val client = getAppwriteClient(view.context)
         val databases = Databases(client)
         val storage = Storage(client)
+        val teams = Teams(client)
         val account = Account(client)
 
         val submission_area = view.findViewById<ScrollView>(R.id.assignment_task_submission)
@@ -119,18 +123,25 @@ class NewAssignmentTask : Fragment() {
         // Check if the user has already submitted the assignment
         CoroutineScope(Dispatchers.IO).launch {
             val session = account.get()
+            isOwner = teams.listMemberships(classId, arrayListOf(Query.equal("userId", session.id))).memberships[0].roles.contains("owner")
             val id = "$assignment_id-${session.id}"
             val hashed_id = hashmd5(id)
 
+            if(isOwner) {
+                activity?.runOnUiThread {
+                    invisible(submission_area)
+                }
+            }
+
             try {
-                val submission = databases.getDocument("classes", "assignments", hashed_id).data.tryJsonCast<SubmissionItem>()!!
+                val submission = databases.getDocument("classes", "submissions", hashed_id).data.tryJsonCast<SubmissionItem>()!!
 
                 alreadySubmitted = true
 
                 val attachments = arrayListOf<Attachment>()
 
                 for(attachment_id in submission.submissions) {
-                    val file = storage.getFile("attachments", attachment_id).name
+                    val file = storage.getFile("submissions", attachment_id).name
                     attachments.add(Attachment(file.substringAfterLast('.', ""), file))
                 }
 
@@ -262,7 +273,9 @@ class NewAssignmentTask : Fragment() {
                     description.text = data.description
                     visible(description)
                     visible(listview)
-                    visible(submission_area)
+                    if(!isOwner) {
+                        visible(submission_area)
+                    }
 
                     listview.adapter = AttachmentAdapter(attachments)
                     listview.layoutManager = GridLayoutManager(view.context, 2)

@@ -7,6 +7,8 @@ import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -39,6 +41,7 @@ data class Assignment(val title: String, val description: String, val attachment
 class NewAssignment : ComponentActivity() {
     private val attachments: ArrayList<Attachment> = arrayListOf()
     private val attachmentsUri: ArrayList<Uri> = arrayListOf()
+    private lateinit var dueDateInput: EditText
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -46,9 +49,10 @@ class NewAssignment : ComponentActivity() {
         val month = calendar.get(Calendar.MONTH)
         val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(this, { view, selectedYear, selectedMonth, selectedDayOfMonth ->
+        val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDayOfMonth ->
             // Do something with the selected date
             val selectedDate = "$selectedYear-${selectedMonth + 1}-$selectedDayOfMonth"
+            dueDateInput.setText(selectedDate)
             // You can display the selected date in a TextView or perform any other action
         }, year, month, dayOfMonth)
 
@@ -59,6 +63,8 @@ class NewAssignment : ComponentActivity() {
         // Setup view
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newassignment)
+
+        dueDateInput = findViewById<EditText>(R.id.newassignment_duedate)
 
         // Get items from bundle
         val classId = intent.extras!!.getString("class_id")!!
@@ -71,8 +77,6 @@ class NewAssignment : ComponentActivity() {
         // Remove status bar
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        val dueDateInput = findViewById<EditText>(R.id.newassignment_duedate)
-
         val today = Date()
         var due_date_year = today.year
         var due_date_month = today.month
@@ -82,9 +86,11 @@ class NewAssignment : ComponentActivity() {
             due_date_year = arg1
             due_date_month = arg2
             due_date_day = arg3
+
+
         }
 
-        dueDateInput.setOnClickListener {
+        findViewById<View>(R.id.assignment_duedate_input_handler).setOnClickListener {
             showDatePickerDialog()
         }
 

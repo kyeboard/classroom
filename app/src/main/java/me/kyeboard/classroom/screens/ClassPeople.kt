@@ -111,13 +111,13 @@ class ClassPeople : ComponentActivity() {
             // Send an invite
             CoroutineScope(Dispatchers.IO).launch {
                 val roles = if(invite_as_teacher) {
-                    listOf("teacher")
+                    listOf("owner")
                 } else {
                     listOf()
                 }
 
                 // Send an invite
-                teams.createMembership(classId, email_address, roles, "https://fryday.vercel.app")
+                teams.createMembership(classId, email_address, roles, "https://classroom.kyeboard.me")
 
                 // Refresh layout
                 populateList()

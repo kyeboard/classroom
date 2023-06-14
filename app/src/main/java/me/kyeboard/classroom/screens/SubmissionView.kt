@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.extensions.tryJsonCast
+import io.appwrite.services.Account
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
 import kotlinx.coroutines.CoroutineScope
@@ -52,6 +53,7 @@ class SubmissionView : ComponentActivity() {
 
         val client = getAppwriteClient(this)
         val databases = Databases(client)
+        val account = Account(client)
         val storage = Storage(client)
 
         val attachmentView = findViewById<RecyclerView>(R.id.submission_view_attachment_list)
@@ -61,45 +63,54 @@ class SubmissionView : ComponentActivity() {
             val msg = findViewById<EditText>(R.id.submission_view_msg_textbox).text.toString()
 
             CoroutineScope(Dispatchers.IO).launch {
-                val submissionDetails = databases.getDocument("classes", "64782b0c5957666e7bee", getID(assignmentId, submissionId))
+                val session = account.get()
+                val submissionDetails = databases.getDocument("classes", "submissions", getID(assignmentId, submissionId))
                 val currentComments = submissionDetails.data.tryJsonCast<SubmissionItem>()!!.comments
 
-                currentComments.add("{\"author\": \"kyeboard\", \"message\": \"$msg\"}")
+                currentComments.add("{\"author\": \"${session.name}\", \"message\": \"$msg\"}")
 
                 databases.updateDocument(
                     "classes",
-                    "64782b0c5957666e7bee", getID(assignmentId, submissionId),
+                    "submissions", getID(assignmentId, submissionId),
                     UpdateItem(currentComments)
                 )
+
+                updateData(databases, storage, assignmentId, submissionId, commentsView, attachmentView)
             }
         }
 
         CoroutineScope(Dispatchers.IO).launch {
-            val submissionDetails = databases.getDocument("classes", "64782b0c5957666e7bee", getID(assignmentId, submissionId))
-            val attachmentList = arrayListOf<Attachment>()
-            val commentList = arrayListOf<Comment>()
-            val data = submissionDetails.data.tryJsonCast<SubmissionItem>()!!
+            updateData(databases, storage, assignmentId, submissionId, commentsView, attachmentView)
+        }
+    }
 
-            for(i in data.submissions) {
-                Log.d("tt", i)
-                val file_name = storage.getFile("647713fa9be2a68d4458", i).name
-                attachmentList.add(Attachment(file_name.substringAfterLast('.', ""), file_name))
-            }
+    private suspend fun updateData(databases: Databases, storage: Storage, assignmentId: String, submissionId: String, commentsView: RecyclerView, attachmentView: RecyclerView) {
+        val submissionDetails = databases.getDocument("classes", "submissions", getID(assignmentId, submissionId))
+        val attachmentList = arrayListOf<Attachment>()
+        val data = submissionDetails.data.tryJsonCast<SubmissionItem>()!!
 
-            for(comment in data.comments) {
-                val parsed = JSONObject(comment)
-                val comment = Comment(parsed.get("author").toString(), parsed.get("message").toString())
+        for(i in data.submissions) {
+            val file_name = storage.getFile("submissions", i).name
+            attachmentList.add(Attachment(file_name.substringAfterLast('.', ""), file_name))
+        }
 
-                commentList.add(comment)
-            }
+        runOnUiThread {
+        }
+        val commentList = arrayListOf<Comment>()
 
-            runOnUiThread {
-                attachmentView.adapter = AttachmentAdapter(attachmentList)
-                attachmentView.layoutManager = GridLayoutManager(this@SubmissionView, 2)
+        for(comment in data.comments) {
+            val parsed = JSONObject(comment)
+            val comment = Comment(parsed.get("author").toString(), parsed.get("message").toString())
 
-                commentsView.adapter = CommentAdapter(commentList)
-                commentsView.layoutManager = LinearLayoutManager(this@SubmissionView)
-            }
+            commentList.add(comment)
+        }
+
+        runOnUiThread {
+            attachmentView.adapter = AttachmentAdapter(attachmentList)
+            attachmentView.layoutManager = GridLayoutManager(this@SubmissionView, 2)
+
+            commentsView.adapter = CommentAdapter(commentList)
+            commentsView.layoutManager = LinearLayoutManager(this@SubmissionView)
         }
     }
 }

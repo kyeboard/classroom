@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.services.Storage
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.SubmissionView
 import me.kyeboard.classroom.utils.getAppwriteClient
+import me.kyeboard.classroom.utils.invisible
 
 class AssignmentViewSubmissions : Fragment() {
     private lateinit var accent_color: String
@@ -32,6 +34,8 @@ class AssignmentViewSubmissions : Fragment() {
         val teams = Teams(client)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.submissions_view_list)
+        val progressBar = view.findViewById<ProgressBar>(R.id.progress_bar)
+
         val class_id = requireArguments().getString("class_id")!!
         assignment_id = requireArguments().getString("assignment_id")!!
         accent_color = requireArguments().getString("accent_color")!!
@@ -43,6 +47,8 @@ class AssignmentViewSubmissions : Fragment() {
             activity?.runOnUiThread {
                 recyclerView.adapter = adapter
                 recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+                invisible(progressBar)
             }
         }
 

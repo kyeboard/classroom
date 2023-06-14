@@ -181,25 +181,47 @@
                 app:layout_constraintStart_toEndOf="@+id/newassignment_grade"
                 app:layout_constraintTop_toBottomOf="@+id/newassignment_description" />
 
-            <EditText
-                android:id="@+id/newassignment_duedate"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/select_date_wrapper"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="8dp"
-                android:ems="10"
-                android:background="@drawable/rounded"
-                android:backgroundTint="#d8dee9"
-                android:padding="16dp"
-                android:textSize="13sp"
-                android:textColor="@color/black"
-                android:textColorHint="#4c566a"
-                android:hint="@string/due_date"
-                android:inputType="date"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/newassignment_grade"
                 app:layout_constraintTop_toBottomOf="@+id/textView15"
-                android:autofillHints="" />
+                android:layout_height="wrap_content">
+                <EditText
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:id="@+id/newassignment_duedate"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:background="@drawable/rounded"
+                    android:backgroundTint="#d8dee9"
+                    android:padding="16dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/black"
+                    android:textColorHint="#4c566a"
+                    android:hint="@string/due_date"
+                    android:inputType="date"
+                    android:autofillHints="" />
+
+                <View
+                    android:id="@+id/assignment_duedate_input_handler"
+                    android:layout_width="0dp"
+                    android:translationZ="10dp"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="0dp">
+
+                </View>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/new_assignment_attachments"
@@ -208,7 +230,7 @@
                 android:layout_marginHorizontal="15dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/newassignment_duedate" />
+                app:layout_constraintTop_toBottomOf="@+id/select_date_wrapper" />
 
             <Button
                 android:id="@+id/new_assignment_add_attachment"

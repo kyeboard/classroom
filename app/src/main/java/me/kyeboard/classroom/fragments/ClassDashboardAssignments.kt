@@ -59,13 +59,12 @@ class ClassDashboardAssignments : Fragment() {
         val today = Date()
 
         // Filters
-        val missedFilter: (Date, Boolean) -> Boolean = { date, _ -> date.before(today) }
-        val assignedFilter: (Date, Boolean) -> Boolean = { date, _ -> date.after(today) || date == today }
-        val submittedFilter: (Date, Boolean) -> Boolean = { _, has_submitted -> has_submitted }
+        val missedFilter: (Date) -> Boolean = { date -> date.before(today) }
+        val assignedFilter: (Date) -> Boolean = { date -> date.after(today) || date == today }
 
         // Initial
         CoroutineScope(Dispatchers.IO).launch {
-            populateAssignments(recyclerView, view, assignedFilter, classId)
+            populateAssignments(recyclerView, view, missedFilter, classId)
         }
 
         // Handle tab layout chances
@@ -73,8 +72,7 @@ class ClassDashboardAssignments : Fragment() {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val filter = when(tab!!.position) {
                     0 -> missedFilter
-                    1 -> assignedFilter
-                    else -> submittedFilter
+                    else -> assignedFilter
                 }
 
                 CoroutineScope(Dispatchers.IO).launch {
@@ -89,7 +87,7 @@ class ClassDashboardAssignments : Fragment() {
         return view
     }
 
-    private suspend fun populateAssignments(recyclerView: RecyclerView, view: View, filter: (Date, Boolean) -> Boolean, class_id: String) {
+    private suspend fun populateAssignments(recyclerView: RecyclerView, view: View, filter: (Date) -> Boolean, class_id: String) {
         val loading = view.findViewById<ProgressBar>(R.id.class_dashboard_assignments_loading)
         val noItemsFound = view.findViewById<ConstraintLayout>(R.id.no_assignments_parent)
 
@@ -111,7 +109,7 @@ class ClassDashboardAssignments : Fragment() {
             for(item in data) {
                 val parsed = item.data.tryJsonCast<Assignment>()!!
 
-                if(filter(parsed.due_date, true) && parsed.classid == class_id) {
+                if(filter(parsed.due_date) && parsed.classid == class_id) {
                     parsedData.add(parsed)
                 }
             }
