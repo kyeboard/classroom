@@ -71,7 +71,7 @@ class AnnouncementView : ComponentActivity() {
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 // Get the announcement
-                val announcementObj = databases.getDocument("classes", "647c1b704310bb8f0fed", announcementId)
+                val announcementObj = databases.getDocument("classes", "announcements", announcementId)
 
                 // Get the data and parse it
                 val data = announcementObj.data.tryJsonCast<Announcement>()!!
@@ -82,7 +82,7 @@ class AnnouncementView : ComponentActivity() {
                 // Get the files attached
                 for(attachment_id in data.attachments) {
                     // Get the file
-                    val file = storage.getFile("6465d3dd2e3905c17280", attachment_id)
+                    val file = storage.getFile("attachments", attachment_id)
 
                     // Add it to the list
                     attachments.add(Attachment(file.name.substringAfterLast('.', ""), file.name) {
@@ -91,7 +91,13 @@ class AnnouncementView : ComponentActivity() {
                             Toast.makeText(this@AnnouncementView, "Please wait while the file is being downloaded", Toast.LENGTH_SHORT).show()
                         }
                         CoroutineScope(Dispatchers.IO).launch {
-                            startActivity(openAttachment(applicationContext, storage, attachment_id, file.name, file.mimeType))
+                            try {
+                                startActivity(openAttachment(applicationContext, storage, attachment_id, file.name, file.mimeType))
+                            } catch(_: Exception) {
+                                runOnUiThread {
+                                    Toast.makeText(this@AnnouncementView, "No handler found for this type of file", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                     })
                 }

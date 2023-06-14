@@ -42,7 +42,7 @@ fun copyStream(`in`: InputStream, out: OutputStream) {
 }
 
 /// Uploads a uri to appwrite storage and returns the id of the file
-suspend fun uploadToAppwriteStorage(resolver: ContentResolver, uri: Uri, storage: Storage, bucketId: String = "6465d3dd2e3905c17280"): String {
+suspend fun uploadToAppwriteStorage(resolver: ContentResolver, uri: Uri, storage: Storage, bucketId: String = "attachments"): String {
     val inputStream = resolver.openInputStream(uri)
     val fileName = getFileName(resolver, uri)
 

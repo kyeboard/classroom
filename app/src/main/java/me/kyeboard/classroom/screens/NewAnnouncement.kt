@@ -19,6 +19,9 @@ import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.Client
+import io.appwrite.Permission
+import io.appwrite.Query
+import io.appwrite.Role
 import io.appwrite.services.Account
 import io.appwrite.services.Databases
 import io.appwrite.services.Storage
@@ -89,20 +92,6 @@ class NewAnnouncement : AppCompatActivity() {
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
 
-        // Date items
-        val today = Date()
-        var mYear: Int = today.year;
-        var mMonth: Int = today.month;
-        var mDay: Int = today.day;
-
-        val mDateSetListener = OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-            mYear = year
-            mMonth = monthOfYear
-            mDay = dayOfMonth
-
-            Log.d("tt", "$mYear year $mMonth month and $mDay day")
-        }
-
         // Handle picking ip files
         val pickFiles = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if(result.resultCode == Activity.RESULT_OK) {
@@ -163,7 +152,7 @@ class NewAnnouncement : AppCompatActivity() {
 
                 val res = databases.createDocument(
                     "classes",
-                    "647c1b704310bb8f0fed",
+                    "announcements",
                     "unique()",
                     AnnouncementItem(
                         currentUser.name,
@@ -172,6 +161,7 @@ class NewAnnouncement : AppCompatActivity() {
                         classId,
                         currentUser.id
                     ),
+                    arrayListOf(Permission.read(Role.team(classId)))
                 )
 
                 setResult(Activity.RESULT_OK)

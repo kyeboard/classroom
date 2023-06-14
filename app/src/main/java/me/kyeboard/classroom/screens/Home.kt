@@ -86,7 +86,13 @@ class Home : AppCompatActivity() {
         val handler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == Activity.RESULT_OK) {
                 CoroutineScope(Dispatchers.IO).launch {
-                    populateClassesList(noClassesParent)
+                    try {
+                        populateClassesList(noClassesParent)
+                    } catch(e: Exception) {
+                        runOnUiThread {
+                            Toast.makeText(this@Home, "Cannot fetch classes, are you connected to internet?", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }
             }
         }
@@ -94,7 +100,16 @@ class Home : AppCompatActivity() {
         // Handler refresh layout event
         refreshView.setOnRefreshListener {
             CoroutineScope(Dispatchers.IO).launch {
-                populateClassesList(noClassesParent, false)
+                try {
+                    populateClassesList(noClassesParent, false)
+                } catch(e: Exception) {
+                    Log.e("fetch_class_error", e.message.toString())
+
+                    runOnUiThread {
+                        Toast.makeText(this@Home, "Cannot fetch classes, are you connected to internet?", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
                 refreshView.isRefreshing = false
             }
         }
@@ -158,7 +173,7 @@ class Home : AppCompatActivity() {
         // Iterate over each team
         for (team in classes) {
             // Get register
-            val item = databases.getDocument("classes", "registery", team.id).data.tryJsonCast<ClassItem>()!!
+            val item = databases.getDocument("classes", "registry", team.id).data.tryJsonCast<ClassItem>()!!
 
             // Set total students
             item.total = team.total

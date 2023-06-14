@@ -14,6 +14,8 @@ import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import io.appwrite.Client
+import io.appwrite.Permission
+import io.appwrite.Role
 import io.appwrite.services.Databases
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
@@ -99,7 +101,15 @@ class NewClass : ComponentActivity() {
                     val team = teams.create("unique()", className)
 
                     // Create the registry in the database
-                    databases.createDocument("classes", "registery", team.id, ClassItem(className, classSubject, selectedColor))
+                    databases.createDocument(
+                        "classes",
+                        "registry",
+                        team.id,
+                        ClassItem(className, classSubject, selectedColor),
+                        arrayListOf(
+                            Permission.read(Role.team(team.id))
+                        )
+                    )
 
                     runOnUiThread {
                         // Set the result

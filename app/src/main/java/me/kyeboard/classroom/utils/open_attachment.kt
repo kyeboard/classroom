@@ -16,7 +16,7 @@ public suspend fun openAttachment(context: Context, storage: Storage, file_id: S
     val file = File(directory, "${file_name.substringBeforeLast('.')}-${file_id}.${file_name.substringAfterLast('.')}")
 
     if(!file.exists()) {
-        val fileForDownload = storage.getFileDownload("6465d3dd2e3905c17280", file_id)
+        val fileForDownload = storage.getFileDownload("attachments", file_id)
 
         // Write the stream to file
         withContext(Dispatchers.IO) {

@@ -6,5 +6,5 @@ import io.appwrite.Client
 fun getAppwriteClient(context: Context): Client {
     return Client(context)
         .setEndpoint("https://cloud.appwrite.io/v1")
-        .setProject("fryday")
+        .setProject("classroom")
 }

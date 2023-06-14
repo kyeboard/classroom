@@ -85,7 +85,7 @@ class ClassDashboardStream : Fragment() {
         // Get the list of the documents
         val data = databases.listDocuments(
             "classes",
-            "647c1b704310bb8f0fed",
+            "announcements",
             arrayListOf(Query.orderDesc("\$createdAt"))
         ).documents
 

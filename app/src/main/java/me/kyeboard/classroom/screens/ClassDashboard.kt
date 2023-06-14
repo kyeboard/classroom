@@ -3,8 +3,10 @@ package me.kyeboard.classroom.screens
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.viewpager2.widget.ViewPager2
@@ -59,7 +61,7 @@ class ClassDashboard : AppCompatActivity() {
         // Viewpager and tab layout for nav
         val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
         val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
-        val create_new_btn = findViewById<ImageButton>(R.id.dashboard_stream_create_new)
+        val createNewBtn = findViewById<ImageButton>(R.id.dashboard_stream_create_new)
 
         // Initiate appwrite services
         client = getAppwriteClient(this)
@@ -72,47 +74,55 @@ class ClassDashboard : AppCompatActivity() {
 
             if(roles.contains("owner")) {
                 runOnUiThread {
-                    visible(create_new_btn)
+                    visible(createNewBtn)
                 }
             }
 
-            // Get class info from registery
-            val classInfo = databases.getDocument("classes", "registery", classId).data.tryJsonCast<ClassItem>()!!
+            try {
+                // Get class info from registery
+                val classInfo = databases.getDocument("classes", "registry", classId).data.tryJsonCast<ClassItem>()!!
 
-            runOnUiThread {
-                // Change tint of the topbar
-                val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
+                runOnUiThread {
+                    // Change tint of the topbar
+                    val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
 
-                // Set background color
-                topbar.background.mutate().apply {
-                    setTint(Color.parseColor(classInfo.color))
-                }
-                window.statusBarColor = Color.parseColor(accentColor)
+                    // Set background color
+                    topbar.background.mutate().apply {
+                        setTint(Color.parseColor(classInfo.color))
+                    }
+                    window.statusBarColor = Color.parseColor(accentColor)
 
-                // Handle plus button clicks
-                create_new_btn.setOnClickListener {
-                    // Select the intent to show
-                    val intent = if(viewPager.currentItem == 0) {
-                        Intent(this@ClassDashboard, NewAnnouncement::class.java)
-                    } else {
-                        Intent(this@ClassDashboard, NewAssignment::class.java)
+                    // Handle plus button clicks
+                    createNewBtn.setOnClickListener {
+                        // Select the intent to show
+                        val intent = if(viewPager.currentItem == 0) {
+                            Intent(this@ClassDashboard, NewAnnouncement::class.java)
+                        } else {
+                            Intent(this@ClassDashboard, NewAssignment::class.java)
+                        }
+
+                        // Add class id
+                        intent.putExtra("class_id", classId)
+                        intent.putExtra("accent_color", classInfo.color)
+
+                        // Start
+                        startActivity(intent)
                     }
 
-                    // Add class id
-                    intent.putExtra("class_id", classId)
-                    intent.putExtra("accent_color", classInfo.color)
+                    // Change name and subject
+                    setText(this@ClassDashboard, R.id.current_class_name, classInfo.name)
+                    setText(this@ClassDashboard, R.id.current_class_subject, classInfo.subject)
 
-                    // Start
-                    startActivity(intent)
+                    visible(topbar)
+                    visible(tabLayout)
+                    visible(findViewById(R.id.class_dashboard_bottom_bar))
                 }
+            } catch(e: Exception) {
+                Log.e("class_info", e.message.toString())
 
-                // Change name and subject
-                setText(this@ClassDashboard, R.id.current_class_name, classInfo.name)
-                setText(this@ClassDashboard, R.id.current_class_subject, classInfo.subject)
-
-                visible(topbar)
-                visible(tabLayout)
-                visible(findViewById(R.id.class_dashboard_bottom_bar))
+                runOnUiThread {
+                    Toast.makeText(this@ClassDashboard, "Cannot find the class", Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
