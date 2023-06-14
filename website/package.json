@@ -16,6 +16,7 @@
     "tailwind-nord": "^1.3.0"
   },
   "dependencies": {
+    "appwrite": "^11.0.0",
     "vue-feather": "^2.0.0"
   }
 }
