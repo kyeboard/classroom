@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 import org.json.JSONObject
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -50,7 +50,7 @@ class SubmissionView : ComponentActivity() {
         window.statusBarColor = Color.parseColor(accentColor)
         (findViewById<ConstraintLayout>(R.id.submission_view_topbar).background.mutate() as GradientDrawable).setTint(Color.parseColor(accentColor))
 
-        val client = get_appwrite_client(this)
+        val client = getAppwriteClient(this)
         val databases = Databases(client)
         val storage = Storage(client)
 

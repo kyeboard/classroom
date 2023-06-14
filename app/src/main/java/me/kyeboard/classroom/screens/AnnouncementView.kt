@@ -2,17 +2,14 @@ package me.kyeboard.classroom.screens
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.WindowCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import io.appwrite.Client
 import io.appwrite.extensions.tryJsonCast
 import io.appwrite.services.Databases
@@ -23,7 +20,7 @@ import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.imageInto
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.openAttachment
@@ -58,7 +55,7 @@ class AnnouncementView : ComponentActivity() {
         findViewById<ConstraintLayout>(R.id.announcement_view_topbar).background.mutate().setTint(Color.parseColor(accentColor))
 
         // Initialize appwrite services
-        client = get_appwrite_client(applicationContext)
+        client = getAppwriteClient(applicationContext)
         databases = Databases(client)
         storage = Storage(client)
 

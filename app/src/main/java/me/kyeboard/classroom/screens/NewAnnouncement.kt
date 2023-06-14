@@ -1,7 +1,6 @@
 package me.kyeboard.classroom.screens
 
 import android.app.Activity
-import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.graphics.Color
@@ -30,7 +29,7 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.utils.getFileName
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import me.kyeboard.classroom.utils.visible
 import java.util.Date
@@ -78,7 +77,7 @@ class NewAnnouncement : AppCompatActivity() {
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         // Initiate appwrite services
-        client = get_appwrite_client(this)
+        client = getAppwriteClient(this)
         databases = Databases(client)
         storage = Storage(client)
         account = Account(client)

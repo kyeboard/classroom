@@ -3,15 +3,10 @@ package me.kyeboard.classroom.screens
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.WindowCompat
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayout
@@ -28,8 +23,7 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.ViewPagerAdapter
 import me.kyeboard.classroom.fragments.ClassDashboardAssignments
 import me.kyeboard.classroom.fragments.ClassDashboardStream
-import me.kyeboard.classroom.utils.get_appwrite_client
-import me.kyeboard.classroom.utils.invisible
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.setText
 import me.kyeboard.classroom.utils.visible
 
@@ -68,7 +62,7 @@ class ClassDashboard : AppCompatActivity() {
         val create_new_btn = findViewById<ImageButton>(R.id.dashboard_stream_create_new)
 
         // Initiate appwrite services
-        client = get_appwrite_client(this)
+        client = getAppwriteClient(this)
         databases = Databases(client)
         teams = Teams(client)
         account = Account(client)

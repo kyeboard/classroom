@@ -3,7 +3,6 @@ package me.kyeboard.classroom.fragments
 import SubmissionsAdapter
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.SubmissionView
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 
 class AssignmentViewSubmissions : Fragment() {
     private lateinit var accent_color: String
@@ -28,7 +27,7 @@ class AssignmentViewSubmissions : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_assignment_view_submissions, container, false)
 
-        val client = get_appwrite_client(view.context)
+        val client = getAppwriteClient(view.context)
         val storage = Storage(client)
         val teams = Teams(client)
 

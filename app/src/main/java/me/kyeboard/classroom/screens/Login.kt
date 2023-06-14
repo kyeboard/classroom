@@ -1,19 +1,17 @@
 package me.kyeboard.classroom.screens
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.WindowCompat
 import io.appwrite.Client
 import io.appwrite.services.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.startActivityWrapper
 
 class Login : ComponentActivity() {
@@ -27,7 +25,7 @@ class Login : ComponentActivity() {
 
         window.statusBarColor = ResourcesCompat.getColor(resources, R.color.home_bg, theme)
 
-        client = get_appwrite_client(applicationContext)
+        client = getAppwriteClient(applicationContext)
         account = Account(client)
 
         // Handle get started button click

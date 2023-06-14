@@ -24,7 +24,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.AssignmentView
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.visible
 import java.util.Date
@@ -46,7 +46,7 @@ class ClassDashboardAssignments : Fragment() {
         val recyclerView = view.findViewById<RecyclerView>(R.id.classdashboard_assignments_recyclerview)
 
         // Appwrite services
-        client = get_appwrite_client(view.context)
+        client = getAppwriteClient(view.context)
         databases = Databases(client)
 
         // Get items from bundle

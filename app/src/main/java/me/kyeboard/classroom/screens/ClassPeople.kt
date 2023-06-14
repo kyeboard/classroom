@@ -3,7 +3,6 @@ package me.kyeboard.classroom.screens
 import MembersList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import android.widget.EditText
@@ -11,18 +10,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.content.res.AppCompatResources
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -32,12 +20,9 @@ import io.appwrite.services.Account
 import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
-import me.kyeboard.classroom.screens.ui.theme.ClassroomTheme
-import me.kyeboard.classroom.utils.get_appwrite_client
-import me.kyeboard.classroom.utils.invisible
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.visible
 
 val email_check_regex = Regex("^\\w+([.-]?\\w+)*@\\w+([.-]?\\w+)*(\\.\\w{2,})+$")
@@ -75,7 +60,7 @@ class ClassPeople : ComponentActivity() {
         findViewById<ConstraintLayout>(R.id.classppl_topbar).background.setTint(Color.parseColor(accentColor))
 
         // Initiate appwrite services
-        client = get_appwrite_client(applicationContext)
+        client = getAppwriteClient(applicationContext)
         teams = Teams(client)
         account = Account(client)
 

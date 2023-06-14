@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,15 +17,13 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import io.appwrite.Client
 import io.appwrite.Query
 import io.appwrite.extensions.tryJsonCast
-import io.appwrite.services.Account
 import io.appwrite.services.Databases
-import io.appwrite.services.Teams
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.AnnouncementView
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.visible
 
@@ -54,7 +51,7 @@ class ClassDashboardStream : Fragment() {
         val swipeToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.class_dashboard_stream_refresh)
 
         // Initiate appwrite services
-        client = get_appwrite_client(view.context)
+        client = getAppwriteClient(view.context)
         databases = Databases(client)
 
         // Handle on swipe

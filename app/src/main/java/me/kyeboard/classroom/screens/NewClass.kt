@@ -20,7 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.visible
 
 data class ClassItem(val name: String, val subject: String, val color: String)
@@ -50,7 +50,7 @@ class NewClass : ComponentActivity() {
 
         // Initiate variables
         var selectedColor = "#fee587"
-        client = get_appwrite_client(applicationContext)
+        client = getAppwriteClient(applicationContext)
         teams = Teams(client)
         databases = Databases(client)
 

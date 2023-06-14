@@ -31,7 +31,7 @@ import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.screens.AssignmentItem
 import me.kyeboard.classroom.utils.getFileName
-import me.kyeboard.classroom.utils.get_appwrite_client
+import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.openAttachment
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
@@ -58,7 +58,7 @@ class NewAssignmentTask : Fragment() {
 
         val assignment_id = requireArguments().getString("assignment_id")!!
 
-        val client = get_appwrite_client(view.context)
+        val client = getAppwriteClient(view.context)
         val databases = Databases(client)
         val storage = Storage(client)
         val account = Account(client)
