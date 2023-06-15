@@ -21,9 +21,9 @@ interface Response {
 }
 
 // All the avatars that current we have
-const avatars_index = ["648148a8162d4b833e4d", "648148b31e4ba73c1fb6", "648148de33045aacfb5b", "648148e93d358fb1dbd9"]
+const avatars_index = ["avatar_1", "avatar_2", "avatar_3", "avatar_4"]
 
-module.exports = async function(req: Request, res: Response) {
+export default async function(req: Request, res: Response) {
     try {
         // Initiate client
         const client = new Client()
@@ -44,7 +44,7 @@ module.exports = async function(req: Request, res: Response) {
         const selected_index = Math.floor(Math.random() * 4)
 
         // Get the avatar URL
-        const raw = await storage.getFileDownload("64814877e40fa803a48b", avatars_index[selected_index])
+        const raw = await storage.getFileDownload("648a6e529592517be880", avatars_index[selected_index])
 
         // Write to the file
         fs.writeFile("profile.png", raw, () => {
@@ -53,7 +53,7 @@ module.exports = async function(req: Request, res: Response) {
 
         // Upload it back to the user profiles bucket
         await storage.createFile(
-            "646ef17593d213adfcf2",
+            "userpfps",
             data.userId,
             InputFile.fromPath("profile.png", "profile.png"),
             [Permission.read(Role.any())]
