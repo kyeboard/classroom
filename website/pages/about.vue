@@ -25,8 +25,6 @@
             <img src="/installation_cover.png" class="rounded-2xl" />
             <div class="mt-5 w-full leading-[35px]">
                 - Install from official website - <a href="https://classroom.kyeboard.me/download" class="text-nord10 font-bold">https://classroom.kyeboard.me/download</a>
-                <br />
-                - Install from GitHub releases - <a href="https://www.github.com/kyeboard/classroom/releases/latest" class="text-nord10 font-bold">https://www.github.com/kyeboard/classroom/releases/latest</a>
             </div>
             <hr class="my-8 border border-gray-300 w-full" />
             <img src="/notes.png" class="rounded-2xl" />
