@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -27,10 +26,9 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.ClassItem
 import me.kyeboard.classroom.adapters.ClassesListAdapter
 import me.kyeboard.classroom.utils.getAppwriteClient
-import me.kyeboard.classroom.utils.imageInto
 import me.kyeboard.classroom.utils.invisible
-import me.kyeboard.classroom.utils.setText
-import me.kyeboard.classroom.utils.startActivityWrapper
+import me.kyeboard.classroom.utils.loadUserSession
+import me.kyeboard.classroom.utils.logoutAndRedirect
 import me.kyeboard.classroom.utils.visible
 
 class Home : AppCompatActivity() {
@@ -40,6 +38,7 @@ class Home : AppCompatActivity() {
     private lateinit var teams: Teams
     private lateinit var listview: RecyclerView
     private lateinit var loading: ProgressBar
+    private lateinit var noClassesParent: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Initialize view
@@ -52,32 +51,19 @@ class Home : AppCompatActivity() {
         databases = Databases(client)
         teams = Teams(client)
 
+        // Initialize view holders
+        val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
+        noClassesParent = findViewById(R.id.no_classes_found_parent)
+        listview = findViewById(R.id.home_classes_list)
+        loading = findViewById(R.id.home_classes_list_loading)
+
+        // Set colors
         window.statusBarColor = ResourcesCompat.getColor(resources, R.color.yellow, theme)
 
         // Handle logout
         findViewById<ImageView>(R.id.logout_user).setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                // Delete current session
-                account.deleteSession("current")
-
-                // Send toast
-                runOnUiThread {
-                    Toast.makeText(applicationContext, "Successfully logged out!", Toast.LENGTH_SHORT).show()
-
-                    val intent = Intent(applicationContext, Login::class.java)
-                    startActivity(intent)
-                }
-
-                // Redirect to login activity
-                finish()
-            }
+            logoutAndRedirect(account, this)
         }
-
-        // View holders
-        val noClassesParent = findViewById<ConstraintLayout>(R.id.no_classes_found_parent)
-        val refreshView = findViewById<SwipeRefreshLayout>(R.id.home_pull_to_refresh)
-        listview = findViewById(R.id.home_classes_list)
-        loading = findViewById(R.id.home_classes_list_loading)
 
         // Setup view
         listview.layoutManager = LinearLayoutManager(applicationContext)
@@ -85,66 +71,22 @@ class Home : AppCompatActivity() {
         // Handle refreshing layout when the new class finishes creating a new class
         val handler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == Activity.RESULT_OK) {
-                CoroutineScope(Dispatchers.IO).launch {
-                    try {
-                        populateClassesList(noClassesParent)
-                    } catch(e: Exception) {
-                        runOnUiThread {
-                            Toast.makeText(this@Home, "Cannot fetch classes, are you connected to internet?", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
+                populateClassesList {  }
             }
         }
 
         // Handler refresh layout event
         refreshView.setOnRefreshListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    populateClassesList(noClassesParent, false)
-                } catch(e: Exception) {
-                    Log.e("fetch_class_error", e.message.toString())
-
-                    runOnUiThread {
-                        Toast.makeText(this@Home, "Cannot fetch classes, are you connected to internet?", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
+            populateClassesList {
                 refreshView.isRefreshing = false
             }
         }
 
-        // Load current info
-        CoroutineScope(Dispatchers.IO).launch {
-            // Show current user info
-            try {
-                val session = account.get()
+        // Load user session
+        loadUserSession(this, account, R.id.current_user_name, R.id.current_user_email, R.id.current_user_profile)
 
-                runOnUiThread {
-                    setText(this@Home, R.id.current_user_name, session.name)
-                    setText(this@Home, R.id.current_user_email, session.email)
-
-                    imageInto(
-                        this@Home,
-                        "https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${session.id}/view?project=fryday",
-                        R.id.current_user_profile
-                    )
-                }
-            } catch(e: Exception) {
-                // User has some issue with session so its better for a login
-                startActivityWrapper(this@Home, Login::class.java)
-
-                // Finish current since there is no more usage of it
-                finish()
-            }
-
-            // Get the list of the teams that the current user is in
-            try {
-                populateClassesList(noClassesParent)
-            } catch(e: Exception) {
-                Log.e("populate_classes_list", e.toString())
-            }
-        }
+        // Initial class list load
+        populateClassesList()
 
         // Handle new class popup
         findViewById<ImageButton>(R.id.open_new_class_popup).setOnClickListener {
@@ -156,44 +98,38 @@ class Home : AppCompatActivity() {
         }
     }
 
-    private suspend fun populateClassesList(noClassesParent: ConstraintLayout, showLoading: Boolean = true) {
-        // Get the data
-        val classes = teams.list().teams
-        val userClasses = arrayListOf<ClassItem>()
+    private fun populateClassesList(callback: () -> Unit = {  }) {
+        visible(loading)
+        listview.animate().alpha(0f).duration = 100
 
-        runOnUiThread {
-            invisible(noClassesParent)
-            invisible( listview)
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Get the data
+                val classes = teams.list().teams.map {
+                    databases.getDocument("classes", "registry", it.id).data.tryJsonCast<ClassItem>()!!
+                }
 
-            if(showLoading) {
-                invisible(loading)
+                // Configure recycler view
+                runOnUiThread {
+                    // If there are no teams, show the no found widget
+                    if(classes.isEmpty()) {
+                        visible(noClassesParent)
+                    } else {
+                        invisible(noClassesParent)
+                    }
+
+                    invisible(loading)
+                    visible(listview)
+                    listview.animate().alpha(1f).duration = 100
+
+                    // Add the adapter
+                    listview.adapter = ClassesListAdapter(classes, this@Home::openClassDashboard, this@Home)
+
+                    callback()
+                }
+            } catch(e: Exception) {
+                Log.e("populate_class_list_error", e.message.toString())
             }
-        }
-
-        // Iterate over each team
-        for (team in classes) {
-            // Get register
-            val item = databases.getDocument("classes", "registry", team.id).data.tryJsonCast<ClassItem>()!!
-
-            // Set total students
-            item.total = team.total
-
-            // Add to list
-            userClasses.add(item)
-        }
-
-        // Configure recycler view
-        runOnUiThread {
-            // If there are no teams, show the no found widget
-            if(classes.isEmpty()) {
-                visible(noClassesParent)
-            }
-
-            invisible(loading)
-            visible(listview)
-
-            // Add the adapter
-            listview.adapter = ClassesListAdapter(userClasses, this@Home::openClassDashboard, this@Home)
         }
     }
 

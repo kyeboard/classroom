@@ -41,7 +41,7 @@
     <string name="new_class_name_hint">Name for your class</string>
     <string name="new_class_subject_hint">Subject for your class</string>
     <string name="new_class_color_header">Colour</string>
-    <string name="terms_and_conditions">By creating a new class,\nyou agree to our terms and conditions</string>
+    <string name="terms_and_conditions">By creating a new class,\nyou agree to our terms and conditions.</string>
     <string name="new_class_btn_create_text">Create class</string>
     <string name="title_activity_class_people">ClassPeople</string>
     <string name="go_back">Go back</string>

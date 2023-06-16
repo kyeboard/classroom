@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.tabs.TabLayout
@@ -44,6 +45,7 @@ class ClassDashboard : AppCompatActivity() {
         val extras = intent.extras!!
         val classId = extras.getString("class_id")!!
         val accentColor = extras.getString("accent_color")!!
+        window.statusBarColor = ResourcesCompat.getColor(resources, R.color.bg, theme)
 
         findViewById<ImageView>(R.id.destory_self).setOnClickListener {
             finish()
@@ -83,11 +85,11 @@ class ClassDashboard : AppCompatActivity() {
             }
 
             try {
-                // Get class info from registery
+                // Get class info from registry
                 val classInfo = databases.getDocument("classes", "registry", classId).data.tryJsonCast<ClassItem>()!!
 
                 runOnUiThread {
-                    // Change tint of the topbar
+                    // Change tint of the top bar
                     val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
 
                     // Set background color

@@ -3,19 +3,17 @@ package me.kyeboard.classroom.adapters
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
-import android.graphics.drawable.ShapeDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import me.kyeboard.classroom.R
 
-data class ClassItem(val name: String, val header: String, val subject: String, val `$id`: String, val color: String, var total: Long)
+data class ClassItem(val name: String, val header: String, val subject: String, val `$id`: String, val color: String)
 
-class ClassesListAdapter(private val dataSet: ArrayList<ClassItem>, private val onClick: (id: String, accent_color: String) -> Unit, private val context: Context) :
+class ClassesListAdapter(private val dataSet: List<ClassItem>, private val onClick: (id: String, accent_color: String) -> Unit, private val context: Context) :
     RecyclerView.Adapter<ClassesListAdapter.ViewHolder>() {
 
     /**

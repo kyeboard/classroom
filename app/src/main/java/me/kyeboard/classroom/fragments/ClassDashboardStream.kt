@@ -5,12 +5,12 @@ import AnnouncementAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -30,24 +30,29 @@ import me.kyeboard.classroom.utils.visible
 class ClassDashboardStream : Fragment() {
     private lateinit var client: Client
     private lateinit var databases: Databases
-    private lateinit var accent_color: String
+    private lateinit var accentColor: String
+    private lateinit var classId: String
+    private lateinit var loading: ConstraintLayout
+    private lateinit var noAnnouncements: ConstraintLayout
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var view: View
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_class_dashboard_stream, container, false)
+        view = inflater.inflate(R.layout.fragment_class_dashboard_stream, container, false)
 
         // Get items from bundle
         val arguments = requireArguments()
-        val classId = arguments.getString("class_id")!!
-        accent_color = arguments.getString("accent_color")!!
+        classId = arguments.getString("class_id")!!
+        accentColor = arguments.getString("accent_color")!!
 
         // Get the view items
-        val recyclerView = view.findViewById<RecyclerView>(R.id.class_dashboard_stream_announcements)
-        val loading = view.findViewById<ConstraintLayout>(R.id.class_dashboard_stream_loading)
-        val noAnnouncements = view.findViewById<ConstraintLayout>(R.id.no_announcements_parent)
+        recyclerView = view.findViewById(R.id.class_dashboard_stream_announcements)
+        loading = view.findViewById(R.id.class_dashboard_stream_loading)
+        noAnnouncements = view.findViewById(R.id.no_announcements_parent)
         val swipeToRefresh = view.findViewById<SwipeRefreshLayout>(R.id.class_dashboard_stream_refresh)
 
         // Initiate appwrite services
@@ -56,70 +61,58 @@ class ClassDashboardStream : Fragment() {
 
         // Handle on swipe
         swipeToRefresh.setOnRefreshListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                try {
-                    updateStreamItems(classId, loading, noAnnouncements, recyclerView, view)
-
-                    requireActivity().runOnUiThread {
-                        swipeToRefresh.isRefreshing = false
-                    }
-                } catch(e: Exception) {
-                    Log.e("update_stream_list", e.message.toString())
-
-                    activity?.runOnUiThread {
-                        Toast.makeText(activity?.applicationContext, "Error while fetching data, are you connected to internet?", Toast.LENGTH_SHORT).show()
-                    }
-                }
+            updateStreamItems {
+                swipeToRefresh.isRefreshing = false
             }
         }
 
-        // Load data for the first time
-        CoroutineScope(Dispatchers.IO).launch {
-            updateStreamItems(classId, loading, noAnnouncements, recyclerView, view)
-        }
+        updateStreamItems {  }
 
         return view
     }
 
-    private suspend fun updateStreamItems(classId: String, loading: ConstraintLayout, noAnnouncements: ConstraintLayout, recyclerView: RecyclerView, view: View) {
-        // Get the list of the documents
-        val data = databases.listDocuments(
-            "classes",
-            "announcements",
-            arrayListOf(Query.orderDesc("\$createdAt"))
-        ).documents
+    private fun updateStreamItems(callback: () -> Unit = { }) {
+        invisible(noAnnouncements)
 
-        // Create an array for announcements
-        val announcements = arrayListOf<Announcement>()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                // Get the list of the documents
+                val announcements = databases.listDocuments(
+                    "classes",
+                    "announcements",
+                    arrayListOf(Query.orderDesc("\$createdAt"))
+                ).documents
+                    .map {
+                        it.tryJsonCast<Announcement>()!!
+                    }
+                    .filter {
+                        it.classid == classId
+                    }
 
-        // Hide no announcements
-        activity?.runOnUiThread {
-            invisible(noAnnouncements)
-        }
+                // Create adapter for announcements
+                val adapter = AnnouncementAdapter(
+                    announcements,
+                    this@ClassDashboardStream::openAnnouncementView
+                )
 
-        // Iterate over the data
-        for(i in data) {
-            val casted = i.data.tryJsonCast<Announcement>()!!
+                // Set adapter and layout
+                activity?.runOnUiThread {
+                    invisible(loading)
 
-            // Filter those announcements for this class
-            if(casted.classid == classId) {
-                announcements.add(casted)
+                    if (announcements.isEmpty()) {
+                        visible(noAnnouncements)
+                    }
+
+                    recyclerView.adapter = adapter
+                    recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+                    callback()
+                }
+            } catch(e: Exception) {
+                Log.e("update_stream_list", e.message.toString())
+
+                Toast.makeText(view.context, "Cannot fetch stream, are you connected to internet?", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        // Create adapter for announcements
-        val adapter = AnnouncementAdapter(announcements, this@ClassDashboardStream::openAnnouncementView)
-
-        // Set adapter and layout
-        activity?.runOnUiThread {
-            invisible(loading)
-
-            if(announcements.isEmpty()) {
-                visible(noAnnouncements)
-            }
-
-            recyclerView.adapter = adapter
-            recyclerView.layoutManager = LinearLayoutManager(view.context)
         }
     }
 
@@ -129,7 +122,7 @@ class ClassDashboardStream : Fragment() {
 
         // Add announcement id
         intent.putExtra("announcement_id", id)
-        intent.putExtra("accent_color", accent_color)
+        intent.putExtra("accent_color", accentColor)
 
         // Start
         startActivity(intent)
