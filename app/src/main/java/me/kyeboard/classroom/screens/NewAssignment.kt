@@ -2,12 +2,10 @@ package me.kyeboard.classroom.screens
 
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
-import android.text.Editable
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -33,7 +31,6 @@ import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import me.kyeboard.classroom.utils.visible
 import java.util.Calendar
-import java.util.Date
 
 
 data class Assignment(val title: String, val description: String, val attachments: ArrayList<String>, val author: String, val grade: Number, val due_date: String, val classid: String, val authorId: String)
@@ -42,6 +39,7 @@ class NewAssignment : ComponentActivity() {
     private val attachments: ArrayList<Attachment> = arrayListOf()
     private val attachmentsUri: ArrayList<Uri> = arrayListOf()
     private lateinit var dueDateInput: EditText
+    private lateinit var attachmentAdapter: AttachmentAdapter
 
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
@@ -64,7 +62,7 @@ class NewAssignment : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_newassignment)
 
-        dueDateInput = findViewById<EditText>(R.id.newassignment_duedate)
+        dueDateInput = findViewById(R.id.newassignment_duedate)
 
         // Get items from bundle
         val classId = intent.extras!!.getString("class_id")!!
@@ -76,19 +74,6 @@ class NewAssignment : ComponentActivity() {
 
         // Remove status bar
         WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        val today = Date()
-        var due_date_year = today.year
-        var due_date_month = today.month
-        var due_date_day = today.day
-
-        val myDateListener = OnDateSetListener { arg0, arg1, arg2, arg3 ->
-            due_date_year = arg1
-            due_date_month = arg2
-            due_date_day = arg3
-
-
-        }
 
         findViewById<View>(R.id.assignment_duedate_input_handler).setOnClickListener {
             showDatePickerDialog()
@@ -106,7 +91,11 @@ class NewAssignment : ComponentActivity() {
         }
 
         // Adapters
-        val adapter = AttachmentAdapter(attachments)
+        attachmentAdapter = AttachmentAdapter(attachments, true) { attachment, i ->
+            attachments.remove(attachment)
+            attachmentsUri.removeAt(i)
+            attachmentAdapter.notifyItemRemoved(i)
+        }
 
         // Set finish listener
         findViewById<ImageView>(R.id.destroy_self).setOnClickListener {
@@ -114,7 +103,7 @@ class NewAssignment : ComponentActivity() {
         }
 
         // Add adapters
-        recyclerView.adapter = adapter
+        recyclerView.adapter = attachmentAdapter
         recyclerView.layoutManager = GridLayoutManager(this, 2)
 
         // Initialize appwrite services
@@ -145,7 +134,7 @@ class NewAssignment : ComponentActivity() {
                             attachmentsUri.add(uri)
                         }
 
-                        adapter.notifyItemRangeChanged(attachments.size - 1, clipData.itemCount)
+                        attachmentAdapter.notifyItemRangeChanged(attachments.size - 1, clipData.itemCount)
                     } else {
                         val contentsURI = result.data?.data!!
                         val fileName = getFileName(this.contentResolver, contentsURI)
@@ -153,7 +142,7 @@ class NewAssignment : ComponentActivity() {
                         attachments.add(Attachment(fileName.substringAfterLast('.', ""), fileName))
                         attachmentsUri.add(contentsURI)
 
-                        adapter.notifyItemChanged(attachments.size - 1)
+                        attachmentAdapter.notifyItemChanged(attachments.size - 1)
                     }
                 }
             }

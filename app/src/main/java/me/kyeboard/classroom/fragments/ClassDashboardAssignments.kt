@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import io.appwrite.Client
@@ -36,48 +37,57 @@ class ClassDashboardAssignments : Fragment() {
     private lateinit var databases: Databases
     private lateinit var accentColor: String
     private lateinit var classId: String
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var class_id: String
+    private lateinit var view: View
+    private val today = Date()
+    val missedFilter: (Date) -> Boolean = { date -> date.before(today) }
+    val assignedFilter: (Date) -> Boolean = { date -> date.after(today) || date == today }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_class_dashboard_assignments, container, false)
+        view = inflater.inflate(R.layout.fragment_class_dashboard_assignments, container, false)
 
         // View holders
-        val recyclerView = view.findViewById<RecyclerView>(R.id.classdashboard_assignments_recyclerview)
+        recyclerView = view.findViewById(R.id.classdashboard_assignments_recyclerview)
 
         // Appwrite services
         client = getAppwriteClient(view.context)
         databases = Databases(client)
 
         // Get items from bundle
-        classId = requireArguments().getString("class_id")!!
+        class_id = requireArguments().getString("class_id")!!
         accentColor = requireArguments().getString("accent_color")!!
 
-        // Get today's date
-        val today = Date()
-
-        // Filters
-        val missedFilter: (Date) -> Boolean = { date -> date.before(today) }
-        val assignedFilter: (Date) -> Boolean = { date -> date.after(today) || date == today }
-
         // Initial
-        CoroutineScope(Dispatchers.IO).launch {
-            populateAssignments(recyclerView, view, missedFilter, classId)
+        populateAssignments(missedFilter)
+
+        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.assignments_refresh_layout)
+        val tablayout = view.findViewById<TabLayout>(R.id.assignments_tablayout)
+
+        refreshLayout.setOnRefreshListener {
+            val filter = when(tablayout.selectedTabPosition) {
+                0 -> missedFilter
+                else -> assignedFilter
+            }
+
+            populateAssignments(filter) {
+                refreshLayout.isRefreshing = false
+            }
         }
 
         // Handle tab layout chances
-        view.findViewById<TabLayout>(R.id.assignments_tablayout).addOnTabSelectedListener(object : OnTabSelectedListener {
+        tablayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 val filter = when(tab!!.position) {
                     0 -> missedFilter
                     else -> assignedFilter
                 }
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    populateAssignments(recyclerView, view, filter, classId)
-                }
+                populateAssignments(filter)
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -87,55 +97,49 @@ class ClassDashboardAssignments : Fragment() {
         return view
     }
 
-    private suspend fun populateAssignments(recyclerView: RecyclerView, view: View, filter: (Date) -> Boolean, class_id: String) {
+    fun populateAssignments(filter: (Date) -> Boolean, callback: () -> Unit = { }) {
         val loading = view.findViewById<ProgressBar>(R.id.class_dashboard_assignments_loading)
         val noItemsFound = view.findViewById<ConstraintLayout>(R.id.no_assignments_parent)
 
-        try {
-            activity?.runOnUiThread {
-                visible(loading)
-                invisible(recyclerView)
-                invisible(noItemsFound)
-            }
+        visible(loading)
+        invisible(recyclerView)
+        invisible(noItemsFound)
 
-            val data = databases.listDocuments(
-                "classes",
-                "assignments",
-                listOf(Query.orderAsc("due_date"))
-            ).documents
-            val parsedData = arrayListOf<Assignment>()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val data = databases.listDocuments("classes","assignments", listOf(Query.orderAsc("due_date")))
+                    .documents
+                    .map { it.data.tryJsonCast<Assignment>()!! }
+                    .filter {
+                        Log.d("tt", it.toString())
+                        filter(it.due_date) && it.classid == class_id
+                    }
 
-            // Filter data here
-            for(item in data) {
-                val parsed = item.data.tryJsonCast<Assignment>()!!
+                // Adapter initialization
+                val adapter = AssignmentAdapter(data, this@ClassDashboardAssignments::openAssignment)
 
-                if(filter(parsed.due_date) && parsed.classid == class_id) {
-                    parsedData.add(parsed)
+                activity?.runOnUiThread {
+                    invisible(loading)
+                    visible(recyclerView)
+
+                    // Set adapter
+                    recyclerView.adapter = adapter
+                    recyclerView.layoutManager = LinearLayoutManager(view.context)
+
+                    if(data.isEmpty()) {
+                        visible(noItemsFound)
+                    }
+
+                    callback()
                 }
+            } catch(e: Exception) {
+                Log.e("load_assignments_error", e.message.toString())
             }
-
-            // Adapter initialization
-            val adapter = AssignmentAdapter(parsedData, this@ClassDashboardAssignments::openAssignment)
-
-            activity?.runOnUiThread {
-                invisible( loading)
-                visible(recyclerView)
-
-                // Set adapter
-                recyclerView.adapter = adapter
-                recyclerView.layoutManager = LinearLayoutManager(view.context)
-
-                if(parsedData.isEmpty()) {
-                    visible(noItemsFound)
-                }
-            }
-        } catch(e: Exception) {
-            Log.e("load_assignments_error", e.message.toString())
         }
     }
 
     private fun openAssignment(id: String) {
-        val intent = Intent(this.context, AssignmentView::class.java)
+        val intent = Intent(context, AssignmentView::class.java)
 
         intent.putExtra("assignment_id", id)
         intent.putExtra("accent_color", accentColor)

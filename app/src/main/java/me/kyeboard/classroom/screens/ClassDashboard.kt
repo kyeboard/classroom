@@ -95,16 +95,18 @@ class ClassDashboard : AppCompatActivity() {
             fragmentFetched = true
             revealUI()
         }
-        val classDashboardStream = dashboardInstance.apply {
+        val assignmentsInstance = ClassDashboardAssignments()
+
+        dashboardInstance.apply {
             arguments = bundle
         }
-        val classDashboardAssignments = ClassDashboardAssignments().apply {
+        assignmentsInstance.apply {
             arguments = bundle
         }
 
         val newAnnouncementHandler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             if(it.resultCode == Activity.RESULT_OK) {
-                classDashboardStream.updateStreamItems {  }
+                dashboardInstance.updateStreamItems {  }
             }
         }
 
@@ -163,8 +165,8 @@ class ClassDashboard : AppCompatActivity() {
 
         // Setup pager adapter
         val adapter = ViewPagerAdapter(this)
-        adapter.addFragment(classDashboardStream)
-        adapter.addFragment(classDashboardAssignments)
+        adapter.addFragment(dashboardInstance)
+        adapter.addFragment(assignmentsInstance)
 
         // Set the adapter
         viewPager.adapter = adapter
