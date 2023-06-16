@@ -23,6 +23,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.AnnouncementView
+import me.kyeboard.classroom.screens.ClassDashboard
 import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.visible
@@ -34,8 +35,17 @@ class ClassDashboardStream : Fragment() {
     private lateinit var classId: String
     private lateinit var loading: ConstraintLayout
     private lateinit var noAnnouncements: ConstraintLayout
-    private lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: RecyclerView
     private lateinit var view: View
+    private lateinit var fetchCallback: () -> Unit
+
+    companion object {
+        fun newInstance(callback: () -> Unit): ClassDashboardStream {
+            val instance = ClassDashboardStream()
+            instance.fetchCallback = callback
+            return instance
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -71,8 +81,9 @@ class ClassDashboardStream : Fragment() {
         return view
     }
 
-    private fun updateStreamItems(callback: () -> Unit = { }) {
+    fun updateStreamItems(callback: () -> Unit = { }) {
         invisible(noAnnouncements)
+        invisible(recyclerView)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -83,7 +94,7 @@ class ClassDashboardStream : Fragment() {
                     arrayListOf(Query.orderDesc("\$createdAt"))
                 ).documents
                     .map {
-                        it.tryJsonCast<Announcement>()!!
+                        it.data.tryJsonCast<Announcement>()!!
                     }
                     .filter {
                         it.classid == classId
@@ -102,6 +113,8 @@ class ClassDashboardStream : Fragment() {
                     if (announcements.isEmpty()) {
                         visible(noAnnouncements)
                     }
+
+                    fetchCallback()
 
                     recyclerView.adapter = adapter
                     recyclerView.layoutManager = LinearLayoutManager(view.context)

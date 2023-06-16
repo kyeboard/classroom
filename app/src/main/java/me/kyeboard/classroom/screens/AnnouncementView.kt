@@ -25,6 +25,7 @@ import me.kyeboard.classroom.utils.imageInto
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.openAttachment
 import me.kyeboard.classroom.utils.setText
+import me.kyeboard.classroom.utils.visible
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -109,9 +110,11 @@ class AnnouncementView : ComponentActivity() {
                     setText(this@AnnouncementView, R.id.announcement_view_time, outputFormat.format(inputFormat.parse(announcementObj.createdAt)!!))
 
                     // Load pfp
-                    imageInto(this@AnnouncementView, "https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${data.userId}/view?project=fryday", R.id.announcement_item_author_pfp)
+                    imageInto(this@AnnouncementView, "https://cloud.appwrite.io/v1/storage/buckets/userpfps/files/${data.userId}/view?project=classroom", R.id.announcement_item_author_pfp)
 
                     setText(this@AnnouncementView, R.id.announcement_itemview_description, data.message)
+
+                    visible(findViewById<ConstraintLayout>(R.id.constraintLayout3))
 
                     view.adapter = AttachmentAdapter(attachments)
                     view.layoutManager = GridLayoutManager(this@AnnouncementView, 2)

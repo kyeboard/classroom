@@ -65,7 +65,7 @@ class MembersList(private val dataSet: List<Membership>, private val isOwner: Bo
             viewHolder.remove.visibility = View.GONE
         }
 
-        Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${data.userId}/view?project=fryday").into(viewHolder.pfp)
+        Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/userpfps/files/${data.userId}/view?project=classroom").into(viewHolder.pfp)
     }
 
     // Return the size of your dataset (invoked by the layout manager)

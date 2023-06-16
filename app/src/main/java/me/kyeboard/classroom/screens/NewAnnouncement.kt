@@ -48,6 +48,7 @@ class NewAnnouncement : AppCompatActivity() {
     private lateinit var databases: Databases
     private lateinit var storage: Storage
     private lateinit var account: Account
+    private lateinit var adapter: AttachmentAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup view
@@ -74,7 +75,11 @@ class NewAnnouncement : AppCompatActivity() {
         applyAccent(accentColor)
 
         // Create adapter for attachments
-        val adapter = AttachmentAdapter(attachments)
+        adapter = AttachmentAdapter(attachments, true) { attachment, i ->
+            attachments.remove(attachment)
+            uris.removeAt(i)
+            adapter.notifyItemRemoved(i)
+        }
         val recyclerView = findViewById<RecyclerView>(R.id.new_announcement_attachments_list)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = GridLayoutManager(this, 2)

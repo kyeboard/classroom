@@ -1,12 +1,15 @@
 package me.kyeboard.classroom.screens
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.ContactsContract.Contacts
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
@@ -34,7 +37,13 @@ class ClassDashboard : AppCompatActivity() {
     private lateinit var client: Client
     private lateinit var databases: Databases
     private lateinit var teams: Teams
+    private var fragmentFetched = false
+    private lateinit var dashboardInstance: ClassDashboardStream
+    private var activityFetched = false
     private lateinit var account: Account
+    private lateinit var tabLayout: TabLayout
+    private lateinit var viewPager: ViewPager2
+    private lateinit var topbar: ConstraintLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Setup view
@@ -65,8 +74,9 @@ class ClassDashboard : AppCompatActivity() {
         }
 
         // Viewpager and tab layout for nav
-        val viewPager = findViewById<ViewPager2>(R.id.classdashbord_viewpager)
-        val tabLayout = findViewById<TabLayout>(R.id.class_dashboard_tablayout)
+        viewPager = findViewById(R.id.classdashbord_viewpager)
+        tabLayout = findViewById(R.id.class_dashboard_tablayout)
+        topbar = findViewById(R.id.class_dashboard_topbar)
         val createNewBtn = findViewById<ImageButton>(R.id.dashboard_stream_create_new)
 
         // Initiate appwrite services
@@ -74,6 +84,29 @@ class ClassDashboard : AppCompatActivity() {
         databases = Databases(client)
         teams = Teams(client)
         account = Account(client)
+
+        // Setup dashboard stream fragment
+        val bundle = Bundle().apply {
+            putString("class_id", classId)
+            putString("accent_color", accentColor)
+        }
+
+        dashboardInstance =  ClassDashboardStream.newInstance {
+            fragmentFetched = true
+            revealUI()
+        }
+        val classDashboardStream = dashboardInstance.apply {
+            arguments = bundle
+        }
+        val classDashboardAssignments = ClassDashboardAssignments().apply {
+            arguments = bundle
+        }
+
+        val newAnnouncementHandler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == Activity.RESULT_OK) {
+                classDashboardStream.updateStreamItems {  }
+            }
+        }
 
         CoroutineScope(Dispatchers.IO).launch {
             val roles = teams.listMemberships(classId, arrayListOf(Query.equal("userId", account.get().id))).memberships[0].roles
@@ -89,9 +122,6 @@ class ClassDashboard : AppCompatActivity() {
                 val classInfo = databases.getDocument("classes", "registry", classId).data.tryJsonCast<ClassItem>()!!
 
                 runOnUiThread {
-                    // Change tint of the top bar
-                    val topbar = findViewById<ConstraintLayout>(R.id.class_dashboard_topbar)
-
                     // Set background color
                     topbar.background.mutate().apply {
                         setTint(Color.parseColor(classInfo.color))
@@ -112,16 +142,15 @@ class ClassDashboard : AppCompatActivity() {
                         intent.putExtra("accent_color", classInfo.color)
 
                         // Start
-                        startActivity(intent)
+                        newAnnouncementHandler.launch(intent)
                     }
 
                     // Change name and subject
                     setText(this@ClassDashboard, R.id.current_class_name, classInfo.name)
                     setText(this@ClassDashboard, R.id.current_class_subject, classInfo.subject)
 
-                    visible(topbar)
-                    visible(tabLayout)
-                    visible(findViewById(R.id.class_dashboard_bottom_bar))
+                    activityFetched = true
+                    revealUI()
                 }
             } catch(e: Exception) {
                 Log.e("class_info", e.message.toString())
@@ -130,18 +159,6 @@ class ClassDashboard : AppCompatActivity() {
                     Toast.makeText(this@ClassDashboard, "Cannot find the class", Toast.LENGTH_SHORT).show()
                 }
             }
-        }
-
-        // Setup dashboard stream fragment
-        val bundle = Bundle().apply {
-            putString("class_id", classId)
-            putString("accent_color", accentColor)
-        }
-        val classDashboardStream = ClassDashboardStream().apply {
-            arguments = bundle
-        }
-        val classDashboardAssignments = ClassDashboardAssignments().apply {
-            arguments = bundle
         }
 
         // Setup pager adapter
@@ -172,5 +189,15 @@ class ClassDashboard : AppCompatActivity() {
                 tabLayout.getTabAt(position)!!.select()
             }
         })
+    }
+
+    private fun revealUI() {
+        if(fragmentFetched && activityFetched) {
+            visible(topbar)
+            visible(tabLayout)
+            visible(findViewById(R.id.class_dashboard_bottom_bar))
+
+            visible(dashboardInstance.recyclerView)
+        }
     }
 }

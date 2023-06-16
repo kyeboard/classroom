@@ -1,4 +1,3 @@
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,8 +6,6 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import io.appwrite.extensions.tryJsonCast
-import io.appwrite.models.Document
 import me.kyeboard.classroom.R
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -62,7 +59,7 @@ class AnnouncementAdapter(private val dataSet: List<Announcement>, private val o
             onClick(data.`$id`)
         }
 
-        Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/646ef17593d213adfcf2/files/${data.userId}/view?project=fryday").into(viewHolder.pfp)
+        Picasso.get().load("https://cloud.appwrite.io/v1/storage/buckets/userpfps/files/${data.userId}/view?project=classroom").into(viewHolder.pfp)
     }
 
     // Return the size of your dataset (invoked by the layout manager)

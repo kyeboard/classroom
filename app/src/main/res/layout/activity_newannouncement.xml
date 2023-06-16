@@ -137,11 +137,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/new_announcement_loading_screen"
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:background="#FD2E3440"
+        android:background="#ED000000"
+        android:visibility="gone"
         android:translationZ="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

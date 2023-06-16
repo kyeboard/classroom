@@ -19,7 +19,7 @@
             android:name=".screens.ClassPeople"
             android:exported="false"
             android:label="@string/title_activity_class_people"
-            android:theme="@style/Theme.App.Starting" />
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity
             android:name=".screens.SubmissionView"
             android:exported="false"
