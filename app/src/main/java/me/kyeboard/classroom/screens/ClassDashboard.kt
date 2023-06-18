@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.ContactsContract.Contacts
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -110,6 +109,12 @@ class ClassDashboard : AppCompatActivity() {
             }
         }
 
+        val newAssignmentHandler = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if(it.resultCode == Activity.RESULT_OK) {
+                assignmentsInstance.populateAssignments(assignmentsInstance.guessFilter()) {  }
+            }
+        }
+
         CoroutineScope(Dispatchers.IO).launch {
             val roles = teams.listMemberships(classId, arrayListOf(Query.equal("userId", account.get().id))).memberships[0].roles
 
@@ -143,8 +148,11 @@ class ClassDashboard : AppCompatActivity() {
                         intent.putExtra("class_id", classId)
                         intent.putExtra("accent_color", classInfo.color)
 
-                        // Start
-                        newAnnouncementHandler.launch(intent)
+                        if(viewPager.currentItem == 0) {
+                            newAnnouncementHandler.launch(intent)
+                        } else {
+                            newAssignmentHandler.launch(intent)
+                        }
                     }
 
                     // Change name and subject
@@ -199,7 +207,7 @@ class ClassDashboard : AppCompatActivity() {
             visible(tabLayout)
             visible(findViewById(R.id.class_dashboard_bottom_bar))
 
-            visible(dashboardInstance.recyclerView)
+            dashboardInstance.recyclerView.animate().alpha(1f).duration = 100
         }
     }
 }

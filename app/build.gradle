@@ -7,17 +7,6 @@ android {
     namespace 'me.kyeboard.classroom'
     compileSdk 33
 
-    android {
-        splits {
-            abi {
-                enable true
-                reset()
-                include "arm64-v8a", "armeabi-v7a", "x86", "x86_64"
-                universalApk true
-            }
-        }
-    }
-
     defaultConfig {
         applicationId "me.kyeboard.classroom"
         minSdk 24
@@ -33,7 +22,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

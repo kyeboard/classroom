@@ -2,9 +2,7 @@ package me.kyeboard.classroom.utils
 
 import android.app.Activity
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import android.widget.TextView
 import com.squareup.picasso.Picasso
 
@@ -18,6 +16,14 @@ fun imageInto(view: Activity, url: String, target: Int) {
         .load(url)
         .into(view.findViewById<ImageView>(target))
 }
+
+fun imageIntoWidget(widget: ImageView, url: String) {
+    Picasso
+        .get()
+        .load(url)
+        .into(widget)
+}
+
 
 fun invisible(target: View) {
     target.visibility = View.GONE

@@ -62,10 +62,22 @@
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
             <ImageView
-                android:id="@+id/assignment_task_expand_submission"
+                android:id="@+id/assignment_task_expand_submission_down"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/chevron_up"
+                android:translationZ="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/assignment_task_expand_submission_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/chevron_down"
+                android:translationZ="0dp"
+                android:alpha="0"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -79,7 +91,7 @@
                 android:layout_marginTop="10dp"
                 android:textColor="@color/black"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/assignment_task_expand_submission" />
+                app:layout_constraintTop_toBottomOf="@id/assignment_task_expand_submission_up" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/assignment_view_submissions_list"
@@ -95,7 +107,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:layout_marginBottom="20dp"
                 android:background="@drawable/rounded"
                 android:backgroundTint="#d8dee9"
                 android:includeFontPadding="false"
@@ -105,6 +116,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/black"
+                android:alpha="0"
                 android:visibility="gone"
                 app:layout_constraintBottom_toTopOf="@+id/assignment_view_submit_assignment"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +127,7 @@
                 android:id="@+id/assignment_view_submit_assignment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/border_yellow"
                 android:includeFontPadding="false"
                 android:outlineProvider="none"

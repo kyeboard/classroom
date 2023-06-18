@@ -56,7 +56,7 @@
         android:layout_marginTop="10dp"
         app:tabIndicatorColor="@color/black"
         android:layout_marginHorizontal="10dp"
-        app:tabRippleColor="#00000000"
+        app:tabRippleColor="#00ECEFF4"
         android:layout_width="match_parent"
         style="@style/customTabLayout"
         app:tabIndicatorFullWidth="false"

@@ -2,7 +2,6 @@ package me.kyeboard.classroom.fragments
 
 import Assignment
 import AssignmentAdapter
-import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -29,20 +28,19 @@ import me.kyeboard.classroom.screens.AssignmentView
 import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.visible
-import java.util.Calendar
 import java.util.Date
 
 class ClassDashboardAssignments : Fragment() {
     private lateinit var client: Client
     private lateinit var databases: Databases
     private lateinit var accentColor: String
-    private lateinit var classId: String
     private lateinit var recyclerView: RecyclerView
-    private lateinit var class_id: String
+    private lateinit var classId: String
     private lateinit var view: View
+    private lateinit var tabLayout: TabLayout
     private val today = Date()
-    val missedFilter: (Date) -> Boolean = { date -> date.before(today) }
-    val assignedFilter: (Date) -> Boolean = { date -> date.after(today) || date == today }
+    private val missedFilter: (Date) -> Boolean = { date -> date.before(today) }
+    private val assignedFilter: (Date) -> Boolean = { date -> date.after(today) || date == today }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,17 +57,17 @@ class ClassDashboardAssignments : Fragment() {
         databases = Databases(client)
 
         // Get items from bundle
-        class_id = requireArguments().getString("class_id")!!
+        classId = requireArguments().getString("class_id")!!
         accentColor = requireArguments().getString("accent_color")!!
 
         // Initial
         populateAssignments(missedFilter)
 
         val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.assignments_refresh_layout)
-        val tablayout = view.findViewById<TabLayout>(R.id.assignments_tablayout)
+        tabLayout = view.findViewById(R.id.assignments_tablayout)
 
         refreshLayout.setOnRefreshListener {
-            val filter = when(tablayout.selectedTabPosition) {
+            val filter = when(tabLayout.selectedTabPosition) {
                 0 -> missedFilter
                 else -> assignedFilter
             }
@@ -80,14 +78,9 @@ class ClassDashboardAssignments : Fragment() {
         }
 
         // Handle tab layout chances
-        tablayout.addOnTabSelectedListener(object : OnTabSelectedListener {
+        tabLayout.addOnTabSelectedListener(object : OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val filter = when(tab!!.position) {
-                    0 -> missedFilter
-                    else -> assignedFilter
-                }
-
-                populateAssignments(filter)
+                populateAssignments(guessFilter())
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
@@ -95,6 +88,15 @@ class ClassDashboardAssignments : Fragment() {
         })
 
         return view
+    }
+
+    fun guessFilter(): (Date) -> Boolean {
+        val filter = when(tabLayout.selectedTabPosition) {
+            0 -> missedFilter
+            else -> assignedFilter
+        }
+
+        return filter
     }
 
     fun populateAssignments(filter: (Date) -> Boolean, callback: () -> Unit = { }) {
@@ -111,8 +113,7 @@ class ClassDashboardAssignments : Fragment() {
                     .documents
                     .map { it.data.tryJsonCast<Assignment>()!! }
                     .filter {
-                        Log.d("tt", it.toString())
-                        filter(it.due_date) && it.classid == class_id
+                        filter(it.due_date) && it.classid == classId
                     }
 
                 // Adapter initialization

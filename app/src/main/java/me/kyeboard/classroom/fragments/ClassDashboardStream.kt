@@ -23,7 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import me.kyeboard.classroom.R
 import me.kyeboard.classroom.screens.AnnouncementView
-import me.kyeboard.classroom.screens.ClassDashboard
 import me.kyeboard.classroom.utils.getAppwriteClient
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.visible
@@ -83,7 +82,7 @@ class ClassDashboardStream : Fragment() {
 
     fun updateStreamItems(callback: () -> Unit = { }) {
         invisible(noAnnouncements)
-        invisible(recyclerView)
+        recyclerView.animate().alpha(0f).duration = 100
 
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -108,13 +107,13 @@ class ClassDashboardStream : Fragment() {
 
                 // Set adapter and layout
                 activity?.runOnUiThread {
-                    invisible(loading)
-
                     if (announcements.isEmpty()) {
                         visible(noAnnouncements)
                     }
 
                     fetchCallback()
+
+                    invisible(loading)
 
                     recyclerView.adapter = adapter
                     recyclerView.layoutManager = LinearLayoutManager(view.context)

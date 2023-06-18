@@ -90,6 +90,8 @@ class NewClass : ComponentActivity() {
                 return@setOnClickListener
             }
 
+            Toast.makeText(this, "$className and $classSubject", Toast.LENGTH_SHORT).show()
+
             loader.alpha = 0f
             visible(loader)
             loader.animate().alpha(1f).duration = 200
@@ -122,7 +124,7 @@ class NewClass : ComponentActivity() {
                     Log.e("new_class_create", e.message.toString())
 
                     runOnUiThread {
-                        Toast.makeText(applicationContext, "Error while creating a class, try again!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(applicationContext, e.message.toString(), Toast.LENGTH_SHORT).show()
                     }
                 }
             }

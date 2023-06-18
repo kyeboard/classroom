@@ -2,13 +2,16 @@ package me.kyeboard.classroom.fragments
 
 import android.animation.ValueAnimator
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
+import android.view.GestureDetector
+import android.view.GestureDetector.SimpleOnGestureListener
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
@@ -18,6 +21,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.appwrite.Query
@@ -34,15 +38,15 @@ import me.kyeboard.classroom.R
 import me.kyeboard.classroom.adapters.Attachment
 import me.kyeboard.classroom.adapters.AttachmentAdapter
 import me.kyeboard.classroom.screens.AssignmentItem
-import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.getAppwriteClient
+import me.kyeboard.classroom.utils.getFileName
 import me.kyeboard.classroom.utils.invisible
 import me.kyeboard.classroom.utils.openAttachment
 import me.kyeboard.classroom.utils.uploadToAppwriteStorage
 import me.kyeboard.classroom.utils.visible
+import java.lang.Math.abs
 import java.math.BigInteger
 import java.security.MessageDigest
-import java.security.Permission
 
 data class SubmissionItem(val grade: Int, val submissions: ArrayList<String>, val studentId: String, val studentName: String)
 
@@ -50,91 +54,135 @@ fun hashmd5(target: String): String {
     return BigInteger(1, MessageDigest.getInstance("MD5").digest(target.toByteArray())).toString(16).padStart(32, '0')
 }
 
+
+open class OnSwipeTouchListener(ctx: Context?) : OnTouchListener {
+    private val gestureDetector: GestureDetector
+
+    init {
+        gestureDetector = GestureDetector(ctx, GestureListener())
+    }
+
+    override fun onTouch(v: View, event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event)
+    }
+
+    private inner class GestureListener : SimpleOnGestureListener() {
+        override fun onDown(e: MotionEvent): Boolean {
+            return true
+        }
+
+        override fun onFling(
+            e1: MotionEvent,
+            e2: MotionEvent,
+            velocityX: Float,
+            velocityY: Float
+        ): Boolean {
+            var result = false
+            try {
+                val diffY = e2.y - e1.y
+                val diffX = e2.x - e1.x
+                if (abs(diffX) > abs(diffY)) {
+                    if (abs(diffX) > 100 && abs(velocityX) > 100) {
+                        if (diffX > 0) {
+                            onSwipeRight()
+                        } else {
+                            onSwipeLeft()
+                        }
+                        result = true
+                    }
+                } else if (abs(diffY) > 100 && abs(velocityY) > 100) {
+                    if (diffY > 0) {
+                        onSwipeBottom()
+                    } else {
+                        onSwipeTop()
+                    }
+                    result = true
+                }
+            } catch (exception: java.lang.Exception) {
+                exception.printStackTrace()
+            }
+            return result
+        }
+
+    }
+
+    open fun onSwipeRight() {}
+    open fun onSwipeLeft() {}
+    open fun onSwipeTop() {}
+    open fun onSwipeBottom() {}
+}
+
 class NewAssignmentTask : Fragment() {
     private var attachmentUris: ArrayList<Uri> = arrayListOf()
     private val attachments = arrayListOf<Attachment>()
     private var alreadySubmitted = false
-    private var unexpanded_height: Int = 0
+    private var unexpandedHeight: Int = 0
     private var isOwner = false
     private lateinit var classId: String
+
+    private lateinit var submissionArea: ScrollView
+    private lateinit var view: View
+    private lateinit var chevron_down: ImageView
+    private lateinit var chevron_up: ImageView
+    private lateinit var add_files_btn: AppCompatButton
+    private lateinit var submissionList: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_new_assignment_task, container, false)
+    ): View {
+        view = inflater.inflate(R.layout.fragment_new_assignment_task, container, false)
 
-        // Arguments
-        val args = requireArguments()
-        val assignment_id = args.getString("assignment_id")!!
-        classId = args.getString("class_id")!!
+        val context = requireContext()
 
-        val client = getAppwriteClient(view.context)
+        val client = getAppwriteClient(context)
         val databases = Databases(client)
         val storage = Storage(client)
         val teams = Teams(client)
         val account = Account(client)
 
-        val submission_area = view.findViewById<ScrollView>(R.id.assignment_task_submission)
+        submissionArea = view.findViewById(R.id.assignment_task_submission)
+        add_files_btn = view.findViewById(R.id.assignment_view_add_files)
+        chevron_up = view.findViewById(R.id.assignment_task_expand_submission_up)
+        chevron_down = view.findViewById(R.id.assignment_task_expand_submission_down)
         val loading = view.findViewById<ConstraintLayout>(R.id.assignment_task_loading)
-        val submissionList = view.findViewById<RecyclerView>(R.id.assignment_view_submissions_list)
+        submissionList = view.findViewById(R.id.assignment_view_submissions_list)
 
-        unexpanded_height = submission_area.height
+        unexpandedHeight = submissionArea.height
+
+        view.setOnTouchListener(object : OnSwipeTouchListener(context) {
+            override fun onSwipeTop() {
+                moveViewDown()
+            }
+
+            override fun onSwipeBottom() {
+                moveViewUp()
+            }
+        })
+
+        // Arguments
+        val args = requireArguments()
+        val assignmentId = args.getString("assignment_id")!!
+        classId = args.getString("class_id")!!
 
         // Handle expansion
-        view.findViewById<ImageView>(R.id.assignment_task_expand_submission).setOnClickListener {
-            val initialHeight = submission_area.height
-
-            if(initialHeight == 600) {
-                val targetHeight = unexpanded_height
-                val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
-                valueAnimator.duration = 100
-
-                valueAnimator.addUpdateListener { animator ->
-                    val layoutParams = submission_area.layoutParams
-                    layoutParams.height = animator.animatedValue as Int
-                    submission_area.layoutParams = layoutParams
-                }
-
-                view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.GONE
-                invisible(submissionList)
-
-                valueAnimator.start()
-            } else {
-                val targetHeight = 600 // Increase the height by 200 pixels
-                val valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight)
-                valueAnimator.duration = 100 // Animation duration in milliseconds
-
-                valueAnimator.addUpdateListener { animator ->
-                    val layoutParams = submission_area.layoutParams
-                    layoutParams.height = animator.animatedValue as Int
-                    submission_area.layoutParams = layoutParams
-                }
-
-                valueAnimator.start()
-
-                if(!alreadySubmitted) {
-                    view.findViewById<AppCompatButton>(R.id.assignment_view_add_files).visibility = View.VISIBLE
-                }
-                visible(submissionList)
-            }
+        chevron_up.setOnClickListener {
+            moveViewUp()
         }
+
+        chevron_down.setOnClickListener {
+            moveViewDown()
+        }
+
 
         // Check if the user has already submitted the assignment
         CoroutineScope(Dispatchers.IO).launch {
             val session = account.get()
-            isOwner = teams.listMemberships(classId, arrayListOf(Query.equal("userId", session.id))).memberships[0].roles.contains("owner")
-            val id = "$assignment_id-${session.id}"
-            val hashed_id = hashmd5(id)
-
-            if(isOwner) {
-                activity?.runOnUiThread {
-                    invisible(submission_area)
-                }
-            }
+            val id = "$assignmentId-${session.id}"
+            val hashedId = hashmd5(id)
 
             try {
-                val submission = databases.getDocument("classes", "submissions", hashed_id).data.tryJsonCast<SubmissionItem>()!!
+                val submission = databases.getDocument("classes", "submissions", hashedId).data.tryJsonCast<SubmissionItem>()!!
 
                 alreadySubmitted = true
 
@@ -147,7 +195,7 @@ class NewAssignmentTask : Fragment() {
 
                 requireActivity().runOnUiThread {
                     invisible(loading)
-                    view.findViewById<Button>(R.id.assignment_view_add_files).visibility = View.GONE
+                    add_files_btn.visibility = View.GONE
                     view.findViewById<Button>(R.id.assignment_view_submit_assignment).apply {
                         text = "Already submitted"
                         isEnabled = false
@@ -162,8 +210,6 @@ class NewAssignmentTask : Fragment() {
                 requireActivity().runOnUiThread {
                     invisible(loading)
                 }
-
-                Log.e("ee", e.message.toString())
             }
         }
 
@@ -220,7 +266,7 @@ class NewAssignmentTask : Fragment() {
 
             CoroutineScope(Dispatchers.IO).launch {
                 val currentUser = account.get()
-                val id = "$assignment_id-${currentUser.id}"
+                val id = "$assignmentId-${currentUser.id}"
                 val hashedId = BigInteger(1, MessageDigest.getInstance("MD5").digest(id.toByteArray())).toString(16).padStart(32, '0')
 
                 val attachmentsIds = arrayListOf<String>()
@@ -249,9 +295,12 @@ class NewAssignmentTask : Fragment() {
         // Load assignment
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                val assignmentItem = databases.getDocument("classes", "assignments", assignment_id)
+                val assignmentItem = databases.getDocument("classes", "assignments", assignmentId)
                 val data = assignmentItem.data.tryJsonCast<AssignmentItem>()!!
                 val attachments = arrayListOf<Attachment>()
+                val session = account.get()
+
+                isOwner = teams.listMemberships(classId, arrayListOf(Query.equal("userId", session.id))).memberships[0].roles.contains("owner")
 
                 for(attachment_id in data.attachments) {
                     val file = storage.getFile("attachments", attachment_id)
@@ -273,8 +322,8 @@ class NewAssignmentTask : Fragment() {
                     description.text = data.description
                     visible(description)
                     visible(listview)
-                    if(!isOwner) {
-                        visible(submission_area)
+                    if(isOwner) {
+                        visible(submissionArea)
                     }
 
                     listview.adapter = AttachmentAdapter(attachments)
@@ -288,5 +337,47 @@ class NewAssignmentTask : Fragment() {
         }
 
         return view
+    }
+
+    private fun moveViewUp() {
+        animateHeightTo(unexpandedHeight)
+
+        invisible(view.findViewById<AppCompatButton>(R.id.assignment_view_add_files))
+        invisible(submissionList)
+        
+        chevron_up.animate().alpha(0f).duration = 100
+        chevron_up.translationZ = 0f
+        chevron_down.animate().alpha(1f).duration = 100
+        chevron_down.translationZ = 1f
+    }
+    
+    private fun animateHeightTo(to: Int) {
+        val valueAnimator = ValueAnimator.ofInt(submissionArea.height, to)
+        valueAnimator.duration = 150
+
+        valueAnimator.addUpdateListener { animator ->
+            val layoutParams = submissionArea.layoutParams
+            layoutParams.height = animator.animatedValue as Int
+            submissionArea.layoutParams = layoutParams
+        }
+
+        valueAnimator.start()
+    }
+
+    private fun moveViewDown() {
+        animateHeightTo(600)
+
+        if(!alreadySubmitted) {
+            add_files_btn.visibility = View.VISIBLE
+            add_files_btn.animate().alpha(1f)
+        }
+        submissionList.alpha = 0f
+        visible(submissionList)
+        submissionList.animate().alpha(1f)
+
+        chevron_up.animate().alpha(1f).duration = 100
+        chevron_up.translationZ = 1f
+        chevron_down.animate().alpha(0f).duration = 100
+        chevron_down.translationZ = 0f
     }
 }
