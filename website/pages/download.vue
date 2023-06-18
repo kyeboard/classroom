@@ -15,17 +15,25 @@
             </div>
             <div class="title mt-5 font-jakarta font-bold">Download</div>
             <div class="variants mt-2 flex gap-5">
-                <a href="/releases/classroom-release-arm64-v8a.apk" class="variant bg-nord6/60 w-44 p-8 flex flex-col items-center rounded-xl text-nord0" download>
+                <a href="https://github.com/kyeboard/classroom/releases/download/v1.0.0/classroom-v1.0.0-arm64-v8a-release.apk" class="variant bg-nord6/60 w-44 p-8 flex flex-col items-center rounded-xl text-nord0" download>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="#2E3440" width="36" height="36"><path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/></svg>
                     <div class="arch font-jakarta mt-0.5">arm64-v8a</div>
                 </a>
-                <a href="/releases/classroom-release-armeabi-v7a.apk" class="variant bg-nord6/60 w-44 p-8 flex flex-col items-center rounded-xl text-nord0" download>
+                <a href="https://github.com/kyeboard/classroom/releases/download/v1.0.0/classroom-v1.0.0-armeabi-v7a-release.apk" class="variant bg-nord6/60 w-44 p-8 flex flex-col items-center rounded-xl text-nord0" download>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="#2E3440" width="36" height="36"><path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/></svg>
                     <div class="arch font-jakarta mt-0.5">armeabi-v7a</div>
                 </a>
-                <a href="/releases/classroom-release-universal.apk" class="variant bg-nord6/60 w-44 p-8 flex flex-col items-center rounded-xl text-nord0" download>
+                <a href="https://github.com/kyeboard/classroom/releases/download/v1.0.0/classroom-v1.0.0-universal-release.apk" class="variant bg-nord6/60 w-44 p-8 flex flex-col items-center rounded-xl text-nord0" download>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="#2E3440" width="36" height="36"><path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/></svg>
                     <div class="arch font-jakarta mt-0.5">Universal</div>
+                </a>
+                <a href="https://github.com/kyeboard/classroom/releases/download/v1.0.0/classroom-v1.0.0-x86-release.apk" class="variant bg-nord6/60 w-44 p-8 flex flex-col items-center rounded-xl text-nord0" download>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="#2E3440" width="36" height="36"><path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/></svg>
+                    <div class="arch font-jakarta mt-0.5">x86</div>
+                </a>
+                <a href="https://github.com/kyeboard/classroom/releases/download/v1.0.0/classroom-v1.0.0-x86_64-release.apk" class="variant bg-nord6/60 w-44 p-8 flex flex-col items-center rounded-xl text-nord0" download>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512" fill="#2E3440" width="36" height="36"><path d="M420.55,301.93a24,24,0,1,1,24-24,24,24,0,0,1-24,24m-265.1,0a24,24,0,1,1,24-24,24,24,0,0,1-24,24m273.7-144.48,47.94-83a10,10,0,1,0-17.27-10h0l-48.54,84.07a301.25,301.25,0,0,0-246.56,0L116.18,64.45a10,10,0,1,0-17.27,10h0l47.94,83C64.53,202.22,8.24,285.55,0,384H576c-8.24-98.45-64.54-181.78-146.85-226.55"/></svg>
+                    <div class="arch font-jakarta mt-0.5">x86_64</div>
                 </a>
             </div>
             <div class="support">
